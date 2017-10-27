@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/main_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:background="@color/white"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:drawableTop="@drawable/tab_bg_home"
+                android:onClick="onTabClicked"
+                android:scaleType="matrix"
+                android:text="首页"
+                android:textColor="@drawable/tab_bg_main_txt"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:background="@color/white"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/btn_category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:drawableTop="@drawable/tab_bg_category"
+                android:onClick="onTabClicked"
+                android:padding="2dp"
+                android:scaleType="matrix"
+                android:text="分类"
+                android:textColor="@drawable/tab_bg_main_txt"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:background="@color/white"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/btn_cart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:drawableTop="@drawable/tab_bg_cart"
+                android:onClick="onTabClicked"
+                android:padding="2dp"
+                android:scaleType="matrix"
+                android:text="购物车"
+                android:textColor="@drawable/tab_bg_main_txt"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:layout_weight="1"
+            android:background="@color/white">
+
+            <Button
+                android:id="@+id/btn_mine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:drawableTop="@drawable/tab_bg_mine"
+                android:onClick="onTabClicked"
+                android:padding="2dp"
+                android:scaleType="matrix"
+                android:text="我的"
+                android:textColor="@drawable/tab_bg_main_txt"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@color/darkgrey"
+        android:layout_above="@id/main_bottom" />
+
+    <RelativeLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/view" />
+
+
+</RelativeLayout>

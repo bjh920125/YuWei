@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:paddingTop="15dp"
+     android:background="#000000">
+
+	<com.bap.haoyidian.view.PhotoViewInViewPager
+	    android:id="@+id/vp_image"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" />
+
+	<TextView
+	    android:id="@+id/tv_index"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginBottom="22dp"
+	    android:text="0/0" 
+	    android:textColor="@color/white"/>
+	
+	  <ImageView
+        android:id="@+id/img_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/delete_messages_pressed" 
+        android:onClick="onViewClick"/>
+	
+
+</RelativeLayout>

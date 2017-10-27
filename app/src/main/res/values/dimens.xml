@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="toolbar_height">45dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="benefit_swipe_width">79dp</dimen>
+    <dimen name="team_delete_swipe_width">79dp</dimen>
+</resources>

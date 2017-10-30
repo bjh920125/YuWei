@@ -14,12 +14,12 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.bap.yuwei.R;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.User;
 import com.bap.yuwei.entity.event.UserInfoEvent;
 import com.bap.yuwei.util.SharedPreferencesUtil;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,6 +39,7 @@ public abstract class BaseFragment extends Fragment {
     protected MediaType jsonMediaType= MediaType.parse("application/json");
     protected User mUser;
     private TextView tipTextView;
+    protected Gson mGson;
 
     /**
      * 初始化布局与控件
@@ -52,6 +53,7 @@ public abstract class BaseFragment extends Fragment {
         mContext = getActivity();
         mActivity = getActivity();
         EventBus.getDefault().register(this);
+        mGson=new Gson();
     }
 
     public void showLoadingDialog() {
@@ -86,7 +88,7 @@ public abstract class BaseFragment extends Fragment {
     public void updateUserInfo(UserInfoEvent userInfoEvent){
         String userJson= SharedPreferencesUtil.getString(mContext, Constants.USER_KEY);
         if(null!=userJson) {
-            mUser = JSON.parseObject(userJson, User.class);
+            mUser = mGson.fromJson(userJson, User.class);
         }
     }
 

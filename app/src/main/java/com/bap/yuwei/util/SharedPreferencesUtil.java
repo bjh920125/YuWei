@@ -6,7 +6,7 @@ import android.content.SharedPreferences.Editor;
 
 public class SharedPreferencesUtil {
 	
-	private final static String FILE_NAME="haoyidianxml";
+	private final static String FILE_NAME="yuweixml";
 	
 	/**
 	 * 设置String类型的值

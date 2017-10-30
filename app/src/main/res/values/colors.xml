@@ -7,6 +7,8 @@
     <color name="wheel_timebtn_nor">#54a3fa</color>
     <color name="wheel_timebtn_pre">#CCCCCC</color>
 
+    <color name="lightpruple">#C0A6D8</color>
+    <color name="lightgray2">#EBEEF1</color>
     <color name="black">#000000</color><!--黑色 -->
     <color name="lightblack">#5b5b5b</color><!--浅黑色 -->
     <color name="white">#FFFFFF</color><!--白色-->

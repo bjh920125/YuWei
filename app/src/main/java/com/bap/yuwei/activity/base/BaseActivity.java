@@ -13,12 +13,12 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.bap.yuwei.R;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.User;
 import com.bap.yuwei.util.MyApplication;
 import com.bap.yuwei.util.SharedPreferencesUtil;
+import com.google.gson.Gson;
 
 import okhttp3.MediaType;
 
@@ -31,15 +31,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected TextView mTxtTitle;
     protected TextView mTxtRightMenu;
     protected Toolbar mToolbar;
-
-    protected Context mContext;
     protected Dialog mProgressDialog;
-
-    protected MediaType jsonMediaType= MediaType.parse("application/json");
-
     protected User mUser;
-
     private TextView tipTextView;
+    protected Context mContext;
+    protected MediaType jsonMediaType= MediaType.parse("application/json; charset=utf-8");
+    protected Gson mGson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +60,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             //设置默认的标题不显示
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-
+        mGson=new Gson();
         String userJson= SharedPreferencesUtil.getString(mContext, Constants.USER_KEY);
         if(null!=userJson) {
-            mUser = JSON.parseObject(userJson, User.class);
+            mUser = mGson.fromJson(userJson, User.class);
         }
         initView();
     }

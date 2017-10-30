@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="10dp"
+    android:paddingTop="5dp"
     android:gravity="center"
     android:background="@null">
 
@@ -21,12 +21,6 @@
         android:text="text"
         android:gravity="center"
         android:textColor="@color/lightblack"
-        android:textSize="14dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/lightgray"/>
+        android:textSize="12dp"/>
 
 </LinearLayout>

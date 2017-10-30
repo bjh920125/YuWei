@@ -6,22 +6,30 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.bap.yuwei.entity.Constants;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.zhy.http.okhttp.OkHttpUtils;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyApplication extends Application {
 	
 	private static List<Activity> activities=new LinkedList<Activity>();
 	private static MyApplication instance;
+	private static Retrofit mRetrofit;
+	private static HashMap<Class, Object> apis = new HashMap<>();
 
 	public MyApplication(){}
 	public static MyApplication getInstance(){
@@ -50,17 +58,35 @@ public class MyApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		OkHttpClient okHttpClient = new OkHttpClient.Builder()
-				.connectTimeout(30000L, TimeUnit.MILLISECONDS)
-				.readTimeout(30000L, TimeUnit.MILLISECONDS)
-				.build();
-		OkHttpUtils.initClient(okHttpClient);
-
+		initOkHttp();
 		initImageLoader(getApplicationContext());//初始化imageloader
 	}
 
+	private void initOkHttp(){
+		OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+		httpClient.addInterceptor(new Interceptor() {
+			@Override
+			public Response intercept(Interceptor.Chain chain) throws IOException {
+				Request original = chain.request();
+				Request request = original.newBuilder()
+						.addHeader("X-Token", null == SharedPreferencesUtil.getString(getApplicationContext(), Constants.XTOKEN_KEY) ?
+								"":SharedPreferencesUtil.getString(getApplicationContext(), Constants.XTOKEN_KEY))
+						.method(original.method(), original.body())
+						.build();
+				return chain.proceed(request);
+			}
+		});
 
-	public static void initImageLoader(Context context) {
+		mRetrofit=new Retrofit.Builder()
+				.client(httpClient.build())
+				 .baseUrl(Constants.URL)
+				 .addConverterFactory(GsonConverterFactory.create())
+				//.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+				.build();
+	}
+
+
+	private void initImageLoader(Context context) {
 		ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
 		config.threadPriority(Thread.NORM_PRIORITY - 2);
 		config.denyCacheImageMultipleSizesInMemory();
@@ -73,6 +99,22 @@ public class MyApplication extends Application {
 		ImageLoader.getInstance().init(config.build());
 	}
 
+
+	/**
+	 * 获取 api
+	 *
+	 * @param service
+	 * @param <T>
+	 * @return
+	 */
+
+	public <T> T getWebService(Class<T> service) {
+		if (!apis.containsKey(service)) {
+			T instance = mRetrofit.create(service);
+			apis.put(service, instance);
+		}
+		return (T) apis.get(service);
+	}
 
 
 	/**

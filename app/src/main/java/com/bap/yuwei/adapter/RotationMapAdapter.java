@@ -8,7 +8,10 @@ import android.widget.ImageView;
 
 import com.bap.yuwei.activity.WebViewActivity;
 import com.bap.yuwei.entity.Banner;
+import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bigkoo.convenientbanner.holder.Holder;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 轮播图adapter
@@ -27,7 +30,7 @@ public class RotationMapAdapter implements Holder<Banner> {
 
     @Override
     public void UpdateUI(final Context context, int position,final Banner data) {
-       // Glide.with(context).load(data.getSite()).into(imageView);
+        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+data.getImageUrl(),imageView, DisplayImageOptionsUtil.getOptions());
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,12 +13,141 @@
         android:background="@color/colorPrimary"
         android:minHeight="@dimen/toolbar_height">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btn_scan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:drawableTop="@drawable/nav_saoyisao"
+                    android:paddingTop="4dp"
+                    android:scaleType="matrix"
+                    android:text="扫一扫"
+                    android:textSize="10dp"
+                    android:textColor="@color/white"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/search"
+                android:paddingLeft="10dp"
+                android:drawablePadding="5dp"
+                android:layout_weight="8"
+                android:background="@drawable/radius_lightpurple_bg"
+                android:textColor="@color/white"
+                android:gravity="center_vertical"
+                android:text="搜索的商品关键词"
+                android:textSize="13dp"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btn_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:drawableTop="@drawable/nav_xiaoxi"
+                    android:paddingTop="2dp"
+                    android:scaleType="matrix"
+                    android:text="消息"
+                    android:textSize="10dp"
+                    android:textColor="@color/white"/>
+            </RelativeLayout>
+        </LinearLayout>
+
     </android.support.v7.widget.Toolbar>
 
-    <com.bigkoo.convenientbanner.ConvenientBanner xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/banner"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_below="@+id/fg_toolbar"
-        app:canLoop="true" />
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_below="@+id/fg_toolbar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.bigkoo.convenientbanner.ConvenientBanner xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/fg_toolbar"
+                app:canLoop="true" />
+
+            <com.bap.yuwei.view.NoScrollGridView
+                android:id="@+id/gv_menus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cacheColorHint="#00000000"
+                android:numColumns="5"
+                android:scrollbars="none"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:id="@+id/view_divider_line"
+                android:layout_margin="5dp"
+                android:layout_height="0.5dp"
+                android:background="#ADADAD"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/white">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:padding="10dp"
+                    android:text="医疗\n快报"
+                    android:textColor="@color/colorPrimary"/>
+
+                <include layout="@layout/view_vertical_line"/>
+
+                <com.bap.yuwei.view.UPMarqueeView
+                    android:id="@+id/upview"
+                    android:layout_width="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="热销商品"
+                android:textColor="@color/colorPrimary"
+                android:textSize="13dp"
+                android:drawableLeft="@drawable/jiabian_xian1"
+                android:drawableRight="@drawable/jiabian_xian2"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:background="@color/lightgray2"/>
+
+            <com.bap.yuwei.view.NoScrollGridView
+                android:id="@+id/gv_goods"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cacheColorHint="#00000000"
+                android:numColumns="2"
+                android:scrollbars="none"/>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
 </RelativeLayout>

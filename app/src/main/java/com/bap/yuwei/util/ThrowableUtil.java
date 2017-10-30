@@ -16,7 +16,7 @@ public class ThrowableUtil {
 			strMsg="网络连接异常，请检查网络连接！";
 		}else{
 			//手动取消网络访问
-			strMsg="";
+			strMsg="服务异常，请稍后再试！";
 		}
 		return strMsg;
 	}

@@ -40,14 +40,13 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.github.jdsjlzx:LRecyclerView:1.4.3'
     compile 'com.github.frankiesardo:linearlistview:1.0.1@aar'
     compile 'com.google.zxing:core:3.3.0'
     compile 'com.journeyapps:zxing-android-embedded:3.3.0'
     compile 'com.bigkoo:convenientbanner:2.0.5'
-    compile 'com.alibaba:fastjson:1.2.31'
     compile 'com.githang:status-bar-compat:0.5.2'
     compile 'com.lzy.widget:ninegridview:0.2.0'
     compile 'com.kyleduo.switchbutton:library:1.4.6'
@@ -55,5 +54,12 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.squareup.okio:okio:1.13.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    compile ('com.alibaba.android:vlayout:1.2.2@aar') {
+        transitive = true
+    }
     compile project(':imagepickerModule')
 }

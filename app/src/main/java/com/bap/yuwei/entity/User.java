@@ -1,7 +1,5 @@
 package com.bap.yuwei.entity;
 
-import java.util.Date;
-
 public class User {
     private String userId;
 
@@ -31,7 +29,6 @@ public class User {
 
     private Integer status;
 
-    private Date createTime;
 
     private Integer emailReviewStatus;
 
@@ -151,13 +148,7 @@ public class User {
         this.status = status;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
     public Integer getEmailReviewStatus() {
         return emailReviewStatus;

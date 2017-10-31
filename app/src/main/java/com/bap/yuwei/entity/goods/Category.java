@@ -1,6 +1,10 @@
-package com.bap.yuwei.activity.goods;
+package com.bap.yuwei.entity.goods;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable{
+    public static final String KEY="category.key";
+
     private Long categoryId;
 
     private String categoryName;

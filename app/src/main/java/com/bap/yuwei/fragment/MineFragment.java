@@ -39,8 +39,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     }
 
     public void refreshUI() {
-        txtName.setText(mUser.getUsername());
-        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead, DisplayImageOptionsUtil.getOptions());
+        if(null != mUser){
+            txtName.setText(mUser.getUsername());
+            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead, DisplayImageOptionsUtil.getOptions());
+        }
     }
 
     @Override

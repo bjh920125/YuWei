@@ -1,19 +1,28 @@
 package com.bap.yuwei.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bap.yuwei.R;
-import com.bap.yuwei.activity.goods.Category;
-import com.bap.yuwei.activity.goods.Goods;
+import com.bap.yuwei.activity.goods.CategoryGoodsActivity;
+import com.bap.yuwei.activity.goods.GoodsDetailActivity;
+import com.bap.yuwei.activity.news.NewsDetailActivity;
+import com.bap.yuwei.activity.news.NewsListActivity;
 import com.bap.yuwei.adapter.RotationMapAdapter;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
 import com.bap.yuwei.entity.Banner;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.News;
+import com.bap.yuwei.entity.goods.Category;
+import com.bap.yuwei.entity.goods.Goods;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.fragment.base.BaseFragment;
@@ -22,6 +31,7 @@ import com.bap.yuwei.util.MyApplication;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.view.NoScrollGridView;
+import com.bap.yuwei.view.UPMarqueeView;
 import com.bap.yuwei.webservice.GoodsWebService;
 import com.bap.yuwei.webservice.NewsWebService;
 import com.bigkoo.convenientbanner.ConvenientBanner;
@@ -49,12 +59,16 @@ import retrofit2.Response;
 public class HomeFragment extends BaseFragment implements View.OnClickListener{
 
     private Button btnScan,btnMsg;
+    private TextView txtNews;
     private ConvenientBanner convenientBanner;
     private NoScrollGridView gvCategories,gvGoods;
+    private UPMarqueeView upviewNews;
 
     private List<Banner> mBanners;
     private List<Category> mCategories;
     private List<Goods> mGoods;
+    private List<News> mNews;
+    private List<View> upviews;
 
     private CommonAdapter<Category> mCategoryAdapter;
     private CommonAdapter<Goods> mGoodsAdapter;
@@ -77,12 +91,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         mBanners=new ArrayList<>();
         mCategories=new ArrayList<>();
         mGoods=new ArrayList<>();
+        mNews=new ArrayList<>();
+        upviews = new ArrayList<>();
         initRotationMaps();
         getBanner();
         initCategoryGV();
         getCategories();
         initHotRecommendGV();
         getHotRecommend();
+        getNews();
     }
 
 
@@ -172,6 +189,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
             }
         };
         gvCategories.setAdapter(mCategoryAdapter);
+
+        gvCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Category category= (Category) gvCategories.getItemAtPosition(position);
+                Intent intent=new Intent(mContext, CategoryGoodsActivity.class);
+                intent.putExtra(Category.KEY,category);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -181,10 +208,23 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
             public void convert(ViewHolder viewHolder, Goods item) {
                 viewHolder.setText(R.id.txt_title, item.getTitle());
                 viewHolder.setText(R.id.txt_price, "￥"+item.getPreferentialPrice());
+                viewHolder.setText(R.id.txt_comment_num, item.getTotalComment()+"条评价");
+                viewHolder.setText(R.id.txt_comment_percent, item.getGoodCommentPercent()+"%好评");
                 viewHolder.setImageByUrl(R.id.img_goods, Constants.PICTURE_URL+item.getGoodsImage());
             }
         };
         gvGoods.setAdapter(mGoodsAdapter);
+
+        gvGoods.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Goods goods= (Goods) gvGoods.getItemAtPosition(i);
+                Intent intent=new Intent(mContext, GoodsDetailActivity.class);
+                intent.putExtra(Goods.KEY,goods);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
@@ -202,7 +242,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
                     LogUtil.print("result",result);
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
-                        mCategories.clear();
+                        mGoods.clear();
                         JSONArray jo=new JSONObject(result).getJSONArray("result");
                         List<Goods> tempList = mGson.fromJson(jo.toString(), new TypeToken<List<Goods>>() {}.getType());
                         mGoods.addAll(tempList);
@@ -222,9 +262,93 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         });
     }
 
+    private void getNews(){
+        Map<String,Object> params=new HashMap<>();
+        params.put("pageNumber",1);
+        params.put("pageSize",12);
+        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
+        Call<ResponseBody> call=newsWebService.getNews(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        mNews.clear();
+                        JSONArray jo=new JSONObject(result).getJSONObject("result").getJSONArray("list");
+                        List<News> tempList = mGson.fromJson(jo.toString(), new TypeToken<List<News>>() {}.getType());
+                        mNews.addAll(tempList);
+                        initUpView();
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    /**
+     * 初始化界面程序
+     */
+    private void initUpView() {
+        setUpView();
+        upviewNews.setViews(upviews);
+        /**
+         * 设置item_view的监听
+         */
+        upviewNews.setOnItemClickListener(new UPMarqueeView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                Intent intent=new Intent(mContext,NewsDetailActivity.class);
+                intent.putExtra(News.KEY,mNews.get(position));
+                startActivity(intent);
+            }
+        });
+    }
+
+    /**
+     * 初始化需要循环的View
+     * 为了灵活的使用滚动的View，所以把滚动的内容让用户自定义
+     * 假如滚动的是三条或者一条，或者是其他，只需要把对应的布局，和这个方法稍微改改就可以了，
+     */
+    private void setUpView() {
+        for (int i = 0; i < mNews.size(); i = i + 2) {
+            final int position = i;
+            //设置滚动的单个布局
+            LinearLayout moreView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.item_upmarquee_news, null);
+            //初始化布局的控件
+            TextView tv1 = (TextView) moreView.findViewById(R.id.txt_title);
+            TextView tv2 = (TextView) moreView.findViewById(R.id.txt_title2);
+            //进行对控件赋值
+            tv1.setText(mNews.get(i).getTitle());
+            if (mNews.size() > i + 1) {
+                //因为淘宝那儿是两条数据，但是当数据是奇数时就不需要赋值第二个，所以加了一个判断，还应该把第二个布局给隐藏掉
+                tv2.setText(mNews.get(i + 1).getTitle());
+            } else {
+                moreView.findViewById(R.id.rl2).setVisibility(View.GONE);
+            }
+            //添加到循环滚动数组里面去
+            upviews.add(moreView);
+        }
+    }
+
+
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()){
+            case R.id.txt_news:
+                startActivity(new Intent(mContext, NewsListActivity.class));
+                break;
+            default:break;
+        }
     }
 
     @Override
@@ -235,6 +359,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         convenientBanner= (ConvenientBanner) fragmentView.findViewById(R.id.banner);
         gvCategories= (NoScrollGridView) fragmentView.findViewById(R.id.gv_menus);
         gvGoods= (NoScrollGridView) fragmentView.findViewById(R.id.gv_goods);
+        upviewNews= (UPMarqueeView) fragmentView.findViewById(R.id.upview);
+        txtNews= (TextView) fragmentView.findViewById(R.id.txt_news);
+        txtNews.setOnClickListener(this);
         return fragmentView;
     }
 

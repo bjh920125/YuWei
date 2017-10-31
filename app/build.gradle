@@ -40,6 +40,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile('com.alibaba.android:vlayout:1.2.2@aar') {
+        transitive = true
+    }
+    compile project(':imagepickerModule')
+    compile project(':pla')
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.github.jdsjlzx:LRecyclerView:1.4.3'
@@ -58,8 +63,5 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-    compile ('com.alibaba.android:vlayout:1.2.2@aar') {
-        transitive = true
-    }
-    compile project(':imagepickerModule')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }

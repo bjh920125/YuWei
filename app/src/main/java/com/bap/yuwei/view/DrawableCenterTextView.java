@@ -28,13 +28,14 @@ public class DrawableCenterTextView extends TextView {
     protected void onDraw(Canvas canvas) {
         Drawable[] drawables = getCompoundDrawables();
         if (drawables != null) {
-            Drawable drawableLeft = drawables[0];
+            Drawable drawableLeft = drawables[2];
             if (drawableLeft != null) {
                 float textWidth = getPaint().measureText(getText().toString());
                 int drawablePadding = getCompoundDrawablePadding();
                 int drawableWidth = 0;
                 drawableWidth = drawableLeft.getIntrinsicWidth();
                 float bodyWidth = textWidth + drawableWidth + drawablePadding;
+                setPadding(0, 0, (int)(getWidth() - bodyWidth), 0);
                 canvas.translate((getWidth() - bodyWidth) / 2, 0);
             }
         }

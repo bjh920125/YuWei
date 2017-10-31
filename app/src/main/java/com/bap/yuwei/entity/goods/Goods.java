@@ -1,8 +1,12 @@
-package com.bap.yuwei.activity.goods;
+package com.bap.yuwei.entity.goods;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
-public class Goods {
+public class Goods implements Serializable{
+    public static final String KEY="goods.key";
+
     private Long goodsId;
 
     /**
@@ -110,6 +114,74 @@ public class Goods {
     private BigDecimal publishPreferentialPrice;
 
     private String goodsImage;
+
+    private int totalComment;
+
+    private int goodCommentPercent;
+
+    private String mainPic;
+
+    private String goodsModelName;
+
+    private long goodsModelId;
+
+    private int sellNum;
+
+    private int stockNum;
+
+    private String goodsPhoneDesc;
+
+    private List<GoodsImage> goodsImages;
+
+    private List<GoodsModel>  goodsModels;
+
+    public String getGoodsPhoneDesc() {
+        return goodsPhoneDesc;
+    }
+
+    public void setGoodsPhoneDesc(String goodsPhoneDesc) {
+        this.goodsPhoneDesc = goodsPhoneDesc;
+    }
+
+    public int getSellNum() {
+        return sellNum;
+    }
+
+    public void setSellNum(int sellNum) {
+        this.sellNum = sellNum;
+    }
+
+    public int getStockNum() {
+        return stockNum;
+    }
+
+    public void setStockNum(int stockNum) {
+        this.stockNum = stockNum;
+    }
+
+    public String getGoodsModelName() {
+        return goodsModelName;
+    }
+
+    public void setGoodsModelName(String goodsModelName) {
+        this.goodsModelName = goodsModelName;
+    }
+
+    public long getGoodsModelId() {
+        return goodsModelId;
+    }
+
+    public void setGoodsModelId(long goodsModelId) {
+        this.goodsModelId = goodsModelId;
+    }
+
+    public String getMainPic() {
+        return mainPic;
+    }
+
+    public void setMainPic(String mainPic) {
+        this.mainPic = mainPic;
+    }
 
     public Long getGoodsId() {
         return goodsId;
@@ -397,5 +469,37 @@ public class Goods {
 
     public void setGoodsImage(String goodsImage) {
         this.goodsImage = goodsImage;
+    }
+
+    public int getTotalComment() {
+        return totalComment;
+    }
+
+    public void setTotalComment(int totalComment) {
+        this.totalComment = totalComment;
+    }
+
+    public int getGoodCommentPercent() {
+        return goodCommentPercent;
+    }
+
+    public void setGoodCommentPercent(int goodCommentPercent) {
+        this.goodCommentPercent = goodCommentPercent;
+    }
+
+    public List<GoodsImage> getGoodsImages() {
+        return goodsImages;
+    }
+
+    public void setGoodsImages(List<GoodsImage> goodsImages) {
+        this.goodsImages = goodsImages;
+    }
+
+    public List<GoodsModel> getGoodsModels() {
+        return goodsModels;
+    }
+
+    public void setGoodsModels(List<GoodsModel> goodsModels) {
+        this.goodsModels = goodsModels;
     }
 }

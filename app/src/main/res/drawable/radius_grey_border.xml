@@ -7,7 +7,7 @@
 
     <!-- 线的宽度，颜色灰色 -->
     <stroke
-        android:width="2dp"
+        android:width="1dp"
         android:color="@color/grey" >
     </stroke>
 

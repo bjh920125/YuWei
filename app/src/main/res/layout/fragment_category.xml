@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
@@ -11,5 +13,107 @@
         android:background="@color/colorPrimary"
         android:minHeight="@dimen/toolbar_height">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/search"
+                android:paddingLeft="10dp"
+                android:drawablePadding="5dp"
+                android:layout_weight="8"
+                android:background="@drawable/radius_lightpurple_bg"
+                android:textColor="@color/white"
+                android:gravity="center_vertical"
+                android:text="搜索的商品关键词"
+                android:textSize="13dp"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <Button
+                    android:id="@+id/btn_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:drawableTop="@drawable/nav_xiaoxi"
+                    android:paddingTop="2dp"
+                    android:scaleType="fitCenter"
+                    android:text="消息"
+                    android:textSize="9dp"
+                    android:textColor="@color/white"/>
+            </RelativeLayout>
+        </LinearLayout>
     </android.support.v7.widget.Toolbar>
-</RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/txt_category1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="普通器械"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/txt_category2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="普通器械"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12dp"
+            android:drawableLeft="@drawable/arrow_right_xiao"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/txt_category3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="普通器械"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12dp"
+            android:drawableLeft="@drawable/arrow_right_xiao"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/txt_category4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="普通器械"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12dp"
+            android:drawableLeft="@drawable/arrow_right_xiao"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.bap.pla.PLALoadMoreListView
+            android:id="@+id/gv_goods"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:plaContentBackground="@color/lightgray"
+            android:cacheColorHint="#00000000"
+            app:plaColumnNumber="2"
+            android:scrollbars="none"
+            android:background="@color/lightgray2"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

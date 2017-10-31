@@ -45,7 +45,8 @@
                 android:hint="账号/邮箱/手机号"
                 android:paddingLeft="5dp"
                 android:textColorHint="@color/darkgrey"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:text="13915584070"/>
 
 
         </LinearLayout>
@@ -87,7 +88,8 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:textColorHint="@color/darkgrey"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:text="1"/>
         </LinearLayout>
 
         <View

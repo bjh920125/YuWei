@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/lightgray2"
+    android:paddingLeft="2.5dp"
+    android:paddingRight="2.5dp">
 
     <ImageView
         android:id="@+id/img_goods"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="180dp"
         android:scaleType="fitXY"
         android:src="@drawable/default_img"/>
 
@@ -20,7 +23,8 @@
         android:textSize="12dp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:maxEms="15"/>
+        android:maxEms="15"
+        android:background="@color/white"/>
 
     <TextView
         android:id="@+id/txt_price"
@@ -28,26 +32,34 @@
         android:layout_height="wrap_content"
         android:padding="3dp"
         android:textColor="@color/red"
-        android:textSize="13dp"/>
+        android:textSize="13dp"
+        android:background="@color/white"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/white">
         <TextView
             android:id="@+id/txt_comment_num"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="3dp"
-            android:textColor="@color/lightgray2"
-            android:textSize="12dp"/>
+            android:textColor="@color/darkgrey"
+            android:textSize="11dp"/>
 
         <TextView
             android:id="@+id/txt_comment_percent"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="3dp"
-            android:textColor="@color/lightgray2"
-            android:textSize="12dp"/>
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/darkgrey"
+            android:textSize="11dp"/>
     </LinearLayout>
+    <View
+    android:layout_width="match_parent"
+    android:layout_height="5dp"
+    android:background="@color/lightgray2" >
+</View>
 </LinearLayout>

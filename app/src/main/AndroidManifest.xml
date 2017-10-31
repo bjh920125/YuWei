@@ -74,10 +74,10 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
@@ -90,10 +90,20 @@
         <activity
             android:name=".activity.WebViewActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".activity.sys.LoginActivity"
+        <activity
+            android:name=".activity.sys.LoginActivity"
             android:label="登录鱼尾"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.news.NewsListActivity"
+            android:label="医疗快报"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.news.NewsDetailActivity"
+            android:label="快报详情"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.goods.CategoryGoodsActivity" />
+        <activity android:name=".activity.goods.GoodsDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -5,14 +5,21 @@ import android.os.Bundle;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
+import com.bap.yuwei.activity.sys.QRLoginActivity;
+import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.util.MyApplication;
+import com.bap.yuwei.webservice.SysWebService;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class ScannerQRCodeActivity extends BaseActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         scan();
     }
 
@@ -40,7 +47,9 @@ public class ScannerQRCodeActivity extends BaseActivity {
                     //Toast.makeText(this,"请重新扫描！",Toast.LENGTH_LONG).show();
                 } else {
                     String scanResult = intentResult.getContents(); // ScanResult 为 获取到的字符串
-                    //// TODO: 2017/10/27
+                    Intent intent=new Intent(mContext, QRLoginActivity.class);
+                    intent.putExtra(Constants.TOKEN_KEY,scanResult);
+                    startActivity(intent);
                     finish();
                 }
             } else {
@@ -48,6 +57,8 @@ public class ScannerQRCodeActivity extends BaseActivity {
             }
         }
     }
+
+
 
 
 

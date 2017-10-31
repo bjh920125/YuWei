@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.bap.yuwei">
 
     <uses-permission android:name="com.bap.haoyidian.permission.JPUSH_MESSAGE" />
@@ -79,6 +80,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
+        <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -102,8 +107,13 @@
             android:name=".activity.news.NewsDetailActivity"
             android:label="快报详情"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.goods.CategoryGoodsActivity" />
-        <activity android:name=".activity.goods.GoodsDetailActivity"></activity>
+        <activity
+            android:name=".activity.goods.CategoryGoodsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.goods.GoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.sys.QRLoginActivity"></activity>
     </application>
 
 </manifest>

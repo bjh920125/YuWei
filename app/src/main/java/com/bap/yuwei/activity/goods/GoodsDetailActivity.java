@@ -6,6 +6,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
@@ -37,13 +38,16 @@ import retrofit2.Response;
 public class GoodsDetailActivity extends BaseActivity {
 
     private ConvenientBanner convenientBanner;
-    private ImageView imgShop;
+    private ImageView imgShop,imgSpecification;
     private TextView txtGoodsTitle,txtPrice,txtOldPrice,txtExpressPrice,txtSellNum,txtModelName,txtSelectNum,txtShopName,txtShopDesc;
     private TextView txtShopCollectUserTotal,txtRecentGoodsTotal,txtGoodsTotal;
     private TextView txtProduct,txtDetail,txtComment;
+    private TextView txtIntroduce,txtSpecification,txtPackage;
+    private RelativeLayout rlPackage;
     private WebView mWebView;
     private StickyScrollView mScrollView;
     private LinearLayout llDetail;
+    private View addview;
 
     private int color;
     private int selectColor;
@@ -129,6 +133,7 @@ public class GoodsDetailActivity extends BaseActivity {
         txtExpressPrice.setText("快递："+mGoods.getFreight()+"元");
         txtModelName.setText(mGoods.getGoodsModelName());
         txtSellNum.setText("已卖出"+mGoods.getSellNum()+"件");
+        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mGoods.getSpecification(),imgSpecification, DisplayImageOptionsUtil.getOptions());
         initRotationMaps();
         mWebView.loadDataWithBaseURL(null, mGoods.getGoodsPhoneDesc(), "text/html", "GB2312", null);
     }
@@ -155,6 +160,36 @@ public class GoodsDetailActivity extends BaseActivity {
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT);
     }
 
+    public void onDetailMenuClick(View v){
+        txtIntroduce.setTextColor(color);
+        txtSpecification.setTextColor(color);
+        txtPackage.setTextColor(color);
+        switch (v.getId()){
+            case R.id.txt_introduce:
+                txtIntroduce.setTextColor(selectColor);
+                mWebView.setVisibility(View.VISIBLE);
+                imgSpecification.setVisibility(View.GONE);
+                rlPackage.setVisibility(View.GONE);
+                addview.setVisibility(View.GONE);
+                break;
+            case R.id.txt_spefi:
+                txtSpecification.setTextColor(selectColor);
+                mWebView.setVisibility(View.GONE);
+                imgSpecification.setVisibility(View.VISIBLE);
+                rlPackage.setVisibility(View.GONE);
+                addview.setVisibility(View.VISIBLE);
+                break;
+            case R.id.txt_package:
+                txtPackage.setTextColor(selectColor);
+                mWebView.setVisibility(View.GONE);
+                imgSpecification.setVisibility(View.GONE);
+                rlPackage.setVisibility(View.VISIBLE);
+                addview.setVisibility(View.VISIBLE);
+                break;
+            default:break;
+        }
+        mScrollView.smoothScrollTo(0,topDetail);
+    }
 
     public void toPosition(View v){
         txtProduct.setTextColor(color);
@@ -215,6 +250,12 @@ public class GoodsDetailActivity extends BaseActivity {
         txtProduct=(TextView) findViewById(R.id.txt_product);
         txtDetail=(TextView) findViewById(R.id.txt_detail);
         txtComment=(TextView) findViewById(R.id.txt_comment);
+        txtIntroduce=(TextView) findViewById(R.id.txt_introduce);
+        txtSpecification=(TextView) findViewById(R.id.txt_spefi);
+        txtPackage=(TextView) findViewById(R.id.txt_package);
+        imgSpecification= (ImageView) findViewById(R.id.img_specification);
+        rlPackage= (RelativeLayout) findViewById(R.id.rl_package);
+        addview=findViewById(R.id.addview);
         txtOldPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
     }
 }

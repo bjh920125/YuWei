@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.ScannerQRCodeActivity;
 import com.bap.yuwei.activity.goods.CategoryGoodsActivity;
 import com.bap.yuwei.activity.goods.GoodsDetailActivity;
 import com.bap.yuwei.activity.news.NewsDetailActivity;
@@ -347,6 +348,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
             case R.id.txt_news:
                 startActivity(new Intent(mContext, NewsListActivity.class));
                 break;
+            case R.id.btn_scan:
+                startActivity(new Intent(mContext, ScannerQRCodeActivity.class));
+                break;
+            case R.id.btn_msg:
+                break;
             default:break;
         }
     }
@@ -361,6 +367,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         gvGoods= (NoScrollGridView) fragmentView.findViewById(R.id.gv_goods);
         upviewNews= (UPMarqueeView) fragmentView.findViewById(R.id.upview);
         txtNews= (TextView) fragmentView.findViewById(R.id.txt_news);
+        btnScan.setOnClickListener(this);
+        btnMsg.setOnClickListener(this);
         txtNews.setOnClickListener(this);
         return fragmentView;
     }

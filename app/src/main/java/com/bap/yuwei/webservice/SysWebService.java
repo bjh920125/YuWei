@@ -18,6 +18,8 @@ public interface SysWebService {
     @POST("/v1/user/login")
     Call<ResponseBody> login(@Body RequestBody body);
 
+    @POST("/v1/user/app/qrcodeLogin")
+    Call<ResponseBody> login(@Field("userId") String userId,@Field("token") String token);
 
     @POST("http://ip.taobao.com/service/getIpInfo2.php")
     @FormUrlEncoded

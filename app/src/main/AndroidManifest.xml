@@ -127,7 +127,8 @@
             android:name=".activity.sys.ReceiveAddressListActivity"
             android:label="我的收货地址"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.sys.AddReceiveAddressActivity"></activity>
+        <activity android:name=".activity.sys.AddReceiveAddressActivity" />
+        <activity android:name=".activity.sys.UpdateReceiveAddressActivity"></activity>
     </application>
 
 </manifest>

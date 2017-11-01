@@ -53,7 +53,7 @@ public class ReceiveAddressListActivity extends BaseActivity {
 
         mAdapter=new CommonAdapter<ShippingAddress>(mContext,addressList,R.layout.item_address) {
             @Override
-            public void convert(ViewHolder viewHolder, ShippingAddress item) {
+            public void convert(ViewHolder viewHolder,final ShippingAddress item) {
                 viewHolder.setText(R.id.txt_name,item.getConsignee());
                 viewHolder.setText(R.id.txt_tel,item.getCellphone());
                 viewHolder.setText(R.id.txt_address,item.getProvince()+item.getCity()+item.getRegion()+item.getStreet());
@@ -71,21 +71,23 @@ public class ReceiveAddressListActivity extends BaseActivity {
                 viewHolder.setOnClickListener(R.id.txt_default, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        setDefaultAddress(item.getShippingAddressId());
                     }
                 });
 
                 viewHolder.setOnClickListener(R.id.txt_edit, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Intent intent=new Intent(mContext,UpdateReceiveAddressActivity.class);
+                        intent.putExtra(ShippingAddress.KEY,item);
+                        startActivity(intent);
                     }
                 });
 
                 viewHolder.setOnClickListener(R.id.txt_delete, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        deleteAddress(item.getShippingAddressId());
                     }
                 });
             }
@@ -94,6 +96,39 @@ public class ReceiveAddressListActivity extends BaseActivity {
         getReceiveAddress();
     }
 
+    /**
+     * 设置默认收获地址
+     */
+    private void setDefaultAddress(Long addressId){
+        Call<ResponseBody> call=sysWebService.setDefaultAddress(mUser.getUserId(),addressId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        getReceiveAddress();
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+
+    /**
+     * 获取收获地址
+     */
     private void getReceiveAddress(){
         Call<ResponseBody> call=sysWebService.getReceiveAddress(mUser.getUserId());
         call.enqueue(new Callback<ResponseBody>() {
@@ -123,6 +158,36 @@ public class ReceiveAddressListActivity extends BaseActivity {
             }
         });
     }
+
+    /**
+     * 删除收获地址
+     */
+    private void deleteAddress(Long addressId){
+        Call<ResponseBody> call=sysWebService.deleteReceiveAddress(mUser.getUserId(),addressId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        getReceiveAddress();
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
 
     public void addAddress(View v){
         startActivity(new Intent(mContext,AddReceiveAddressActivity.class));

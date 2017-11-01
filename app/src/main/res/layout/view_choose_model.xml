@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:zhy="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,38 +7,34 @@
     android:background="@color/transparent"
     android:clipChildren="false">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="150dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="150dp"
         android:background="@color/white"
         android:layout_below="@+id/view"
         android:paddingTop="10dp">
     <ImageView
-        android:id="@+id/img_goods"
+        android:id="@+id/img_place"
         android:layout_width="85dp"
-        android:layout_height="85dp"
+        android:layout_height="70dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        app:srcCompat="@drawable/default_img"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/txt_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/img_goods"
+        android:layout_alignTop="@+id/img_place"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="35dp"
-        android:layout_toEndOf="@+id/img_goods"
-        android:layout_toRightOf="@+id/img_goods"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/img_place"
+        android:layout_toRightOf="@+id/img_place"
         android:text="111"
         android:textColor="@color/red"
         android:textSize="16dp"/>
@@ -47,7 +43,7 @@
         android:id="@+id/txt_stock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/img_goods"
+        android:layout_alignBottom="@+id/img_place"
         android:layout_alignLeft="@+id/txt_price"
         android:layout_marginBottom="9dp"
         android:text="1111"
@@ -60,7 +56,6 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/img_goods"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         app:srcCompat="@drawable/tk_close"
@@ -69,7 +64,7 @@
     <View
         android:id="@+id/view_divider_line2"
         android:layout_width="match_parent"
-        android:layout_below="@+id/img_goods"
+        android:layout_below="@+id/img_place"
         android:layout_marginTop="10dp"
         android:layout_height="0.5dp"
         android:background="#ADADAD" />
@@ -78,8 +73,8 @@
         android:id="@+id/txt_model_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/img_goods"
-        android:layout_alignStart="@+id/img_goods"
+        android:layout_alignLeft="@+id/img_place"
+        android:layout_alignStart="@+id/img_place"
         android:layout_below="@+id/view_divider_line2"
         android:layout_marginTop="14dp"
         android:text="型号" />
@@ -143,4 +138,13 @@
         android:background="@color/colorPrimary"/>
 
         </RelativeLayout>
-</RelativeLayout>
+
+    <ImageView
+        android:id="@+id/img_goods"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        app:srcCompat="@drawable/default_img"
+        android:layout_marginTop="140dp" />
+</FrameLayout>

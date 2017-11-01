@@ -81,6 +81,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
      * 获取收藏量
      */
     private void getCollectNum(){
+        if(null==mUser) return;
         Call<ResponseBody> call=goodsWebService.getCollectNum(mUser.getUserId());
         call.enqueue(new Callback<ResponseBody>() {
             @Override

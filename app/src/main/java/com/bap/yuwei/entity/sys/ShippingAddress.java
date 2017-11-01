@@ -1,6 +1,10 @@
 package com.bap.yuwei.entity.sys;
 
-public class ShippingAddress {
+import java.io.Serializable;
+
+public class ShippingAddress implements Serializable{
+    public static final String KEY="shippingaddress.key";
+
     private Long shippingAddressId;
     private String consignee;
     private String province;

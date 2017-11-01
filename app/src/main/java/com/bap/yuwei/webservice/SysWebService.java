@@ -5,6 +5,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -47,4 +48,10 @@ public interface SysWebService {
 
     @POST("/v1/user/{userId}/addresses")
     Call<ResponseBody> addReceiveAddress(@Path("userId") String userId,@Body RequestBody body);
+
+    @PUT("v1/user/{userId}/addresses/{addressId}/setdefaultaddress")
+    Call<ResponseBody> setDefaultAddress(@Path("userId") String userId,@Path("addressId") Long addressId);
+
+    @DELETE("/v1/user/{userId}/addresses/{addressId}")
+    Call<ResponseBody> deleteReceiveAddress(@Path("userId") String userId,@Path("addressId") Long addressId);
 }

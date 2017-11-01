@@ -5,7 +5,7 @@ import android.webkit.WebView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
-import com.bap.yuwei.entity.News;
+import com.bap.yuwei.entity.news.News;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.util.LogUtil;

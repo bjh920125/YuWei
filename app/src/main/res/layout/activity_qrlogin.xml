@@ -24,21 +24,21 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txt_close"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="191dp"
-        app:srcCompat="@drawable/baozhang" />
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/computer"
+        android:layout_above="@+id/txt_tip"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/txt_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:text="PC端登录确认"
-        android:textSize="16dp"/>
+        android:textSize="16dp"
+        android:layout_above="@+id/txt_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="88dp" />
 
     <TextView
         android:id="@+id/txt_login"

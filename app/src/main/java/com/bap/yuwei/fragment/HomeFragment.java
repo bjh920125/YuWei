@@ -14,14 +14,15 @@ import com.bap.yuwei.R;
 import com.bap.yuwei.activity.ScannerQRCodeActivity;
 import com.bap.yuwei.activity.goods.CategoryGoodsActivity;
 import com.bap.yuwei.activity.goods.GoodsDetailActivity;
+import com.bap.yuwei.activity.goods.OverallSearchActivity;
 import com.bap.yuwei.activity.news.NewsDetailActivity;
 import com.bap.yuwei.activity.news.NewsListActivity;
 import com.bap.yuwei.adapter.RotationMapAdapter;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
-import com.bap.yuwei.entity.Banner;
+import com.bap.yuwei.entity.news.Banner;
 import com.bap.yuwei.entity.Constants;
-import com.bap.yuwei.entity.News;
+import com.bap.yuwei.entity.news.News;
 import com.bap.yuwei.entity.goods.Category;
 import com.bap.yuwei.entity.goods.Goods;
 import com.bap.yuwei.entity.http.AppResponse;
@@ -60,7 +61,7 @@ import retrofit2.Response;
 public class HomeFragment extends BaseFragment implements View.OnClickListener{
 
     private Button btnScan,btnMsg;
-    private TextView txtNews;
+    private TextView txtNews,txtSearch;
     private ConvenientBanner convenientBanner;
     private NoScrollGridView gvCategories,gvGoods;
     private UPMarqueeView upviewNews;
@@ -353,6 +354,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
                 break;
             case R.id.btn_msg:
                 break;
+            case R.id.txt_search:
+                startActivity(new Intent(mContext, OverallSearchActivity.class));
+                break;
             default:break;
         }
     }
@@ -367,9 +371,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         gvGoods= (NoScrollGridView) fragmentView.findViewById(R.id.gv_goods);
         upviewNews= (UPMarqueeView) fragmentView.findViewById(R.id.upview);
         txtNews= (TextView) fragmentView.findViewById(R.id.txt_news);
+        txtSearch=(TextView) fragmentView.findViewById(R.id.txt_search);
         btnScan.setOnClickListener(this);
         btnMsg.setOnClickListener(this);
         txtNews.setOnClickListener(this);
+        txtSearch.setOnClickListener(this);
         return fragmentView;
     }
 

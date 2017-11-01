@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.entity.Constants;
-import com.bap.yuwei.entity.User;
+import com.bap.yuwei.entity.sys.User;
 import com.bap.yuwei.entity.event.UserInfoEvent;
 import com.bap.yuwei.util.SharedPreferencesUtil;
 import com.google.gson.Gson;

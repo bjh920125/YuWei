@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bap.yuwei.activity.WebViewActivity;
-import com.bap.yuwei.entity.Banner;
+import com.bap.yuwei.entity.news.Banner;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bigkoo.convenientbanner.holder.Holder;

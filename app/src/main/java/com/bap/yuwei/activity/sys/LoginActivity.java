@@ -7,7 +7,8 @@ import android.view.View;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.entity.Constants;
-import com.bap.yuwei.entity.User;
+import com.bap.yuwei.entity.sys.User;
+import com.bap.yuwei.entity.event.UserInfoEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.util.LogUtil;
@@ -20,6 +21,7 @@ import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.view.ClearableEditText;
 import com.bap.yuwei.webservice.SysWebService;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -78,6 +80,7 @@ public class LoginActivity extends BaseActivity {
                         SharedPreferencesUtil.putString(mContext,Constants.USER_KEY,jo.getString("user"));
                         User user=mGson.fromJson(jo.getString("user"),User.class);
                         getXToken(jo.getString("token"),user.getUserId());
+                        EventBus.getDefault().post(new UserInfoEvent());
                         finish();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bap.yuwei.activity.sys.ReceiveAddressListActivity">
+
+    <include layout="@layout/view_toolbar"/>
+
+    <ListView
+        android:id="@+id/lv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginBottom="56dp"
+        android:divider="@drawable/ic_listview_sperator"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/radius_purple_bg"
+        android:gravity="center"
+        android:text="添加新地址"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:onClick="addAddress"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"/>
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.bap.yuwei.entity;
+package com.bap.yuwei.entity.news;
 
 /**
  * Created by Administrator on 2017/7/24.

@@ -1,4 +1,4 @@
-package com.bap.yuwei.entity;
+package com.bap.yuwei.entity.sys;
 
 public class User {
     private String userId;

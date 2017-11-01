@@ -113,7 +113,21 @@
         <activity
             android:name=".activity.goods.GoodsDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.sys.QRLoginActivity"></activity>
+        <activity
+            android:name=".activity.sys.QRLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.goods.OverallSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.UserInfoActivity"
+            android:label="个人资料"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.ReceiveAddressListActivity"
+            android:label="我的收货地址"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.sys.AddReceiveAddressActivity"></activity>
     </application>
 
 </manifest>

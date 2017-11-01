@@ -1,7 +1,7 @@
 package com.bap.yuwei.entity.event;
 
 
-import com.bap.yuwei.entity.User;
+import com.bap.yuwei.entity.sys.User;
 
 /**
  * Created by jianhua on 17/5/31.

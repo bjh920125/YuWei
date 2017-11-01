@@ -1,11 +1,16 @@
 package com.bap.yuwei.activity.goods;
 
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,12 +19,14 @@ import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.GoodsImageAdapter;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.goods.Goods;
+import com.bap.yuwei.entity.goods.GoodsModel;
 import com.bap.yuwei.entity.goods.Shop;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
+import com.bap.yuwei.util.StringUtils;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.view.StickyScrollView;
@@ -27,6 +34,9 @@ import com.bap.yuwei.webservice.GoodsWebService;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import org.json.JSONObject;
 
@@ -35,7 +45,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GoodsDetailActivity extends BaseActivity {
+public class GoodsDetailActivity extends BaseActivity implements View.OnClickListener{
 
     private ConvenientBanner convenientBanner;
     private ImageView imgShop,imgSpecification;
@@ -48,6 +58,9 @@ public class GoodsDetailActivity extends BaseActivity {
     private StickyScrollView mScrollView;
     private LinearLayout llDetail;
     private View addview;
+    private TextView txtNum;
+
+    private PopupWindow popModels;
 
     private int color;
     private int selectColor;
@@ -70,6 +83,13 @@ public class GoodsDetailActivity extends BaseActivity {
         selectColor=getResources().getColor(R.color.colorPrimary);
     }
 
+    /**
+     * 选择型号
+     * @param v
+     */
+    public void chooseModel(View v){
+        popModels.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);
+    }
 
     private void getGoodsDetail(){
         Call<ResponseBody> call=goodsWebService.getGoodsDetail(mGoods.getGoodsId());
@@ -136,6 +156,7 @@ public class GoodsDetailActivity extends BaseActivity {
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mGoods.getSpecification(),imgSpecification, DisplayImageOptionsUtil.getOptions());
         initRotationMaps();
         mWebView.loadDataWithBaseURL(null, mGoods.getGoodsPhoneDesc(), "text/html", "GB2312", null);
+        initChooseModelView();
     }
 
     private void initShopUIWithValues(){
@@ -160,6 +181,40 @@ public class GoodsDetailActivity extends BaseActivity {
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.img_close:
+                popModels.dismiss();
+                break;
+            case R.id.img_add:
+                updateSelectNum(true);
+                break;
+            case R.id.img_less:
+                updateSelectNum(false);
+                break;
+            default:break;
+        }
+    }
+
+    private void updateSelectNum(boolean isAdd){
+        int num=Integer.parseInt(StringUtils.getTextViewValue(txtNum));
+        if(isAdd){
+            if(num<mGoods.getStockNum()){
+                txtNum.setText(++num+"");
+            }else{
+                ToastUtil.showShort(mContext,"数量不能超过库存！");
+            }
+        }else{
+            if(num>=2){
+                txtNum.setText(--num+"");
+            }
+        }
+    }
+
+    /**
+     * 商品介绍、规格、评价按钮
+     */
     public void onDetailMenuClick(View v){
         txtIntroduce.setTextColor(color);
         txtSpecification.setTextColor(color);
@@ -191,6 +246,9 @@ public class GoodsDetailActivity extends BaseActivity {
         mScrollView.smoothScrollTo(0,topDetail);
     }
 
+    /**
+     * 标题上的商品、详情、评价按钮
+     */
     public void toPosition(View v){
         txtProduct.setTextColor(color);
         txtDetail.setTextColor(color);
@@ -219,6 +277,36 @@ public class GoodsDetailActivity extends BaseActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         topDetail = llDetail.getTop()+55;  //滑动需要的距离
+    }
+
+    private void initChooseModelView(){
+        View view = LayoutInflater.from(mContext).inflate(R.layout.view_choose_model, null);
+        ImageView imgGoods= (ImageView) view.findViewById(R.id.img_goods);
+        TextView txtPrice= (TextView) view.findViewById(R.id.txt_price);
+        TextView txtStock= (TextView) view.findViewById(R.id.txt_stock);
+        final TagFlowLayout modelTfl= (TagFlowLayout) view.findViewById(R.id.flowlayout);
+        ImageView imgMore= (ImageView) view.findViewById(R.id.img_add);
+        ImageView imgLess= (ImageView) view.findViewById(R.id.img_less);
+        ImageView imgClose= (ImageView) view.findViewById(R.id.img_close);
+        txtNum= (TextView) view.findViewById(R.id.txt_num);
+        imgMore.setOnClickListener(this);
+        imgLess.setOnClickListener(this);
+        imgClose.setOnClickListener(this);
+        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mGoods.getGoodsImages().get(0).getGoodsImagePath(),imgGoods, DisplayImageOptionsUtil.getOptions());
+        txtPrice.setText("￥"+mGoods.getPreferentialPrice());
+        txtStock.setText("库存"+mGoods.getStockNum()+"件");
+        modelTfl.setMaxSelectCount(1);
+        modelTfl.setAdapter(new TagAdapter<GoodsModel>(mGoods.getGoodsModels()) {
+            @Override
+            public View getView(FlowLayout parent, int position, GoodsModel o) {
+                TextView tv = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_model, modelTfl, false);
+                tv.setText(o.getGoodsModelName());
+                return tv;
+            }
+        });
+        popModels = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popModels.setBackgroundDrawable(new BitmapDrawable());
+        popModels.setOutsideTouchable(true);
     }
 
     @Override
@@ -258,4 +346,6 @@ public class GoodsDetailActivity extends BaseActivity {
         addview=findViewById(R.id.addview);
         txtOldPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
     }
+
+   
 }

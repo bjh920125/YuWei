@@ -4,6 +4,7 @@ package com.bap.yuwei.fragment.base;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -15,9 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.sys.LoginActivity;
 import com.bap.yuwei.entity.Constants;
-import com.bap.yuwei.entity.sys.User;
 import com.bap.yuwei.entity.event.UserInfoEvent;
+import com.bap.yuwei.entity.sys.User;
 import com.bap.yuwei.util.SharedPreferencesUtil;
 import com.google.gson.Gson;
 
@@ -89,6 +91,8 @@ public abstract class BaseFragment extends Fragment {
         String userJson= SharedPreferencesUtil.getString(mContext, Constants.USER_KEY);
         if(null!=userJson) {
             mUser = mGson.fromJson(userJson, User.class);
+        }else{
+            mUser=null;
         }
     }
 
@@ -139,6 +143,12 @@ public abstract class BaseFragment extends Fragment {
         //   window.setWindowAnimations(R.style.PopWindowAnimStyle);
     }
 
-
+    protected boolean isLogined(){
+        if(null==mUser){
+            startActivity(new Intent(mContext, LoginActivity.class));
+            return false;
+        }
+        return true;
+    }
 
 }

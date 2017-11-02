@@ -18,18 +18,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="onBackClick"
                 android:scaleType="centerInside"
-                android:src="@drawable/nav_arrow_left"
-                android:onClick="onBackClick"/>
+                android:src="@drawable/nav_arrow_left" />
 
             <EditText
                 android:id="@+id/et_words"
@@ -41,8 +41,8 @@
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:hint="搜索关键词"
-                android:singleLine="true"
                 android:paddingLeft="10dp"
+                android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="13dp" />
 
@@ -68,44 +68,51 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
         android:text="热搜"
         android:textColor="@color/lightblack" />
 
-    <com.linearlistview.LinearListView
-        android:id="@+id/lv_hot_words"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
 
-    <include layout="@layout/view_divider"/>
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+        <com.linearlistview.LinearListView
+            android:id="@+id/lv_hot_words"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <include layout="@layout/view_divider" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginLeft="10dp">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_weight="2"
+            android:gravity="center_vertical"
             android:text="历史搜索"
             android:textColor="@color/lightblack" />
 
         <com.bap.yuwei.view.LeftDrawableCenterTextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_weight="1"
-            android:text="清空历史搜索"
             android:drawableLeft="@drawable/delete"
-            android:textColor="@color/lightblack"
-            android:onClick="deleteSearchHistory"/>
+            android:gravity="center_vertical"
+            android:onClick="deleteSearchHistory"
+            android:text="清空历史搜索"
+            android:textColor="@color/lightblack" />
 
     </LinearLayout>
 
@@ -116,6 +123,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:divider="@drawable/ic_listview_sperator"
-        android:showDividers="middle"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:showDividers="middle" />
 </LinearLayout>

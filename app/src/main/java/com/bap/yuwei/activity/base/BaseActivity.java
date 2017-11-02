@@ -2,6 +2,7 @@ package com.bap.yuwei.activity.base;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.sys.LoginActivity;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.sys.User;
 import com.bap.yuwei.util.MyApplication;
@@ -214,4 +216,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         //   window.setWindowAnimations(R.style.PopWindowAnimStyle);
     }
 
+
+    protected boolean isLogined(){
+        if(null==mUser){
+            startActivity(new Intent(mContext, LoginActivity.class));
+            return false;
+        }
+        return true;
+    }
 }

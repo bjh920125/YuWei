@@ -10,9 +10,10 @@ import android.widget.TextView;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.entity.Constants;
-import com.bap.yuwei.entity.sys.User;
+import com.bap.yuwei.entity.event.UserInfoEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
+import com.bap.yuwei.entity.sys.User;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
@@ -26,6 +27,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pizidea.imagepicker.AndroidImagePicker;
 import com.pizidea.imagepicker.bean.ImageItem;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -220,6 +223,15 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
             default:break;
         }
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateUserInfo(UserInfoEvent userInfoEvent){
+        String userJson= SharedPreferencesUtil.getString(mContext, Constants.USER_KEY);
+        if(null!=userJson) {
+            mUser = mGson.fromJson(userJson, User.class);
+            refreshUI();
+        }
     }
 
     public void addAddress(View v){

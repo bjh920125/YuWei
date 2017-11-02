@@ -2,6 +2,7 @@ package com.bap.yuwei.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,17 @@ import com.bap.yuwei.activity.goods.GoodsDetailActivity;
 import com.bap.yuwei.activity.goods.OverallSearchActivity;
 import com.bap.yuwei.activity.news.NewsDetailActivity;
 import com.bap.yuwei.activity.news.NewsListActivity;
+import com.bap.yuwei.activity.sys.MsgMenusActivity;
 import com.bap.yuwei.adapter.RotationMapAdapter;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
-import com.bap.yuwei.entity.news.Banner;
 import com.bap.yuwei.entity.Constants;
-import com.bap.yuwei.entity.news.News;
 import com.bap.yuwei.entity.goods.Category;
 import com.bap.yuwei.entity.goods.Goods;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
+import com.bap.yuwei.entity.news.Banner;
+import com.bap.yuwei.entity.news.News;
 import com.bap.yuwei.fragment.base.BaseFragment;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
@@ -58,13 +60,14 @@ import retrofit2.Response;
  * Created by Administrator on 2017/10/27.
  */
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener{
+public class HomeFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private Button btnScan,btnMsg;
     private TextView txtNews,txtSearch;
     private ConvenientBanner convenientBanner;
     private NoScrollGridView gvCategories,gvGoods;
     private UPMarqueeView upviewNews;
+    private SwipeRefreshLayout swipeRefresh;
 
     private List<Banner> mBanners;
     private List<Category> mCategories;
@@ -81,7 +84,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         newsWebService= MyApplication.getInstance().getWebService(NewsWebService.class);
         goodsWebService=MyApplication.getInstance().getWebService(GoodsWebService.class);
     }
@@ -96,13 +98,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         mNews=new ArrayList<>();
         upviews = new ArrayList<>();
         initRotationMaps();
-        getBanner();
         initCategoryGV();
-        getCategories();
         initHotRecommendGV();
-        getHotRecommend();
-        getNews();
+        swipeRefresh.setRefreshing(true);
+         onRefresh();
     }
+
 
 
     private void getBanner(){
@@ -239,6 +240,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                swipeRefresh.setRefreshing(false);
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -350,9 +352,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
                 startActivity(new Intent(mContext, NewsListActivity.class));
                 break;
             case R.id.btn_scan:
+                if(isLogined())
                 startActivity(new Intent(mContext, ScannerQRCodeActivity.class));
                 break;
             case R.id.btn_msg:
+                if(isLogined())
+                    startActivity(new Intent(mContext, MsgMenusActivity.class));
                 break;
             case R.id.txt_search:
                 startActivity(new Intent(mContext, OverallSearchActivity.class));
@@ -360,6 +365,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
             default:break;
         }
     }
+
+    @Override
+    public void onRefresh() {
+        getBanner();
+        getCategories();
+        getHotRecommend();
+        getNews();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -372,10 +386,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         upviewNews= (UPMarqueeView) fragmentView.findViewById(R.id.upview);
         txtNews= (TextView) fragmentView.findViewById(R.id.txt_news);
         txtSearch=(TextView) fragmentView.findViewById(R.id.txt_search);
+        swipeRefresh= (SwipeRefreshLayout) fragmentView.findViewById(R.id.swipe);
         btnScan.setOnClickListener(this);
         btnMsg.setOnClickListener(this);
         txtNews.setOnClickListener(this);
         txtSearch.setOnClickListener(this);
+        swipeRefresh.setOnRefreshListener(this);
         return fragmentView;
     }
 

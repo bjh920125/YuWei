@@ -75,7 +75,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -127,8 +126,48 @@
             android:name=".activity.sys.ReceiveAddressListActivity"
             android:label="我的收货地址"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.sys.AddReceiveAddressActivity" />
-        <activity android:name=".activity.sys.UpdateReceiveAddressActivity"></activity>
+        <activity
+            android:name=".activity.sys.AddReceiveAddressActivity"
+            android:label="新增收货地址"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.UpdateReceiveAddressActivity"
+            android:label="修改收货地址"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.SettingActivity"
+            android:label="设置"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.AccountMenusActivity"
+            android:label="账户安全"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.ResetPwdByOldPwdActivity"
+            android:label="修改密码"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.ResetPhoneActivity"
+            android:label="修改绑定手机"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.VatActivity"
+            android:label="增票资质"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.MsgSetActivity"
+            android:label="消息设置"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.sys.RegisterActivity"
+            android:label="注册"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.sys.ForgetPwdActivity"
+            android:label="忘记密码"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.sys.MsgMenusActivity"
+            android:label="消息"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

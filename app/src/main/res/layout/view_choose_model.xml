@@ -3,141 +3,162 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:zhy="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/transparent"
+    android:layout_height="wrap_content"
     android:clipChildren="false">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/view"
         android:layout_marginTop="150dp"
         android:background="@color/white"
-        android:layout_below="@+id/view"
         android:paddingTop="10dp">
-    <ImageView
-        android:id="@+id/img_place"
-        android:layout_width="85dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="10dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:visibility="invisible"/>
 
-    <TextView
-        android:id="@+id/txt_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/img_place"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@+id/img_place"
-        android:layout_toRightOf="@+id/img_place"
-        android:text="111"
-        android:textColor="@color/red"
-        android:textSize="16dp"/>
+        <ImageView
+            android:id="@+id/img_place"
+            android:layout_width="85dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:visibility="invisible" />
 
-    <TextView
-        android:id="@+id/txt_stock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/img_place"
-        android:layout_alignLeft="@+id/txt_price"
-        android:layout_marginBottom="9dp"
-        android:text="1111"
-        android:textSize="11dp"
-        android:textColor="@color/darkgrey"/>
+        <TextView
+            android:id="@+id/txt_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_place"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@+id/img_place"
+            android:layout_toRightOf="@+id/img_place"
+            android:text="111"
+            android:textColor="@color/red"
+            android:textSize="16dp" />
 
-    <ImageView
-        android:id="@+id/img_close"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        app:srcCompat="@drawable/tk_close"
-        android:scaleType="centerInside"/>
+        <TextView
+            android:id="@+id/txt_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_place"
+            android:layout_alignLeft="@+id/txt_price"
+            android:layout_marginBottom="9dp"
+            android:text="1111"
+            android:textColor="@color/darkgrey"
+            android:textSize="11dp" />
 
-    <View
-        android:id="@+id/view_divider_line2"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/img_place"
-        android:layout_marginTop="10dp"
-        android:layout_height="0.5dp"
-        android:background="#ADADAD" />
+        <ImageView
+            android:id="@+id/img_close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/tk_close" />
 
-    <TextView
-        android:id="@+id/txt_model_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/img_place"
-        android:layout_alignStart="@+id/img_place"
-        android:layout_below="@+id/view_divider_line2"
-        android:layout_marginTop="14dp"
-        android:text="型号" />
+        <View
+            android:id="@+id/view_divider_line2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/img_place"
+            android:layout_marginTop="10dp"
+            android:background="#ADADAD" />
 
-    <com.zhy.view.flowlayout.TagFlowLayout
-        android:id="@+id/flowlayout"
-        zhy:max_select="1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txt_model_title"/>
+        <TextView
+            android:id="@+id/txt_model_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/img_place"
+            android:layout_alignStart="@+id/img_place"
+            android:layout_below="@+id/view_divider_line2"
+            android:layout_marginTop="14dp"
+            android:text="型号" />
 
-    <TextView
-        android:id="@+id/txt_num_title"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:gravity="center"
-        android:layout_marginTop="28dp"
-        android:text="数量"
-        android:layout_below="@+id/flowlayout"
-        android:layout_alignLeft="@+id/txt_model_title"
-        android:layout_alignStart="@+id/txt_model_title" />
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/flowlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_model_title"
+            zhy:max_select="1" />
 
-    <ImageView
-        android:id="@+id/img_add"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignTop="@+id/txt_num_title"
-        android:layout_alignRight="@+id/img_close"
-        app:srcCompat="@drawable/syncart_more_btn" />
+        <TextView
+            android:id="@+id/txt_num_title"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignLeft="@+id/txt_model_title"
+            android:layout_alignStart="@+id/txt_model_title"
+            android:layout_below="@+id/flowlayout"
+            android:layout_marginTop="28dp"
+            android:gravity="center"
+            android:text="数量" />
 
-    <TextView
-        android:id="@+id/txt_num"
-        android:layout_width="50dp"
-        android:layout_height="25dp"
-        android:gravity="center"
-        android:layout_alignBottom="@+id/img_add"
-        android:layout_toLeftOf="@+id/img_add"
-        android:inputType="number"
-        android:background="@drawable/syncart_middle_btn"
-        android:text="1"
-        android:textColor="@color/lightblack"/>
+        <ImageView
+            android:id="@+id/img_add"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignRight="@+id/img_close"
+            android:layout_alignTop="@+id/txt_num_title"
+            app:srcCompat="@drawable/syncart_more_btn" />
 
-    <ImageView
-        android:id="@+id/img_less"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignTop="@+id/txt_num"
-        android:layout_toLeftOf="@+id/txt_num"
-        android:layout_toStartOf="@+id/txt_num"
-        app:srcCompat="@drawable/syncart_less_btn" />
+        <TextView
+            android:id="@+id/txt_num"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignBottom="@+id/img_add"
+            android:layout_toLeftOf="@+id/img_add"
+            android:background="@drawable/syncart_middle_btn"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="1"
+            android:textColor="@color/lightblack" />
 
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="加入购物车"
-        android:background="@color/colorPrimary"/>
+        <ImageView
+            android:id="@+id/img_less"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignTop="@+id/txt_num"
+            android:layout_toLeftOf="@+id/txt_num"
+            android:layout_toStartOf="@+id/txt_num"
+            app:srcCompat="@drawable/syncart_less_btn" />
 
-        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_add_cart"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="加入购物车"
+                android:textColor="@color/white" />
+
+
+            <TextView
+                android:id="@+id/txt_buy"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#5B3787"
+                android:gravity="center"
+                android:text="立即购买"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/img_goods"
@@ -145,6 +166,6 @@
         android:layout_height="85dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        app:srcCompat="@drawable/default_img"
-        android:layout_marginTop="140dp" />
+        android:layout_marginTop="140dp"
+        app:srcCompat="@drawable/default_img" />
 </FrameLayout>

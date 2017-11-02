@@ -1,10 +1,12 @@
 package com.bap.yuwei.activity.sys;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.MainActivity;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.sys.User;
@@ -50,6 +52,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         webService = MyApplication.getInstance().getWebService(SysWebService.class);
         getIp();
+        initUIWithValue();
     }
 
     public void login(View v){
@@ -76,11 +79,14 @@ public class LoginActivity extends BaseActivity {
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         JSONObject jo=new JSONObject(result).getJSONObject("result");
-                        SharedPreferencesUtil.putString(mContext, Constants.TOKEN_KEY,jo.getString("token"));
-                        SharedPreferencesUtil.putString(mContext,Constants.USER_KEY,jo.getString("user"));
                         User user=mGson.fromJson(jo.getString("user"),User.class);
+                        user.setLoginName(StringUtils.getEditTextValue(etUserName));
+                        user.setPassword(StringUtils.getEditTextValue(etPassword));
+                        SharedPreferencesUtil.putString(mContext,Constants.USER_KEY,mGson.toJson(user));
+                        SharedPreferencesUtil.putString(mContext, Constants.TOKEN_KEY,jo.getString("token"));
                         getXToken(jo.getString("token"),user.getUserId());
                         EventBus.getDefault().post(new UserInfoEvent());
+                        startActivity(new Intent(mContext, MainActivity.class));
                         finish();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
@@ -104,6 +110,12 @@ public class LoginActivity extends BaseActivity {
         SharedPreferencesUtil.putString(mContext,Constants.XTOKEN_KEY,xToken.trim());
     }
 
+    private void initUIWithValue(){
+        if(null==mUser) return;
+        etPassword.setText(mUser.getPassword());
+        etUserName.setText(mUser.getLoginName());
+    }
+
     private void getIp(){
         Call<ResponseBody> call=webService.getIp("myip");
         call.enqueue(new Callback<ResponseBody>() {
@@ -123,6 +135,16 @@ public class LoginActivity extends BaseActivity {
             }
         });
     }
+
+    public void regist(View v){
+        startActivity(new Intent(mContext,RegisterActivity.class));
+    }
+
+    public void forgetPwd(View v){
+        startActivity(new Intent(mContext,ForgetPwdActivity.class));
+    }
+
+
 
     @Override
     protected int getLayoutId() {

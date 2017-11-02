@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
@@ -13,8 +12,8 @@ import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.util.LogUtil;
-import com.bap.yuwei.util.MD5Utils;
 import com.bap.yuwei.util.MyApplication;
+import com.bap.yuwei.util.SharedPreferencesUtil;
 import com.bap.yuwei.util.StringUtils;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
@@ -33,42 +32,33 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends BaseActivity {
-
-    private TextView txtPeronalUser,txtComUser;
-    private View viewPeronalUser,viewComUser;
-    private LinearLayout llPerson;
-    private TextView txtCom;
-    private EditText etName,etPhone,etValidateCode,etPwd,etConfirmPwd;
+public class ResetPhoneActivity extends BaseActivity {
 
     private TextView txtSecond;
+    private EditText etPhone,etValidateCode;
+
     private String msgId;
     protected Timer timer;
     protected int restSecond=60;
     private SysWebService webService;
 
-    private int color;
-    private int selectColor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         webService = MyApplication.getInstance().getWebService(SysWebService.class);
-        color=getResources().getColor(R.color.lightblack);
-        selectColor=getResources().getColor(R.color.colorPrimary);
     }
 
-    public void regist(){
-        String password= MD5Utils.encode(StringUtils.getEditTextValue(etPwd)).toLowerCase();
+
+    /**
+     * 更新用户信息
+     */
+    private void updateUser(){
+        final String phone = StringUtils.getEditTextValue(etPhone);
         Map<String,Object> params=new HashMap<>();
-        params.put("username", StringUtils.getEditTextValue(etName));
-        params.put("password", password);
-        params.put("phone",StringUtils.getEditTextValue(etPhone));
-        params.put("code",StringUtils.getEditTextValue(etValidateCode));
-        params.put("msgId",msgId);
-        params.put("deviceType", Constants.DEVICE_TYPE);
+        params.put("phone",phone);
+        params.put("userId",mUser.getUserId());
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
-        Call<ResponseBody> call=webService.register(body);
+        Call<ResponseBody> call=webService.updatePhone(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -77,7 +67,9 @@ public class RegisterActivity extends BaseActivity {
                     LogUtil.print("result",result);
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
-                        ToastUtil.showShort(mContext,"注册成功！");
+                        mUser.setPhone(phone);
+                        SharedPreferencesUtil.putString(mContext, Constants.USER_KEY, mGson.toJson(mUser));
+                        ToastUtil.showShort(mContext, "新手机号绑定成功！");
                         finish();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
@@ -92,18 +84,6 @@ public class RegisterActivity extends BaseActivity {
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
-    }
-
-    public void chooseUserType(View v){
-        switch (v.getId()){
-            case R.id.txt_person_user:
-                showPersonalView();
-                break;
-            case R.id.txt_com_user:
-                showComView();
-                break;
-            default:break;
-        }
     }
 
     protected void startSecond(){
@@ -132,7 +112,7 @@ public class RegisterActivity extends BaseActivity {
      */
     public void resend(View v){
         if(TextUtils.isEmpty(StringUtils.getEditTextValue(etPhone))){
-            ToastUtil.showShort(mContext,"请输入手机号码！");
+            ToastUtil.showShort(mContext,"请输入新的手机号码！");
             return;
         }
         restSecond=60;
@@ -178,14 +158,7 @@ public class RegisterActivity extends BaseActivity {
      * 检查验证码的正确性
      */
     public void checkCode(View v){
-        String pwd= StringUtils.getEditTextValue(etPwd);
-        String confirmPwd=StringUtils.getEditTextValue(etConfirmPwd);
-        if(!pwd.equals(confirmPwd)){
-            ToastUtil.showShort(mContext,"两次输入的密码不一致！");
-            return;
-        }
-
-        String code= StringUtils.getEditTextValue(etValidateCode);
+        String code=StringUtils.getEditTextValue(etValidateCode);
         Map<String,Object> params=new HashMap<>();
         params.put("code",code);
         params.put("msgId",msgId);
@@ -199,7 +172,7 @@ public class RegisterActivity extends BaseActivity {
                     LogUtil.print("result", result);
                     AppResponse appResponse = mGson.fromJson(result, AppResponse.class);
                     if (appResponse.getCode() == ResponseCode.SUCCESS) {
-                        regist();
+                        updateUser();
                     } else {
                         ToastUtil.showShort(mContext, appResponse.getMessage());
                     }
@@ -215,43 +188,20 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-
-    private void showPersonalView(){
-        txtPeronalUser.setTextColor(selectColor);
-        txtComUser.setTextColor(color);
-        viewPeronalUser.setVisibility(View.VISIBLE);
-        viewComUser.setVisibility(View.INVISIBLE);
-        llPerson.setVisibility(View.VISIBLE);
-        txtCom.setVisibility(View.GONE);
-    }
-
-    private void showComView(){
-        txtPeronalUser.setTextColor(color);
-        txtComUser.setTextColor(selectColor);
-        viewPeronalUser.setVisibility(View.INVISIBLE);
-        viewComUser.setVisibility(View.VISIBLE);
-        llPerson.setVisibility(View.GONE);
-        txtCom.setVisibility(View.VISIBLE);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_register;
+        return R.layout.activity_reset_phone;
     }
 
     @Override
     protected void initView() {
-        txtPeronalUser= (TextView) findViewById(R.id.txt_person_user);
-        txtComUser= (TextView) findViewById(R.id.txt_com_user);
-        viewPeronalUser=findViewById(R.id.view_person_user);
-        viewComUser=findViewById(R.id.view_com_user);
-        llPerson= (LinearLayout) findViewById(R.id.ll_person);
-        txtCom=(TextView) findViewById(R.id.txt_com);
-        etName= (EditText) findViewById(R.id.et_user_name);
+        txtSecond= (TextView) findViewById(R.id.txt_send_code_msg);
         etPhone= (EditText) findViewById(R.id.et_phone);
         etValidateCode= (EditText) findViewById(R.id.et_validate_code);
-        etPwd= (EditText) findViewById(R.id.et_pwd);
-        etConfirmPwd= (EditText) findViewById(R.id.et_confirm_pwd);
-        txtSecond= (TextView) findViewById(R.id.txt_send_code_msg);
     }
 }

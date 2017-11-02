@@ -22,8 +22,14 @@ import retrofit2.http.Path;
 public interface SysWebService {
 
 
+    @POST("/v1/user/register")
+    Call<ResponseBody> register(@Body RequestBody body);
+
     @POST("/v1/user/login")
     Call<ResponseBody> login(@Body RequestBody body);
+
+    @GET("/v1/user/logout")
+    Call<ResponseBody> loginout();
 
     @POST("/v1/user/app/qrcodeLogin")
     @FormUrlEncoded
@@ -34,6 +40,18 @@ public interface SysWebService {
 
     @PUT("/v1/user/{userId}/profile")
     Call<ResponseBody> updateUserInfo(@Path("userId") String userId,@Body RequestBody body);
+
+    @POST("/v1/user/check_pwd")
+    Call<ResponseBody> checkPassword(@Body RequestBody body);
+
+    @PUT("/v1/user/pass")
+    Call<ResponseBody> updatePassword(@Body RequestBody body);
+
+    @PUT("/v1/user/phone")
+    Call<ResponseBody> updatePhone(@Body RequestBody body);
+
+    @POST("/v1/user/password_reset")
+    Call<ResponseBody> forgetPassword(@Body RequestBody body);
 
     @POST("http://ip.taobao.com/service/getIpInfo2.php")
     @FormUrlEncoded
@@ -52,6 +70,24 @@ public interface SysWebService {
     @PUT("v1/user/{userId}/addresses/{addressId}/setdefaultaddress")
     Call<ResponseBody> setDefaultAddress(@Path("userId") String userId,@Path("addressId") Long addressId);
 
+    @PUT("/v1/user/{userId}/addresses/{addressId}")
+    Call<ResponseBody> updateReceiveAddress(@Path("userId") String userId,@Path("addressId") Long addressId,@Body RequestBody body);
+
     @DELETE("/v1/user/{userId}/addresses/{addressId}")
     Call<ResponseBody> deleteReceiveAddress(@Path("userId") String userId,@Path("addressId") Long addressId);
+
+    @GET("/v1/vat/{userId}")
+    Call<ResponseBody> getVat(@Path("userId") String userId);
+
+    @POST("/v1/vat")
+    Call<ResponseBody> updateVat(@Body RequestBody body);
+
+    @POST("/v1/user/smscode")
+    @FormUrlEncoded
+    Call<ResponseBody> getSmsCode(@Field("phone") String phone);
+
+    @POST("/v1/user/sms/valid")
+    Call<ResponseBody> validSmsCode(@Body RequestBody body);
+
+
 }

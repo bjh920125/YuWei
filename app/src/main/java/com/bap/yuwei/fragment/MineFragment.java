@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.sys.LoginActivity;
+import com.bap.yuwei.activity.sys.MsgMenusActivity;
+import com.bap.yuwei.activity.sys.SettingActivity;
 import com.bap.yuwei.activity.sys.UserInfoActivity;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.http.AppResponse;
@@ -41,6 +43,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     private ImageView imgHead;
     private TextView txtName;
     private TextView txtGoodsCollectNum,txtShopCollectNum,txtFootmarkNum;
+    private ImageView imgSet,imgMsg;
 
     private GoodsWebService goodsWebService;
 
@@ -55,7 +58,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         refreshUI();
-        getCollectNum();
     }
 
     @Override
@@ -63,6 +65,13 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         switch (view.getId()){
             case R.id.rl_person_info:
                 loginOrUpdateInfo();
+                break;
+            case R.id.img_set:
+                startActivity(new Intent(mContext, SettingActivity.class));
+                break;
+            case R.id.img_msg:
+                if(isLogined())
+                    startActivity(new Intent(mContext, MsgMenusActivity.class));
                 break;
             default:break;
         }
@@ -114,6 +123,13 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         if(null != mUser){
             txtName.setText(mUser.getUsername());
             ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead, DisplayImageOptionsUtil.getOptions());
+            getCollectNum();
+        }else{
+            txtName.setText("点击登录");
+            ImageLoader.getInstance().displayImage("drawable://"+R.drawable.iconfont_touxiang,imgHead, DisplayImageOptionsUtil.getOptions());
+            txtGoodsCollectNum.setText("0");
+            txtShopCollectNum.setText("0");
+            txtFootmarkNum.setText("0");
         }
     }
 
@@ -140,10 +156,14 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         txtGoodsCollectNum= (TextView) fragmentView.findViewById(R.id.txt_goods_collect_num);
         txtShopCollectNum= (TextView) fragmentView.findViewById(R.id.txt_shop_collect_num);
         txtFootmarkNum= (TextView) fragmentView.findViewById(R.id.txt_footmark_num);
+        imgSet= (ImageView) fragmentView.findViewById(R.id.img_set);
+        imgMsg= (ImageView) fragmentView.findViewById(R.id.img_msg);
         rlPersonInfo.setOnClickListener(this);
         txtGoodsCollectNum.setOnClickListener(this);
         txtShopCollectNum.setOnClickListener(this);
         txtFootmarkNum.setOnClickListener(this);
+        imgSet.setOnClickListener(this);
+        imgMsg.setOnClickListener(this);
         return fragmentView;
     }
 

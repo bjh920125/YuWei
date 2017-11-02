@@ -76,6 +76,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
 
     @Override
     public void onRefresh() {
+        swipeRefresh.setRefreshing(true);
         mGoods.clear();
         mGoodsAdapter.notifyDataSetChanged();
         pageIndex=1;

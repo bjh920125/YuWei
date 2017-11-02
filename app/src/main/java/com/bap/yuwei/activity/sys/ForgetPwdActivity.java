@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
@@ -33,13 +32,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends BaseActivity {
-
-    private TextView txtPeronalUser,txtComUser;
-    private View viewPeronalUser,viewComUser;
-    private LinearLayout llPerson;
-    private TextView txtCom;
-    private EditText etName,etPhone,etValidateCode,etPwd,etConfirmPwd;
+public class ForgetPwdActivity extends BaseActivity {
+    private EditText etPhone,etValidateCode,etPwd;
 
     private TextView txtSecond;
     private String msgId;
@@ -47,28 +41,20 @@ public class RegisterActivity extends BaseActivity {
     protected int restSecond=60;
     private SysWebService webService;
 
-    private int color;
-    private int selectColor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         webService = MyApplication.getInstance().getWebService(SysWebService.class);
-        color=getResources().getColor(R.color.lightblack);
-        selectColor=getResources().getColor(R.color.colorPrimary);
     }
 
-    public void regist(){
+    private void updatePwd(){
         String password= MD5Utils.encode(StringUtils.getEditTextValue(etPwd)).toLowerCase();
         Map<String,Object> params=new HashMap<>();
-        params.put("username", StringUtils.getEditTextValue(etName));
         params.put("password", password);
         params.put("phone",StringUtils.getEditTextValue(etPhone));
-        params.put("code",StringUtils.getEditTextValue(etValidateCode));
-        params.put("msgId",msgId);
         params.put("deviceType", Constants.DEVICE_TYPE);
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
-        Call<ResponseBody> call=webService.register(body);
+        Call<ResponseBody> call=webService.forgetPassword(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -77,7 +63,7 @@ public class RegisterActivity extends BaseActivity {
                     LogUtil.print("result",result);
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
-                        ToastUtil.showShort(mContext,"注册成功！");
+                        ToastUtil.showShort(mContext,"密码修改成功！");
                         finish();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
@@ -94,17 +80,6 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    public void chooseUserType(View v){
-        switch (v.getId()){
-            case R.id.txt_person_user:
-                showPersonalView();
-                break;
-            case R.id.txt_com_user:
-                showComView();
-                break;
-            default:break;
-        }
-    }
 
     protected void startSecond(){
         timer=new Timer();
@@ -178,13 +153,6 @@ public class RegisterActivity extends BaseActivity {
      * 检查验证码的正确性
      */
     public void checkCode(View v){
-        String pwd= StringUtils.getEditTextValue(etPwd);
-        String confirmPwd=StringUtils.getEditTextValue(etConfirmPwd);
-        if(!pwd.equals(confirmPwd)){
-            ToastUtil.showShort(mContext,"两次输入的密码不一致！");
-            return;
-        }
-
         String code= StringUtils.getEditTextValue(etValidateCode);
         Map<String,Object> params=new HashMap<>();
         params.put("code",code);
@@ -199,7 +167,7 @@ public class RegisterActivity extends BaseActivity {
                     LogUtil.print("result", result);
                     AppResponse appResponse = mGson.fromJson(result, AppResponse.class);
                     if (appResponse.getCode() == ResponseCode.SUCCESS) {
-                        regist();
+                        updatePwd();
                     } else {
                         ToastUtil.showShort(mContext, appResponse.getMessage());
                     }
@@ -216,42 +184,16 @@ public class RegisterActivity extends BaseActivity {
     }
 
 
-    private void showPersonalView(){
-        txtPeronalUser.setTextColor(selectColor);
-        txtComUser.setTextColor(color);
-        viewPeronalUser.setVisibility(View.VISIBLE);
-        viewComUser.setVisibility(View.INVISIBLE);
-        llPerson.setVisibility(View.VISIBLE);
-        txtCom.setVisibility(View.GONE);
-    }
-
-    private void showComView(){
-        txtPeronalUser.setTextColor(color);
-        txtComUser.setTextColor(selectColor);
-        viewPeronalUser.setVisibility(View.INVISIBLE);
-        viewComUser.setVisibility(View.VISIBLE);
-        llPerson.setVisibility(View.GONE);
-        txtCom.setVisibility(View.VISIBLE);
-    }
-
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_register;
+        return R.layout.activity_forget_pwd;
     }
 
     @Override
     protected void initView() {
-        txtPeronalUser= (TextView) findViewById(R.id.txt_person_user);
-        txtComUser= (TextView) findViewById(R.id.txt_com_user);
-        viewPeronalUser=findViewById(R.id.view_person_user);
-        viewComUser=findViewById(R.id.view_com_user);
-        llPerson= (LinearLayout) findViewById(R.id.ll_person);
-        txtCom=(TextView) findViewById(R.id.txt_com);
-        etName= (EditText) findViewById(R.id.et_user_name);
         etPhone= (EditText) findViewById(R.id.et_phone);
         etValidateCode= (EditText) findViewById(R.id.et_validate_code);
         etPwd= (EditText) findViewById(R.id.et_pwd);
-        etConfirmPwd= (EditText) findViewById(R.id.et_confirm_pwd);
         txtSecond= (TextView) findViewById(R.id.txt_send_code_msg);
     }
 }

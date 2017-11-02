@@ -16,7 +16,8 @@ public class Constants {
     public static final String TOKEN_KEY="token.key";
     /**X-TOKEN*/
     public static final String XTOKEN_KEY="xtoken.key";
-
+    /**SMS CODE ID*/
+    public static final String SMS_CODE_ID_KEY="sms.code.id.key";
 
 
     /**设备类型*/

@@ -1,12 +1,12 @@
 package com.bap.yuwei.activity.goods;
 
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,6 +89,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
      */
     public void chooseModel(View v){
         popModels.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);
+        backgroundAlpha(0.5f);
     }
 
     private void getGoodsDetail(){
@@ -304,9 +305,25 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 return tv;
             }
         });
-        popModels = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-        popModels.setBackgroundDrawable(new BitmapDrawable());
+        popModels = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popModels.setAnimationStyle(R.style.popupwindow_anim);
         popModels.setOutsideTouchable(true);
+        popModels.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1f);
+            }
+        });
+    }
+
+    /**
+     * 设置添加屏幕的背景透明度
+     */
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     @Override

@@ -2,26 +2,23 @@ package com.bap.yuwei.activity.sys;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.sys.ShippingAddress;
-import com.bap.yuwei.util.area.GetJsonDataUtil;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
+import com.bap.yuwei.util.SoftInputUtil;
 import com.bap.yuwei.util.StringUtils;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
+import com.bap.yuwei.util.area.GetJsonDataUtil;
 import com.bap.yuwei.util.area.JsonBean;
 import com.bap.yuwei.webservice.SysWebService;
 import com.bigkoo.pickerview.OptionsPickerView;
@@ -102,6 +99,7 @@ public class AddReceiveAddressActivity extends BaseActivity {
 
 
     public void chooseArea(View v) {// 弹出选择器
+        SoftInputUtil.hideKeyboard(mContext);
         OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {

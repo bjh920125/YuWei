@@ -1,6 +1,8 @@
 package com.bap.yuwei.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 
@@ -40,6 +42,20 @@ public class MediaUtil {
 			return true;
 		}else{
 			return false;
+		}
+	}
+
+	/**
+	 * 删除方法 这里只会删除某个文件夹下的文件
+	 */
+	public static void deleteFilesByDirectory(File directory, Context context) {
+		if (directory != null && directory.exists() && directory.isDirectory()) {
+			for (File item : directory.listFiles()) {
+				item.delete();
+			}
+			Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+			intent.setData(Uri.fromFile(directory));
+			context.sendBroadcast(intent);
 		}
 	}
 	

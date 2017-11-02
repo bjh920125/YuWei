@@ -1,17 +1,20 @@
 package com.bap.yuwei.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bap.pla.PLAAdapterView;
 import com.bap.pla.PLALoadMoreListView;
 import com.bap.pla.PLALoadMoreListView.OnLoadMoreListener;
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.sys.MsgMenusActivity;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
 import com.bap.yuwei.entity.Constants;
@@ -43,12 +46,11 @@ import retrofit2.Response;
 /**
  * Created by Administrator on 2017/10/27.
  */
-
 public class CategoryFragment extends BaseFragment  implements OnRefreshListener,OnLoadMoreListener,View.OnClickListener {
 
     private SwipeRefreshLayout swipeRefresh;
     private PLALoadMoreListView mGvGoods;
-
+    private Button btnMsg;
     private TextView txtCategory1,txtCategory2,txtCategory3,txtCategory4;
 
     private List<Goods> mGoods;
@@ -163,6 +165,10 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         switch (view.getId()) {
             case R.id.txt_category1:
                 break;
+            case R.id.btn_msg:
+                if(isLogined())
+                    startActivity(new Intent(mContext, MsgMenusActivity.class));
+                break;
             default:
                 break;
         }
@@ -178,9 +184,11 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         txtCategory2= (TextView) fragmentView.findViewById(R.id.txt_category2);
         txtCategory3= (TextView) fragmentView.findViewById(R.id.txt_category3);
         txtCategory4= (TextView) fragmentView.findViewById(R.id.txt_category4);
+        btnMsg=(Button) fragmentView.findViewById(R.id.btn_msg);
         mGvGoods.setOnLoadMoreListener(this);
         swipeRefresh.setOnRefreshListener(this);
         txtCategory1.setOnClickListener(this);
+        btnMsg.setOnClickListener(this);
         return fragmentView;
     }
 

@@ -484,9 +484,7 @@
             android:paddingTop="5dp"
             android:background="@null"
             android:drawableTop="@drawable/kefu"
-            android:onClick="onTabClicked"
             android:textColor="@color/lightblack"
-            android:scaleType="matrix"
             android:text="客服"
             android:textSize="12sp" />
         <Button
@@ -496,12 +494,11 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:drawableTop="@drawable/dianpu"
-            android:paddingTop="5dp"
-            android:onClick="onTabClicked"
-            android:scaleType="matrix"
+            android:paddingTop="7dp"
             android:textColor="@color/lightblack"
             android:text="店铺"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:onClick="showShop"/>
         <Button
             android:id="@+id/btn_collect"
             android:layout_width="0dp"
@@ -510,8 +507,7 @@
             android:paddingTop="5dp"
             android:background="@null"
             android:drawableTop="@drawable/shoucang"
-            android:onClick="onTabClicked"
-            android:scaleType="matrix"
+            android:onClick="collectGoods"
             android:textColor="@color/lightblack"
             android:text="收藏"
             android:textSize="12sp" />

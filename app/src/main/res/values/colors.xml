@@ -19,7 +19,9 @@
     <color name="whitesmoke">#f5f5f5</color><!--烟白色 -->
 
     <color name="transparent">#9000</color><!-- 半透明 -->
+    <color name="transparentall">#00000000</color><!-- 全透明 -->
 
+    <color name="color_00">#8A000000</color>
     <color name="antiquewhite">#faebd7</color><!--古董白 -->
     <color name="navajowhite">#ffdead</color><!--纳瓦白 -->
     <color name="grey">#808080</color><!--灰色 -->

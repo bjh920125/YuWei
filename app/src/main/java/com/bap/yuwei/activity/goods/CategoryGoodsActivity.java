@@ -196,7 +196,6 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
             default:
                 break;
         }
-
         onRefresh();
     }
 

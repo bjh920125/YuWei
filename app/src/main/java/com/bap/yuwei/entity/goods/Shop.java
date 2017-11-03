@@ -1,9 +1,13 @@
 package com.bap.yuwei.entity.goods;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/7/12.
  */
-public class Shop {
+public class Shop implements Serializable{
+    public static final String KEY="shop.key";
+
     private Long shopId;//主键ID
     private String shopName;//店铺名称
     private String icon;//店铺图像
@@ -28,6 +32,15 @@ public class Shop {
     private String shopIcon;
     private int recentGoodsTotal;
     private int goodsTotal;
+    private int goodCommentPercent;
+
+    public int getGoodCommentPercent() {
+        return goodCommentPercent;
+    }
+
+    public void setGoodCommentPercent(int goodCommentPercent) {
+        this.goodCommentPercent = goodCommentPercent;
+    }
 
     public int getGoodsTotal() {
         return goodsTotal;

@@ -227,7 +227,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 startActivity(intent);
             }
         });
-
     }
 
 

@@ -1,6 +1,8 @@
 package com.bap.yuwei.activity.goods;
 
+import android.content.Intent;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -40,6 +43,10 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,6 +66,8 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout llDetail;
     private View addview;
     private TextView txtNum;
+    private Button btnCollect;
+    private boolean hasCollected=false;
 
     private PopupWindow popModels;
 
@@ -75,6 +84,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showLoadingDialog();
         goodsWebService= MyApplication.getInstance().getWebService(GoodsWebService.class);
         mGoods= (Goods) getIntent().getSerializableExtra(Goods.KEY);
         getGoodsDetail();
@@ -85,11 +95,21 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 选择型号
-     * @param v
      */
     public void chooseModel(View v){
         popModels.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);
         backgroundAlpha(0.5f);
+    }
+
+    /**
+     * 收藏
+     */
+    public void collectGoods(View v){
+        if(hasCollected){
+            cancelGoodsCollect();
+        }else{
+            addGoodsCollect();
+        }
     }
 
     private void getGoodsDetail(){
@@ -97,6 +117,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -105,6 +126,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                         JSONObject jo=new JSONObject(result).getJSONObject("result");
                         mGoods= mGson.fromJson(jo.toString(), Goods.class);
                         getShopDetail();
+                        getGoodsCollect();
                         initGoodsUIWithValues();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
@@ -112,9 +134,11 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
@@ -145,6 +169,121 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
+    }
+
+    /**
+     * 获取收藏商品详情
+     */
+    private void getGoodsCollect(){
+        if(null==mUser) return;
+        Call<ResponseBody> call=goodsWebService.getGoodsCollect(mUser.getUserId(),mGoods.getGoodsId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        JSONObject jo=new JSONObject(result).getJSONObject("result");
+                        if(null != jo){//已收藏
+                            hasCollected=true;
+                        }
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    /**
+     * 收藏商品
+     */
+    private void addGoodsCollect(){
+        Map<String,Object> params=new HashMap<>();
+        params.put("goodsId", mGoods.getGoodsId());
+        params.put("goodsTitle", mGoods.getTitle());
+        params.put("shopId",mShop.getShopId());
+        params.put("userId",mUser.getUserId());
+        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
+        Call<ResponseBody> call=goodsWebService.addGoodsCollect(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        hasCollected=true;
+                        setCollectImage(true);
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    /**
+     * 取消收藏商品
+     */
+    private void cancelGoodsCollect(){
+        Map<String,Object> params=new HashMap<>();
+        params.put("goodsId", mGoods.getGoodsId());
+        params.put("userId",mUser.getUserId());
+        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
+        Call<ResponseBody> call=goodsWebService.cancelGoodsCollect(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        hasCollected=false;
+                        setCollectImage(false);
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    private void setCollectImage(boolean hasCollected){
+        if(hasCollected){
+            Drawable drawable= getResources().getDrawable(R.drawable.favourite_fill);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btnCollect.setCompoundDrawables(null,drawable,null,null);
+        }else {
+            Drawable drawable= getResources().getDrawable(R.drawable.shoucang);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btnCollect.setCompoundDrawables(null,drawable,null,null);
+        }
     }
 
     private void initGoodsUIWithValues(){
@@ -196,6 +335,12 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             default:break;
         }
+    }
+
+    public void showShop(View v){
+        Intent intent=new Intent(mContext,ShopGoodsActivity.class);
+        intent.putExtra(Shop.KEY,mShop);
+        startActivity(intent);
     }
 
     private void updateSelectNum(boolean isAdd){
@@ -361,6 +506,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         imgSpecification= (ImageView) findViewById(R.id.img_specification);
         rlPackage= (RelativeLayout) findViewById(R.id.rl_package);
         addview=findViewById(R.id.addview);
+        btnCollect= (Button) findViewById(R.id.btn_collect);
         txtOldPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
     }
 

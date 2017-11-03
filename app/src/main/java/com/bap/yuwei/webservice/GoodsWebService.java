@@ -49,5 +49,27 @@ public interface GoodsWebService {
     @GET("/v1/collectnum/user/{userId}")
     Call<ResponseBody> getCollectNum(@Path("userId") String userId);
 
+    @GET("/v1/goodscollect/user/{userId}/goods/{goodsId}")
+    Call<ResponseBody> getGoodsCollect(@Path("userId") String userId,@Path("goodsId") Long goodsId);
+
+    @POST("/v1/goodscollect")
+    Call<ResponseBody> addGoodsCollect(@Body RequestBody body);
+
+    @POST("/v1/deletegoodscollect")
+    Call<ResponseBody> cancelGoodsCollect(@Body RequestBody body);
+
+    @GET("/v1/shopcollect/user/{userId}/shop/{shopId}")
+    Call<ResponseBody> getShopCollect(@Path("userId") String userId,@Path("shopId") Long shopId);
+
+    @POST("/v1/shopcollect")
+    Call<ResponseBody> addShopCollect(@Body RequestBody body);
+
+    @POST("/v1/deleteshopcollect")
+    Call<ResponseBody> cancelShopCollect(@Body RequestBody body);
+
+    @POST("/v1/goods/shopgoods")
+    Call<ResponseBody> getShopGoods(@Body RequestBody body);
+
+
 
 }

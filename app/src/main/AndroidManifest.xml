@@ -75,6 +75,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -162,12 +163,16 @@
             android:name=".activity.sys.RegisterActivity"
             android:label="注册"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.sys.ForgetPwdActivity"
+        <activity
+            android:name=".activity.sys.ForgetPwdActivity"
             android:label="忘记密码"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.sys.MsgMenusActivity"
+        <activity
+            android:name=".activity.sys.MsgMenusActivity"
             android:label="消息"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.goods.ShopGoodsActivity" />
+        <activity android:name=".activity.goods.ShopCategoryActivity"></activity>
     </application>
 
 </manifest>

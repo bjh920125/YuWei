@@ -135,17 +135,18 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:drawableTop="@drawable/jshop_title_list_normal"
                             android:gravity="center"
-                            android:onClick="search"
                             android:paddingTop="2dp"
                             android:text="分类"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:onClick="showCategory"/>
                     </RelativeLayout>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>

@@ -171,8 +171,11 @@
             android:name=".activity.sys.MsgMenusActivity"
             android:label="消息"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.goods.ShopGoodsActivity" />
-        <activity android:name=".activity.goods.ShopCategoryActivity"></activity>
+        <activity android:name=".activity.goods.ShopGoodsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.goods.ShopCategoryActivity"
+            android:label="分类"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -1,9 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.bap.yuwei.activity.goods.ShopCategoryActivity">
 
-</android.support.constraint.ConstraintLayout>
+
+    <include layout="@layout/view_toolbar" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/view_divider" />
+            <TextView
+                android:id="@+id/txt_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/arrow_right_xiao"
+                android:gravity="center_vertical"
+                android:onClick="showAll"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="全部宝贝"
+                android:textColor="@color/lightblack" />
+
+            <include layout="@layout/view_divider" />
+
+            <com.linearlistview.LinearListView
+                android:id="@+id/lv_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+</LinearLayout>

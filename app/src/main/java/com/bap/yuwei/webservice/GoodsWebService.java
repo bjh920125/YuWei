@@ -70,6 +70,7 @@ public interface GoodsWebService {
     @POST("/v1/goods/shopgoods")
     Call<ResponseBody> getShopGoods(@Body RequestBody body);
 
-
+    @GET("/v1/goods/shopgoods/{shopId}")
+    Call<ResponseBody> getShopCategory(@Path("shopId") Long shopId);
 
 }

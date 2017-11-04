@@ -1,5 +1,6 @@
 package com.bap.yuwei.activity.goods;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -368,6 +369,18 @@ public class ShopGoodsActivity extends BaseActivity {
             }
         });
     }
+
+    public void onBackClick(View v){
+        super.onBackPressed();
+    }
+
+    public void showCategory(View v){
+        Intent i=new Intent(mContext,ShopCategoryActivity.class);
+        i.putExtra(Shop.KEY,mShop);
+        startActivity(i);
+    }
+
+
 
     private void initUIWithValue(){
         txtShopName.setText(mShop.getShopName());

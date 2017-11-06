@@ -45,6 +45,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -60,6 +61,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView txtShopCollectUserTotal,txtRecentGoodsTotal,txtGoodsTotal;
     private TextView txtProduct,txtDetail,txtComment;
     private TextView txtIntroduce,txtSpecification,txtPackage;
+    private TextView txtAddCarts,txtBuy;
     private RelativeLayout rlPackage;
     private WebView mWebView;
     private StickyScrollView mScrollView;
@@ -70,6 +72,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private boolean hasCollected=false;
 
     private PopupWindow popModels;
+    private View popModelsView;
+    private int preSelectPoistion;
+    private int selectNum=1;
 
     private int color;
     private int selectColor;
@@ -112,6 +117,43 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * 添加商品到购物车
+     */
+    private void addCarts(){
+        Map<String,Object> params=new HashMap<>();
+        params.put("goodsId", mGoods.getGoodsId());
+        params.put("goodsCount",selectNum);
+        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
+        Call<ResponseBody> call=goodsWebService.addCarts(mUser.getUserId(),body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        popModels.dismiss();
+                        ToastUtil.showShort(mContext,"添加成功！");
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    /**
+     * 获取商品详情
+     */
     private void getGoodsDetail(){
         Call<ResponseBody> call=goodsWebService.getGoodsDetail(mGoods.getGoodsId());
         call.enqueue(new Callback<ResponseBody>() {
@@ -143,6 +185,47 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             }
         });
     }
+
+    /**
+     * 根据型号获取商品详情
+     */
+    private void getGoodsDetailByModel(Long modelId){
+        Map<String,Object> params=new HashMap<>();
+        params.put("deviceType", Constants.DEVICE_TYPE);
+        params.put("goodsModelId",modelId);
+        params.put("goodsName",mGoods.getGoodsName());
+        params.put("shopId",mShop.getShopId());
+        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
+        Call<ResponseBody> call=goodsWebService.getGoodsDetail(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        JSONObject jo=new JSONObject(result).getJSONObject("result");
+                        mGoods= mGson.fromJson(jo.toString(), Goods.class);
+                        getGoodsCollect();
+                        initGoodsUIWithValues();
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
 
     private void getShopDetail(){
         Call<ResponseBody> call=goodsWebService.getShopDetail(mGoods.getShopId());
@@ -324,6 +407,14 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.txt_add_cart:
+                addCarts();
+                break;
+            case R.id.txt_buy:
+                break;
+            case R.id.txt_open_model_view:
+                chooseModel(null);
+                break;
             case R.id.img_close:
                 popModels.dismiss();
                 break;
@@ -338,7 +429,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void showShop(View v){
-        Intent intent=new Intent(mContext,ShopGoodsActivity.class);
+        Intent intent=new Intent(mContext,ShopHomeActivity.class);
         intent.putExtra(Shop.KEY,mShop);
         startActivity(intent);
     }
@@ -425,38 +516,79 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         topDetail = llDetail.getTop()+55;  //滑动需要的距离
     }
 
+
     private void initChooseModelView(){
-        View view = LayoutInflater.from(mContext).inflate(R.layout.view_choose_model, null);
-        ImageView imgGoods= (ImageView) view.findViewById(R.id.img_goods);
-        TextView txtPrice= (TextView) view.findViewById(R.id.txt_price);
-        TextView txtStock= (TextView) view.findViewById(R.id.txt_stock);
-        final TagFlowLayout modelTfl= (TagFlowLayout) view.findViewById(R.id.flowlayout);
-        ImageView imgMore= (ImageView) view.findViewById(R.id.img_add);
-        ImageView imgLess= (ImageView) view.findViewById(R.id.img_less);
-        ImageView imgClose= (ImageView) view.findViewById(R.id.img_close);
-        txtNum= (TextView) view.findViewById(R.id.txt_num);
-        imgMore.setOnClickListener(this);
-        imgLess.setOnClickListener(this);
-        imgClose.setOnClickListener(this);
+        ImageView imgGoods=null;
+        TextView txtPrice=null;
+        TextView txtStock=null;
+        final TagFlowLayout modelTfl;
+        ImageView imgMore=null;
+        ImageView imgLess=null;
+        ImageView imgClose=null;
+        TextView txtAddCart=null;
+        if(null==popModelsView){
+            popModelsView = LayoutInflater.from(mContext).inflate(R.layout.view_choose_model, null);
+            imgGoods= (ImageView) popModelsView.findViewById(R.id.img_goods);
+            txtPrice= (TextView) popModelsView.findViewById(R.id.txt_price);
+            txtStock= (TextView) popModelsView.findViewById(R.id.txt_stock);
+            modelTfl= (TagFlowLayout) popModelsView.findViewById(R.id.flowlayout);
+            imgMore= (ImageView) popModelsView.findViewById(R.id.img_add);
+            imgLess= (ImageView) popModelsView.findViewById(R.id.img_less);
+            imgClose= (ImageView) popModelsView.findViewById(R.id.img_close);
+            txtAddCart=(TextView) popModelsView.findViewById(R.id.txt_add_cart);
+            txtNum= (TextView) popModelsView.findViewById(R.id.txt_num);
+            imgMore.setOnClickListener(this);
+            imgLess.setOnClickListener(this);
+            imgClose.setOnClickListener(this);
+
+            modelTfl.setMaxSelectCount(1);
+
+           final TagAdapter adapter=new TagAdapter<GoodsModel>(mGoods.getGoodsModels()) {
+                @Override
+                public View getView(FlowLayout parent, int position, GoodsModel o) {
+                    TextView tv = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_model, modelTfl, false);
+                    tv.setText(o.getGoodsModelName());
+                    if(mGoods.getGoodsModelName().equals(o.getGoodsModelName())){
+                        preSelectPoistion=position;
+                    }
+                    return tv;
+                }
+            };
+            modelTfl.setAdapter(adapter);
+            adapter.setSelectedList(preSelectPoistion);
+
+            modelTfl.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                @Override
+                public boolean onTagClick(View view, int position, FlowLayout parent) {
+                    adapter.setSelectedList(position);
+                    return true;
+                }
+            });
+
+            modelTfl.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+                @Override
+                public void onSelected(Set<Integer> selectPosSet) {
+                    for (Integer position : selectPosSet) {
+                        GoodsModel goodsModel = mGoods.getGoodsModels().get(position);
+                        getGoodsDetailByModel(goodsModel.getGoodsModelId());
+                    }
+                }
+            });
+        }
+
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mGoods.getGoodsImages().get(0).getGoodsImagePath(),imgGoods, DisplayImageOptionsUtil.getOptions());
         txtPrice.setText("￥"+mGoods.getPreferentialPrice());
         txtStock.setText("库存"+mGoods.getStockNum()+"件");
-        modelTfl.setMaxSelectCount(1);
-        modelTfl.setAdapter(new TagAdapter<GoodsModel>(mGoods.getGoodsModels()) {
-            @Override
-            public View getView(FlowLayout parent, int position, GoodsModel o) {
-                TextView tv = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_model, modelTfl, false);
-                tv.setText(o.getGoodsModelName());
-                return tv;
-            }
-        });
-        popModels = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        txtAddCart.setOnClickListener(this);
+        popModels = new PopupWindow(popModelsView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         popModels.setAnimationStyle(R.style.popupwindow_anim);
         popModels.setOutsideTouchable(true);
         popModels.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 backgroundAlpha(1f);
+                txtModelName.setText(mGoods.getGoodsModelName());
+                txtSelectNum.setText(StringUtils.getTextViewValue(txtNum)+"件");
             }
         });
     }
@@ -508,6 +640,10 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         addview=findViewById(R.id.addview);
         btnCollect= (Button) findViewById(R.id.btn_collect);
         txtOldPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+        txtAddCarts= (TextView) findViewById(R.id.txt_open_model_view);
+        txtBuy= (TextView) findViewById(R.id.txt_buy);
+        txtAddCarts.setOnClickListener(this);
+        txtBuy.setOnClickListener(this);
     }
 
    

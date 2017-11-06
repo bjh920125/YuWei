@@ -70,6 +70,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+        <activity
+            android:name="com.alipay.sdk.app.H5AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -171,10 +183,19 @@
             android:name=".activity.sys.MsgMenusActivity"
             android:label="消息"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.goods.ShopGoodsActivity"
+        <activity
+            android:name=".activity.goods.ShopHomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.goods.ShopCategoryActivity"
+        <activity
+            android:name=".activity.goods.ShopCategoryActivity"
             android:label="分类"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.goods.ShopGoodsListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.sys.MsgListActivity"
+            android:label="消息"
             android:screenOrientation="portrait" />
     </application>
 

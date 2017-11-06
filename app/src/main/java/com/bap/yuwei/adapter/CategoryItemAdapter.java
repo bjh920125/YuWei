@@ -5,13 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
-import com.bap.yuwei.entity.goods.Category;
 import com.bap.yuwei.entity.goods.CategoryII;
-import com.bap.yuwei.view.NoScrollGridView;
 
 import java.util.List;
 
@@ -59,12 +56,6 @@ public class CategoryItemAdapter extends BaseAdapter {
         }
         CategoryII category=mCategories.get(position);
         viewHolder.txtCategory.setText(category.getCategoryName2());
-        viewHolder.txtCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
         return convertView;
     }
 

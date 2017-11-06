@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.GoodsAdapter;
+import com.bap.yuwei.adapter.ListBaseAdapter;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.goods.Goods;
 import com.bap.yuwei.entity.goods.Shop;
@@ -26,6 +27,7 @@ import com.bap.yuwei.util.DateTimeUtil;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
+import com.bap.yuwei.util.SoftInputUtil;
 import com.bap.yuwei.util.StringUtils;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
@@ -52,37 +54,37 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ShopGoodsActivity extends BaseActivity {
+public class ShopHomeActivity extends BaseActivity {
 
-    private ImageView imgShop,imgHead;
-    private TextView txtShopName,txtGoodComment,txtCollectNum,txtGoodsTotal,txtGoodsNews;
-    private LRecyclerView gvGoods;
-    private Button btnHome;
-    private TextView txtAllTitle,txtAllNum,txtNewTitle,txtNewNum;
-    private View viewHome,viewAll,viewNew;
-    private LinearLayout llFilter;
-    private TextView txtMult,txtSell,txtTime,txtPrice;
-    private EditText etSearch;
+    protected ImageView imgShop,imgHead;
+    protected TextView txtShopName,txtGoodComment,txtCollectNum,txtGoodsTotal,txtGoodsNews;
+    protected LRecyclerView gvGoods;
+    protected Button btnHome;
+    protected TextView txtAllTitle,txtAllNum,txtNewTitle,txtNewNum;
+    protected View viewHome,viewAll,viewNew;
+    protected LinearLayout llFilter;
+    protected TextView txtMult,txtSell,txtTime,txtPrice;
+    protected EditText etSearch;
 
 
-    private List<Goods> mGoods;
-    private Shop mShop;
-    private GoodsAdapter mGoodsAdapter;
-    private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
+    protected List<Goods> mGoods;
+    protected Shop mShop;
+    protected GoodsAdapter mGoodsAdapter;
+    protected LRecyclerViewAdapter mLRecyclerViewAdapter = null;
 
-    private GoodsWebService goodsWebService;
+    protected GoodsWebService goodsWebService;
 
-    private int  pageIndex = 1;
-    private int orderType=1;
-    private String queryTime;
-    private String goodsTitle;
-    private String categoryNodes;
-    private boolean isPriceAsc=false;
+    protected int pageIndex = 1;
+    protected int orderType=1;
+    protected String queryTime;
+    protected String goodsTitle;
+    protected String categoryNodes;
+    protected boolean isPriceAsc=false;
 
-    private boolean hasCollected=false;
+    protected boolean hasCollected=false;
 
-    private int color;
-    private int selectColor;
+    protected int color;
+    protected int selectColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +98,26 @@ public class ShopGoodsActivity extends BaseActivity {
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(mGoodsAdapter);
         gvGoods.setAdapter(mLRecyclerViewAdapter);
 
+        mGoodsAdapter.setOnItemClickListener(new ListBaseAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClick(View view , int position){
+                Goods goods= mGoods.get(position);
+                Intent intent=new Intent(mContext, GoodsDetailActivity.class);
+                intent.putExtra(Goods.KEY,goods);
+                startActivity(intent);
+            }
+        });
+
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    SoftInputUtil.hideKeyboard(mContext);
                     goodsTitle= StringUtils.getEditTextValue(etSearch);
-                    gvGoods.refresh();
+                    Intent i=new Intent(mContext,ShopGoodsListActivity.class);
+                    i.putExtra(ShopGoodsListActivity.KEYWORDS_KEY,goodsTitle);
+                    i.putExtra(Shop.KEY,mShop);
+                    startActivity(i);
                 }
                 return true;
             }
@@ -125,7 +141,6 @@ public class ShopGoodsActivity extends BaseActivity {
             }
         });
         getShopCollect();
-        gvGoods.refresh();
         initUIWithValue();
     }
 
@@ -220,7 +235,7 @@ public class ShopGoodsActivity extends BaseActivity {
         gvGoods.refresh();
     }
 
-    private void getGoodsList(){
+    protected void getGoodsList(){
         Map<String,Object> params=new HashMap<>();
         params.put("categoryNodes",categoryNodes);
         params.put("discountStatus",0);
@@ -244,12 +259,13 @@ public class ShopGoodsActivity extends BaseActivity {
                         JSONArray jo=new JSONObject(result).getJSONObject("result").getJSONArray("list");
                         List<Goods> tempList = mGson.fromJson(jo.toString(), new TypeToken<List<Goods>>() {}.getType());
                         if(tempList!=null && tempList.size()>0){
+                            mGoods.addAll(tempList);
                             mGoodsAdapter.addAll(tempList);
                             mGoodsAdapter.notifyDataSetChanged();
-                            gvGoods.refreshComplete(tempList.size());
                         }else{
                             gvGoods.setNoMore(true);
                         }
+                        gvGoods.refreshComplete(tempList.size());
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -268,8 +284,8 @@ public class ShopGoodsActivity extends BaseActivity {
     /**
      * 获取收藏店铺详情
      */
-    private void getShopCollect(){
-        if(null==mUser) return;
+    protected void getShopCollect(){
+        if(null==mUser || null==mShop) return;
         Call<ResponseBody> call=goodsWebService.getShopCollect(mUser.getUserId(),mShop.getShopId());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -302,7 +318,7 @@ public class ShopGoodsActivity extends BaseActivity {
     /**
      * 收藏店铺
      */
-    private void addShopCollect(){
+    protected void addShopCollect(){
         Map<String,Object> params=new HashMap<>();
         params.put("shopId",mShop.getShopId());
         params.put("shopName", mShop.getShopName());
@@ -338,7 +354,7 @@ public class ShopGoodsActivity extends BaseActivity {
     /**
      * 取消收藏店铺
      */
-    private void cancelShopCollect(){
+    protected void cancelShopCollect(){
         Map<String,Object> params=new HashMap<>();
         params.put("shopId",mShop.getShopId());
         params.put("userId",mUser.getUserId());
@@ -382,7 +398,8 @@ public class ShopGoodsActivity extends BaseActivity {
 
 
 
-    private void initUIWithValue(){
+    protected void initUIWithValue(){
+        gvGoods.refresh();
         txtShopName.setText(mShop.getShopName());
         txtCollectNum.setText("收藏 "+mShop.getShopCollectUserTotal()+"人");
         txtGoodComment.setText("好评率"+mShop.getGoodCommentPercent()+"%");
@@ -395,7 +412,7 @@ public class ShopGoodsActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_shop_goods;
+        return R.layout.activity_shop_home;
     }
 
     @Override
@@ -428,7 +445,5 @@ public class ShopGoodsActivity extends BaseActivity {
         gvGoods.setHeaderViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
         gvGoods.setFooterViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
         gvGoods.setFooterViewHint("拼命加载中","已经全部为你呈现了","网络不给力啊，点击再试一次吧");
-
-
     }
 }

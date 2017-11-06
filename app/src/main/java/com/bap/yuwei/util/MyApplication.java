@@ -110,7 +110,6 @@ public class MyApplication extends Application {
 				if (contentLength != 0) {
 					try {
 						String result = buffer.clone().readString(charset);
-						LogUtil.print("result", result);
 						AppResponse appResponse = gson.fromJson(result, AppResponse.class);
 						if (appResponse.getCode() == ResponseCode.TOKEN_ERROR || appResponse.getCode() == ResponseCode.TOKEN_INVALID) {
 							startActivity(new Intent(getApplicationContext(), LoginActivity.class));

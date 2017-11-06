@@ -31,6 +31,9 @@ public interface GoodsWebService {
     @GET("/v1/goods/{goodsId}/deviceType/1")
     Call<ResponseBody> getGoodsDetail(@Path("goodsId") Long goodsId);
 
+    @POST("/v1/goods/goodsmodel")
+    Call<ResponseBody> getGoodsDetail(@Body RequestBody body);
+
     @GET("/v1/shop/{shopId}/detail")
     Call<ResponseBody> getShopDetail(@Path("shopId") Long shopId);
 
@@ -72,5 +75,8 @@ public interface GoodsWebService {
 
     @GET("/v1/goods/shopgoods/{shopId}")
     Call<ResponseBody> getShopCategory(@Path("shopId") Long shopId);
+
+    @POST("/v1/user/{userId}/carts")
+    Call<ResponseBody> addCarts(@Path("userId") String userId,@Body RequestBody body);
 
 }

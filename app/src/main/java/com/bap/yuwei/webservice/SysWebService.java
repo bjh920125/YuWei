@@ -14,6 +14,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Administrator on 2017/10/30.
@@ -89,5 +90,13 @@ public interface SysWebService {
     @POST("/v1/user/sms/valid")
     Call<ResponseBody> validSmsCode(@Body RequestBody body);
 
+    @GET("/v1/{userId}/app/messages")
+    Call<ResponseBody> getMsgs(@Path("userId") String userId);
+
+    @POST("/v1/{userId}/messages")
+    Call<ResponseBody> getMsgsByType(@Path("userId") String userId,@Body RequestBody body);
+
+    @GET("/v1/{userId}/messages/unread-count")
+    Call<ResponseBody> getUnreadMsgsCount(@Path("userId") String userId, @Query("userType") int userType);
 
 }

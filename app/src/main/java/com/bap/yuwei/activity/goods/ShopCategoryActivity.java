@@ -1,6 +1,9 @@
 package com.bap.yuwei.activity.goods;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.CategoryAdapter;
@@ -15,9 +18,12 @@ import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.webservice.GoodsWebService;
 import com.linearlistview.LinearListView;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,6 +51,14 @@ public class ShopCategoryActivity extends BaseActivity {
         getShopCategory();
     }
 
+    public void showAll(View v){
+        Intent i=new Intent(mContext, ShopGoodsListActivity.class);
+        i.putExtra(Shop.KEY,mShop);
+        i.putExtra(ShopGoodsListActivity.CATEGORY_KEY,"");
+        i.putExtra(ShopGoodsListActivity.KEYWORDS_KEY,"");
+        startActivity(i);
+    }
+
     private void getShopCategory(){
         Call<ResponseBody> call=goodsWebService.getShopCategory(mShop.getShopId());
         call.enqueue(new Callback<ResponseBody>() {
@@ -60,7 +74,7 @@ public class ShopCategoryActivity extends BaseActivity {
                         List<Category> tempList = mShopCategory.getCategories();
                         if(tempList!=null && tempList.size()>0){
                             mCategories.addAll(tempList);
-                            mAdapter=new CategoryAdapter(mShopCategory,mCategories,mContext);
+                            mAdapter=new CategoryAdapter(mShop,mShopCategory,mCategories,mContext);
                             lvCategory.setAdapter(mAdapter);
                         }
                     }else{

@@ -18,16 +18,29 @@ import android.widget.TextView;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.sys.LoginActivity;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.event.UnreadEvent;
 import com.bap.yuwei.entity.event.UserInfoEvent;
+import com.bap.yuwei.entity.http.AppResponse;
+import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.sys.User;
+import com.bap.yuwei.util.LogUtil;
+import com.bap.yuwei.util.MyApplication;
 import com.bap.yuwei.util.SharedPreferencesUtil;
+import com.bap.yuwei.util.ThrowableUtil;
+import com.bap.yuwei.util.ToastUtil;
+import com.bap.yuwei.webservice.SysWebService;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
 import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -151,4 +164,33 @@ public abstract class BaseFragment extends Fragment {
         return true;
     }
 
+
+    protected void getUnreadMsgCount(){
+        if(null==mUser) return;
+        SysWebService sysWebService= MyApplication.getInstance().getWebService(SysWebService.class);
+        Call<ResponseBody> call=sysWebService.getUnreadMsgsCount(mUser.getUserId(),Constants.BUYER);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        int unreadNum=new JSONObject(result).getInt("result");
+                        EventBus.getDefault().post(new UnreadEvent(unreadNum));
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
 }

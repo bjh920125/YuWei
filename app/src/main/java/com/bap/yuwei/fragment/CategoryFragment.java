@@ -18,6 +18,7 @@ import com.bap.yuwei.activity.sys.MsgMenusActivity;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.event.UnreadEvent;
 import com.bap.yuwei.entity.goods.Category;
 import com.bap.yuwei.entity.goods.Goods;
 import com.bap.yuwei.entity.http.AppResponse;
@@ -30,6 +31,8 @@ import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.webservice.GoodsWebService;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -50,7 +53,7 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
 
     private SwipeRefreshLayout swipeRefresh;
     private PLALoadMoreListView mGvGoods;
-    private Button btnMsg;
+    private TextView btnMsg,txtMsgCount;
     private TextView txtCategory1,txtCategory2,txtCategory3,txtCategory4;
 
     private List<Goods> mGoods;
@@ -63,7 +66,6 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         goodsWebService= MyApplication.getInstance().getWebService(GoodsWebService.class);
     }
 
@@ -74,6 +76,7 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         mGoods=new ArrayList<>();
         initGoodsGV();
         getGoods();
+        getUnreadMsgCount();
 
     }
 
@@ -174,6 +177,17 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setUnReadMsgCount(UnreadEvent event){
+        int unreadNum=event.unreadNum;
+        if(unreadNum>0){
+            txtMsgCount.setVisibility(View.VISIBLE);
+            txtMsgCount.setText(unreadNum+"");
+        }else{
+            txtMsgCount.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -184,7 +198,8 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         txtCategory2= (TextView) fragmentView.findViewById(R.id.txt_category2);
         txtCategory3= (TextView) fragmentView.findViewById(R.id.txt_category3);
         txtCategory4= (TextView) fragmentView.findViewById(R.id.txt_category4);
-        btnMsg=(Button) fragmentView.findViewById(R.id.btn_msg);
+        btnMsg=(TextView) fragmentView.findViewById(R.id.btn_msg);
+        txtMsgCount=(TextView) fragmentView.findViewById(R.id.txt_msg_count);
         mGvGoods.setOnLoadMoreListener(this);
         swipeRefresh.setOnRefreshListener(this);
         txtCategory1.setOnClickListener(this);

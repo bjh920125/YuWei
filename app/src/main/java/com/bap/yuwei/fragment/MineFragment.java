@@ -15,6 +15,7 @@ import com.bap.yuwei.activity.sys.MsgMenusActivity;
 import com.bap.yuwei.activity.sys.SettingActivity;
 import com.bap.yuwei.activity.sys.UserInfoActivity;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.event.UnreadEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.fragment.base.BaseFragment;
@@ -26,6 +27,8 @@ import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.webservice.GoodsWebService;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import okhttp3.ResponseBody;
@@ -43,6 +46,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     private ImageView imgHead;
     private TextView txtName;
     private TextView txtGoodsCollectNum,txtShopCollectNum,txtFootmarkNum;
+    private TextView txtMsgCount;
     private ImageView imgSet,imgMsg;
 
     private GoodsWebService goodsWebService;
@@ -58,6 +62,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         refreshUI();
+        getUnreadMsgCount();
     }
 
     @Override
@@ -147,6 +152,17 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         refreshUI();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setUnReadMsgCount(UnreadEvent event){
+        int unreadNum=event.unreadNum;
+        if(unreadNum>0){
+            txtMsgCount.setVisibility(View.VISIBLE);
+            txtMsgCount.setText(unreadNum+"");
+        }else{
+            txtMsgCount.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_mine, container, false);
@@ -158,6 +174,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         txtFootmarkNum= (TextView) fragmentView.findViewById(R.id.txt_footmark_num);
         imgSet= (ImageView) fragmentView.findViewById(R.id.img_set);
         imgMsg= (ImageView) fragmentView.findViewById(R.id.img_msg);
+        txtMsgCount=(TextView) fragmentView.findViewById(R.id.txt_msg_count);
         rlPersonInfo.setOnClickListener(this);
         txtGoodsCollectNum.setOnClickListener(this);
         txtShopCollectNum.setOnClickListener(this);

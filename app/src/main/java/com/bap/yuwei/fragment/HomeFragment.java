@@ -23,6 +23,7 @@ import com.bap.yuwei.adapter.RotationMapAdapter;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.event.UnreadEvent;
 import com.bap.yuwei.entity.goods.Category;
 import com.bap.yuwei.entity.goods.Goods;
 import com.bap.yuwei.entity.http.AppResponse;
@@ -42,6 +43,8 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -62,8 +65,8 @@ import retrofit2.Response;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
-    private Button btnScan,btnMsg;
-    private TextView txtNews,txtSearch;
+    private Button btnScan;
+    private TextView txtNews,txtSearch,btnMsg,txtMsgCount;
     private ConvenientBanner convenientBanner;
     private NoScrollGridView gvCategories,gvGoods;
     private UPMarqueeView upviewNews;
@@ -101,7 +104,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         initCategoryGV();
         initHotRecommendGV();
         swipeRefresh.setRefreshing(true);
-         onRefresh();
+        onRefresh();
+        getUnreadMsgCount();
     }
 
 
@@ -298,6 +302,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setUnReadMsgCount(UnreadEvent event){
+        int unreadNum=event.unreadNum;
+        if(unreadNum>0){
+            txtMsgCount.setVisibility(View.VISIBLE);
+            txtMsgCount.setText(unreadNum+"");
+        }else{
+            txtMsgCount.setVisibility(View.GONE);
+        }
+    }
+
     /**
      * 初始化界面程序
      */
@@ -378,7 +394,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_home, container, false);
         btnScan= (Button) fragmentView.findViewById(R.id.btn_scan);
-        btnMsg=(Button) fragmentView.findViewById(R.id.btn_msg);
+        btnMsg=(TextView) fragmentView.findViewById(R.id.btn_msg);
+        txtMsgCount=(TextView) fragmentView.findViewById(R.id.txt_msg_count);
         convenientBanner= (ConvenientBanner) fragmentView.findViewById(R.id.banner);
         gvCategories= (NoScrollGridView) fragmentView.findViewById(R.id.gv_menus);
         gvGoods= (NoScrollGridView) fragmentView.findViewById(R.id.gv_goods);

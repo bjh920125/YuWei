@@ -3,23 +3,23 @@ package com.bap.yuwei.activity.sys;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
+import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
+import com.bap.yuwei.adapter.commonadapter.ViewHolder;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.sys.Msg;
-import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.webservice.SysWebService;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.linearlistview.LinearListView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,10 +35,11 @@ import retrofit2.Response;
 public class MsgMenusActivity extends BaseActivity {
 
 
-    private TextView txtSysMsg,txtExpressMsg,txtOrderMsg;
-    private TextView txtOrderMsgTitle;
-    private ImageView imgOrder;
+    private TextView txtSysMsg,txtExpressMsg;
     private List<Msg> msgs;
+    private LinearListView lvOrderMsg;
+    private List<Msg> orderMsgs;
+    private CommonAdapter<Msg> mAdapter;
     private int messageType;
 
     private SysWebService sysWebService;
@@ -48,6 +49,26 @@ public class MsgMenusActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         sysWebService= MyApplication.getInstance().getWebService(SysWebService.class);
         msgs=new ArrayList<>();
+        orderMsgs=new ArrayList<>();
+        mAdapter=new CommonAdapter<Msg>(mContext,orderMsgs,R.layout.item_order_msg) {
+            @Override
+            public void convert(ViewHolder viewHolder, Msg item) {
+                viewHolder.setText(R.id.txt_order_msg_title,item.getShopName());
+                viewHolder.setText(R.id.txt_order_summary,item.getContent());
+                viewHolder.setImageByUrl(R.id.img_order_msg, Constants.PICTURE_URL+item.getShopIcon());
+            }
+        };
+        lvOrderMsg.setAdapter(mAdapter);
+        lvOrderMsg.setOnItemClickListener(new LinearListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(LinearListView parent, View view, int position, long id) {
+                Msg msg=orderMsgs.get(position);
+                Intent intent=new Intent(mContext,MsgListActivity.class);
+                intent.putExtra(MsgListActivity.MSG_TYPE_KEY,Constants.ORDER_MSG);//0系统消息 1物流消息 2订单消息 3通知消息
+                intent.putExtra(Msg.KEY,msg);
+                startActivity(intent);
+            }
+        });
         getMsgs();
     }
 
@@ -110,13 +131,10 @@ public class MsgMenusActivity extends BaseActivity {
             if(null!=expressMsg){
                 txtExpressMsg.setText(expressMsg.getContent());
             }
-
-            Msg orderMsg=msgs.get(2);
-            if(null!=orderMsg){
-                txtOrderMsgTitle.setText(orderMsg.getShopName());
-                txtOrderMsg.setText(orderMsg.getContent());
-                ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+orderMsg.getShopIcon(),imgOrder, DisplayImageOptionsUtil.getOptions());
+            for(int i=2;i<msgs.size();i++){
+                orderMsgs.add(msgs.get(i));
             }
+            mAdapter.notifyDataSetChanged();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -131,8 +149,6 @@ public class MsgMenusActivity extends BaseActivity {
     protected void initView() {
         txtSysMsg= (TextView) findViewById(R.id.txt_sys_summary);
         txtExpressMsg= (TextView) findViewById(R.id.txt_express_summary);
-        txtOrderMsg= (TextView) findViewById(R.id.txt_order_summary);
-        txtOrderMsgTitle= (TextView) findViewById(R.id.txt_order_msg_title);
-        imgOrder= (ImageView) findViewById(R.id.img_order_msg);
+        lvOrderMsg= (LinearListView) findViewById(R.id.lv_order_msg);
     }
 }

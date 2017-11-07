@@ -136,6 +136,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                swipeRefresh.setRefreshing(false);
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });

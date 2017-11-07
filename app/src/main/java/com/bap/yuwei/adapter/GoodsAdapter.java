@@ -37,7 +37,7 @@ public class GoodsAdapter extends ListBaseAdapter<Goods> {
         txtPrice.setText("￥"+goods.getPreferentialPrice());
         txtCommentNum.setText(goods.getTotalComment()+"条评价");
         txtGoodCommentPercent.setText(goods.getGoodCommentPercent()+"%好评");
-        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+goods.getGoodsImage(), imgGoods, DisplayImageOptionsUtil.getOptions());
+        ImageLoader.getInstance().displayImage(null!=goods.getGoodsImage() ? Constants.PICTURE_URL+goods.getGoodsImage() :  Constants.PICTURE_URL+goods.getMainPic(), imgGoods, DisplayImageOptionsUtil.getOptions());
     }
 
 

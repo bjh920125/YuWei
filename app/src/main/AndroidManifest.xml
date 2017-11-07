@@ -74,13 +74,13 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
@@ -194,8 +194,14 @@
         <activity
             android:name=".activity.goods.ShopGoodsListActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.sys.MsgListActivity"
+        <activity
+            android:name=".activity.sys.MsgListActivity"
             android:label="消息"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.goods.SearchGoodsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.goods.SearchGoodsCategoryActivity"
+            android:label="分类"
             android:screenOrientation="portrait" />
     </application>
 

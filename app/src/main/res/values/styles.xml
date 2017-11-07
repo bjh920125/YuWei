@@ -66,4 +66,9 @@
         <item name="android:windowEnterAnimation">@anim/pickerview_slide_in_bottom</item>
         <item name="android:windowExitAnimation">@anim/pickerview_slide_out_bottom</item>
     </style>
+
+    <style name="popupwindow_anim_up_down" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_top</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_top</item>
+    </style>
 </resources>

@@ -22,6 +22,8 @@ import com.bap.yuwei.util.MyApplication;
 import com.bap.yuwei.util.SharedPreferencesUtil;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import okhttp3.MediaType;
 
 
@@ -45,6 +47,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MyApplication.getInstance().addActivity(this);
         mContext = this;
+        if(isRegistEventBus()) EventBus.getDefault().register(this);
         initDialog();
       //  mProgressDialog = new ProgressDialog(mContext, ProgressDialog.THEME_HOLO_LIGHT);
         setContentView(getLayoutId());
@@ -142,6 +145,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    protected boolean isRegistEventBus(){
+       return false;
+    }
+
     protected void setTitleColor(){}
 
 
@@ -223,5 +230,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(isRegistEventBus()) EventBus.getDefault().unregister(this);
     }
 }

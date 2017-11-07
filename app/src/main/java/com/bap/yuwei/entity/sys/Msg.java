@@ -1,9 +1,13 @@
 package com.bap.yuwei.entity.sys;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/11/6.
  */
-public class Msg {
+public class Msg implements Serializable{
+    public static final String KEY="msg.key";
+
     private int messageType;
     private String createTime;
     private int userType;

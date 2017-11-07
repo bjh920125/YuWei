@@ -92,6 +92,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         showLoadingDialog();
         goodsWebService= MyApplication.getInstance().getWebService(GoodsWebService.class);
         mGoods= (Goods) getIntent().getSerializableExtra(Goods.KEY);
+        addFootmark();
         getGoodsDetail();
         initRotationMaps();
         color=getResources().getColor(R.color.lightblack);
@@ -344,6 +345,38 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                         setCollectImage(false);
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+
+    /**
+     * 新增足迹
+     */
+    private void addFootmark(){
+        Map<String,Object> params=new HashMap<>();
+        params.put("goodsId", mGoods.getGoodsId());
+        params.put("userId",mUser.getUserId());
+        params.put("goodsTitle",mGoods.getTitle());
+        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
+        Call<ResponseBody> call=goodsWebService.addFoormark(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -59,10 +59,10 @@ public class MsgAdapter extends ListBaseAdapter<Msg> {
             TextView txtTitle=holder.getView(R.id.txt_title);
             TextView txtContent=holder.getView(R.id.txt_content);
             ImageView imageView=holder.getView(R.id.img_goods);
-            txtTime.setText(msg.getCreateTime().substring(2,10));
-            txtTitle.setText(msg.getLogiTitle());
+            txtTime.setText(msg.getCreateTime().substring(0,16));
+            txtTitle.setText(msg.getTitle());
             txtContent.setText(msg.getContent());
-            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+msg.getPicUrl(),imageView, DisplayImageOptionsUtil.getOptions());
+            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+msg.getOrderImage(),imageView, DisplayImageOptionsUtil.getOptions());
         }
     }
 }

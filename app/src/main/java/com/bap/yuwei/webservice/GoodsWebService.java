@@ -22,11 +22,17 @@ public interface GoodsWebService {
     @GET("/v1/categories/top")
     Call<ResponseBody> getTopCategories();
 
+    @GET("/v1/categories/{categoryId}/children")
+    Call<ResponseBody> getChildrenCategories(@Path("categoryId") Long categoryId);
+
     @POST("/v1/hotrecommend")
     Call<ResponseBody> getHotRecommend(@Body RequestBody body);
 
-    @GET("categorysearch")
+    @GET("/categorysearch")
     Call<ResponseBody> categorysearch(@QueryMap Map<String,Object> params);
+
+    @GET("/search")
+    Call<ResponseBody> goodssearch(@QueryMap Map<String,Object> params);
 
     @GET("/v1/goods/{goodsId}/deviceType/1")
     Call<ResponseBody> getGoodsDetail(@Path("goodsId") Long goodsId);
@@ -76,7 +82,13 @@ public interface GoodsWebService {
     @GET("/v1/goods/shopgoods/{shopId}")
     Call<ResponseBody> getShopCategory(@Path("shopId") Long shopId);
 
+    @POST("/v1/mygoodshistory")
+    Call<ResponseBody> addFoormark(@Body RequestBody body);
+
     @POST("/v1/user/{userId}/carts")
     Call<ResponseBody> addCarts(@Path("userId") String userId,@Body RequestBody body);
+
+    @GET("/v1/user/{userId}/carts")
+    Call<ResponseBody> getCarts(@Path("userId") String userId);
 
 }

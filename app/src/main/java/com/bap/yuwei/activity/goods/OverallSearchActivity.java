@@ -1,5 +1,6 @@
 package com.bap.yuwei.activity.goods;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -61,6 +62,7 @@ public class OverallSearchActivity extends BaseActivity {
 
     public void search(View v){
         String words= StringUtils.getEditTextValue(etWords);
+        toSeachPage(words);
     }
 
     /**
@@ -208,7 +210,7 @@ public class OverallSearchActivity extends BaseActivity {
         lvHotwords.setOnItemClickListener(new LinearListView.OnItemClickListener() {
             @Override
             public void onItemClick(LinearListView parent, View view, int position, long id) {
-                String words=mHotwords.get(position);
+                toSeachPage(mHotwords.get(position));
             }
         });
     }
@@ -224,9 +226,15 @@ public class OverallSearchActivity extends BaseActivity {
         lvHistory.setOnItemClickListener(new LinearListView.OnItemClickListener() {
             @Override
             public void onItemClick(LinearListView parent, View view, int position, long id) {
-                String words=mSearchHistories.get(position);
+                toSeachPage(mSearchHistories.get(position));
             }
         });
+    }
+
+    private void toSeachPage(String words){
+        Intent i=new Intent(mContext,SearchGoodsActivity.class);
+        i.putExtra(SearchGoodsActivity.KEYWORDS_KEY,words);
+        startActivity(i);
     }
 
     public void onBackClick(View v){

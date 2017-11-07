@@ -96,6 +96,9 @@ public interface SysWebService {
     @POST("/v1/{userId}/messages")
     Call<ResponseBody> getMsgsByType(@Path("userId") String userId,@Body RequestBody body);
 
+    @GET("/v1/{userId}/messages")
+    Call<ResponseBody> getOrderMsgs(@Path("userId") String userId,@Query("shopId") Long shopId,@Query("userType") int userType);
+
     @GET("/v1/{userId}/messages/unread-count")
     Call<ResponseBody> getUnreadMsgsCount(@Path("userId") String userId, @Query("userType") int userType);
 

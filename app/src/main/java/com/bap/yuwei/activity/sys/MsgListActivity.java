@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.MsgAdapter;
+import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.sys.Msg;
@@ -43,6 +44,8 @@ public class MsgListActivity extends BaseActivity {
     protected LRecyclerViewAdapter mLRecyclerViewAdapter = null;
     private MsgAdapter msgAdapter;
 
+    private Msg msg;
+
     public static final String MSG_TYPE_KEY="msg.type.key";
 
     protected int  pageIndex = 1;
@@ -65,7 +68,7 @@ public class MsgListActivity extends BaseActivity {
                 msgs.clear();
                 msgAdapter.clear();
                 pageIndex=1;
-                getMsgs();
+                setMethodByType();
             }
         });
 
@@ -73,11 +76,20 @@ public class MsgListActivity extends BaseActivity {
             @Override
             public void onLoadMore() {
                 pageIndex++;
-                getMsgs();
+                setMethodByType();
             }
         });
         rvMsgs.refresh();
     }
+
+    private void setMethodByType(){
+        if(messageType==Constants.ORDER_MSG){
+            getOrderMsgs();
+        }else {
+            getMsgs();
+        }
+    }
+
 
     private void getMsgs(){
         Map<String,Object> params=new HashMap<>();
@@ -106,6 +118,42 @@ public class MsgListActivity extends BaseActivity {
                             rvMsgs.setNoMore(true);
                         }
                         rvMsgs.refreshComplete(tempList.size());
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    rvMsgs.refreshComplete(0);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    private void getOrderMsgs(){
+        msg= (Msg) getIntent().getSerializableExtra(Msg.KEY);
+        Call<ResponseBody> call=sysWebService.getOrderMsgs(mUser.getUserId(),msg.getShopId(), Constants.BUYER);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        JSONArray jo=new JSONObject(result).getJSONArray("result");
+                        List<Msg> tempList = mGson.fromJson(jo.toString(), new TypeToken<List<Msg>>() {}.getType());
+                        if(tempList!=null && tempList.size()>0){
+                            msgs.addAll(tempList);
+                            msgAdapter.addAll(tempList);
+                            msgAdapter.notifyDataSetChanged();
+                        }
+                        rvMsgs.refreshComplete(tempList.size());
+                        rvMsgs.setNoMore(true);
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }

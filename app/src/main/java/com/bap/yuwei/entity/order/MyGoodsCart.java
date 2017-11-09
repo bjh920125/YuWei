@@ -11,7 +11,16 @@ public class MyGoodsCart {
     private Long shopId;//店铺ID
     private String shopName;//店铺名称
     private List<GoodsCart> cartItems;
+    private boolean isChecked;
     private int status;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public Long getShopId() {
         return shopId;

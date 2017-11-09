@@ -1,11 +1,14 @@
 package com.bap.yuwei.entity.order;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 购物车
  */
-public class GoodsCart {
+public class GoodsCart implements Serializable{
+
+    public static final String KEY="goodscart.key";
 
     /**
      * 主键ID
@@ -72,6 +75,16 @@ public class GoodsCart {
     private BigDecimal freight;
 
     private Integer maxQuantity;//最大库存数量,不存在数据库,直接查询回去
+
+    private boolean isChecked;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public Long getGoodsCartId() {
         return goodsCartId;

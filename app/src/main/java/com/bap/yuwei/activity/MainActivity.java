@@ -7,21 +7,36 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
+import com.bap.yuwei.entity.event.UpdateCartNumEvent;
+import com.bap.yuwei.entity.http.AppResponse;
+import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.fragment.CartFragment;
 import com.bap.yuwei.fragment.CategoryFragment;
 import com.bap.yuwei.fragment.HomeFragment;
 import com.bap.yuwei.fragment.MineFragment;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
+import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
+import com.bap.yuwei.webservice.GoodsWebService;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity {
 
@@ -32,6 +47,7 @@ public class MainActivity extends BaseActivity {
 
     private Button[] mTabs;
     private Fragment[] fragments;
+    private TextView txtCartNum;
 
     // 当前fragment的index
     private int currentTabIndex;
@@ -39,6 +55,8 @@ public class MainActivity extends BaseActivity {
     private int index;
     //退出点击次数
     private int times=1;
+
+    private GoodsWebService webService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +72,7 @@ public class MainActivity extends BaseActivity {
                 .show(homeFragment)
                 .commit();
         requestPermissions();
+        webService=MyApplication.getInstance().getWebService(GoodsWebService.class);
     }
 
 
@@ -66,6 +85,9 @@ public class MainActivity extends BaseActivity {
                 index=1;
                 break;
             case R.id.btn_cart:
+                if(!isLogined()){
+                    return;
+                }
                 index=2;
                 break;
             case R.id.btn_mine:
@@ -99,8 +121,51 @@ public class MainActivity extends BaseActivity {
         mTabs[2]=(Button) findViewById(R.id.btn_cart);
         mTabs[3]=(Button) findViewById(R.id.btn_mine);
         mTabs[0].setSelected(true);
+        txtCartNum= (TextView) findViewById(R.id.txt_cart_num);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateCartNumEvent(UpdateCartNumEvent event){
+        updateCartNum(event.cartNum);
+    }
+
+    private void getCartNum(){
+        if(null==mUser) return;
+        Call<ResponseBody> call=webService.getCartsNum(mUser.getUserId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        int num=new JSONObject(result).getInt("result");
+                        updateCartNum(num);
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    private void updateCartNum(int num){
+        if(num==0){
+            txtCartNum.setVisibility(View.GONE);
+            txtCartNum.setText(0);
+        }else {
+            txtCartNum.setVisibility(View.VISIBLE);
+            txtCartNum.setText(num+"");
+        }
+    }
 
     @Override
     public void onBackPressed(){
@@ -127,10 +192,8 @@ public class MainActivity extends BaseActivity {
         //读写sd卡，拍照权限
         AndPermission.with(this)
                 .requestCode(101)
-                .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_CONTACTS,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.CAMERA,Manifest.permission.CALL_PHONE)
+                .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.CAMERA)
                 .send();
     }
 
@@ -153,6 +216,17 @@ public class MainActivity extends BaseActivity {
             LogUtil.print("permission","failed");
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCartNum();
+    }
+
+    @Override
+    protected boolean isRegistEventBus() {
+        return true;
+    }
 
     @Override
     protected void onDestroy() {

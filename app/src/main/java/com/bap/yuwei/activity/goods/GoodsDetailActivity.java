@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
+import com.bap.yuwei.activity.order.EnsureOrderActivity;
 import com.bap.yuwei.adapter.GoodsImageAdapter;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.goods.Goods;
@@ -26,6 +27,7 @@ import com.bap.yuwei.entity.goods.GoodsModel;
 import com.bap.yuwei.entity.goods.Shop;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
+import com.bap.yuwei.entity.order.GoodsCart;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
@@ -444,6 +446,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 addCarts();
                 break;
             case R.id.txt_buy:
+                buyNow();
                 break;
             case R.id.txt_open_model_view:
                 chooseModel(null);
@@ -459,6 +462,15 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             default:break;
         }
+    }
+
+    private void buyNow(){
+        GoodsCart cart=new GoodsCart();
+        cart.setGoodsId(mGoods.getGoodsId());
+        cart.setGoodsCount(selectNum);
+        Intent i=new Intent(mContext, EnsureOrderActivity.class);
+        i.putExtra(GoodsCart.KEY,cart);
+        startActivity(i);
     }
 
     public void showShop(View v){

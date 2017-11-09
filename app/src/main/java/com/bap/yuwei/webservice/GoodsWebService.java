@@ -8,7 +8,9 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
@@ -90,5 +92,14 @@ public interface GoodsWebService {
 
     @GET("/v1/user/{userId}/carts")
     Call<ResponseBody> getCarts(@Path("userId") String userId);
+
+    @HTTP(method = "DELETE",path = "/v1/user/{userId}/carts",hasBody = true)
+    Call<ResponseBody> deleteCarts(@Path("userId") String userId,@Body RequestBody body);
+
+    @PUT("/v1/user/{userId}/carts/{cartId}")
+    Call<ResponseBody> updateCarts(@Path("userId") String userId,@Path("cartId") Long cartId,@Body RequestBody body);
+
+    @GET("/v1/user/{userId}/carts/count")
+    Call<ResponseBody> getCartsNum(@Path("userId") String userId);
 
 }

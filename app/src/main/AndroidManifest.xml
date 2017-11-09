@@ -198,10 +198,15 @@
             android:name=".activity.sys.MsgListActivity"
             android:label="消息"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.goods.SearchGoodsActivity"
+        <activity
+            android:name=".activity.goods.SearchGoodsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.goods.SearchGoodsCategoryActivity"
+        <activity
+            android:name=".activity.goods.SearchGoodsCategoryActivity"
             android:label="分类"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.order.EnsureOrderActivity"
+            android:label="确认订单"
             android:screenOrientation="portrait" />
     </application>
 

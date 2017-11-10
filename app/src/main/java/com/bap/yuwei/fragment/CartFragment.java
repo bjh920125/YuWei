@@ -1,5 +1,6 @@
 package com.bap.yuwei.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.order.EnsureOrderActivity;
 import com.bap.yuwei.adapter.CartAdapter;
 import com.bap.yuwei.entity.event.CartMoneyEvent;
 import com.bap.yuwei.entity.event.UpdateCartEvent;
@@ -212,7 +214,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                         List<MyGoodsCart> templist=mGson.fromJson(ja.toString(), new TypeToken<List<MyGoodsCart>>() {}.getType());
                         myGoodsCarts.addAll(templist);
                         mAdapter.notifyDataSetChanged();
-                        EventBus.getDefault().post(new UpdateCartNumEvent(jo.getInt("totalRecord")));
+                        EventBus.getDefault().post(new UpdateCartNumEvent());
                         txtPrice.setText("￥0");
                         cbAll.setChecked(false);
                     }else{
@@ -267,7 +269,17 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     private void payOrDelete(){
         if(model==PAY){
-
+            ArrayList<String> cartIds=new ArrayList<>();
+            for(MyGoodsCart goodsCart:myGoodsCarts) {
+                for (GoodsCart cartItem : goodsCart.getCartItems()) {
+                    if(cartItem.isChecked()){
+                        cartIds.add(cartItem.getGoodsCartId()+"");
+                    }
+                }
+            }
+            Intent i=new Intent(mContext, EnsureOrderActivity.class);
+            i.putStringArrayListExtra(EnsureOrderActivity.CART_IDS_KEY,cartIds);
+            startActivity(i);
         }else {
             deleteCarts();
         }

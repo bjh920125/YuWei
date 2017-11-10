@@ -1,49 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.bap.yuwei.activity.order.EnsureOrderActivity">
 
-    <include layout="@layout/view_toolbar"/>
+    <include layout="@layout/view_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginBottom="45dp"
         android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <RelativeLayout
+
+            <TextView
+                android:id="@+id/txt_add_address"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:onClick="chooseAddress"
+                android:text="点击添加收货地址" />
+
+            <RelativeLayout
+                android:id="@+id/rl_receiver_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:onClick="chooseAddress"
+                android:padding="3dp"
+                android:visibility="gone">
+
                 <ImageView
                     android:id="@+id/img_location"
                     android:layout_width="40dp"
                     android:layout_height="50dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/location"/>
+                    android:src="@drawable/location" />
 
                 <TextView
                     android:id="@+id/txt_receiver"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
                     android:layout_toRightOf="@+id/img_location"
-                    android:text="123"/>
+                    android:paddingTop="5dp"
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/txt_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txt_receiver"
                     android:layout_alignLeft="@+id/txt_receiver"
+                    android:layout_below="@+id/txt_receiver"
                     android:paddingTop="5dp"
-                    android:text="123"
-                    android:textSize="13dp"/>
+                    android:text=""
+                    android:textSize="13dp" />
 
                 <ImageView
                     android:id="@+id/img_arrow_right"
@@ -51,20 +69,119 @@
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/arrow_right_xiao"/>
+                    android:src="@drawable/arrow_right_xiao" />
 
                 <TextView
                     android:id="@+id/txt_tel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123"
-                    android:paddingTop="5dp"
                     android:layout_alignTop="@+id/txt_receiver"
-                    android:layout_toLeftOf="@+id/img_arrow_right" />
+                    android:layout_toLeftOf="@+id/img_arrow_right"
+                    android:paddingTop="5dp"
+                    android:text="" />
             </RelativeLayout>
-            <include layout="@layout/view_divider"/>
 
+            <include layout="@layout/view_divider" />
 
+            <com.linearlistview.LinearListView
+                android:id="@+id/lv_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white"
+                android:onClick="setInvoice">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="发票"
+                    android:textSize="13dp" />
+
+                <ImageView
+                    android:id="@+id/img_arrow_right2"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/arrow_right_xiao" />
+
+                <TextView
+                    android:id="@+id/txt_invoice_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/img_arrow_right2"
+                    android:gravity="center_vertical"
+                    android:text="（明细-个人）"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:id="@+id/txt_invoice_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/txt_invoice_header"
+                    android:gravity="center_vertical"
+                    android:text="纸质"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="13dp" />
+            </RelativeLayout>
+
+            <include layout="@layout/view_divider" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/lightgray2" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/txt_commit_order"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="提交订单"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/txt_price"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/txt_commit_order"
+            android:gravity="center"
+            android:paddingRight="5dp"
+            android:text="￥0.00"
+            android:textColor="@color/red" />
+
+        <TextView
+            android:id="@+id/txt_price_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/txt_price"
+            android:gravity="center"
+            android:text="小计："
+            android:textColor="@color/lightblack" />
+
+        <TextView
+            android:id="@+id/txt_total_num"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/txt_price_title"
+            android:gravity="center"
+            android:text="共 件，"
+            android:textColor="@color/lightblack" />
+    </RelativeLayout>
+</RelativeLayout>

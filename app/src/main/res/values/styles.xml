@@ -63,8 +63,8 @@
 
     <style name="CustomCircleCheckboxTheme.CheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/checkbox_circle_bg</item>
+        <item name="android:textColor">@color/lightblack</item>
     </style>
-
 
     <style name="popupwindow_anim" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/pickerview_slide_in_bottom</item>

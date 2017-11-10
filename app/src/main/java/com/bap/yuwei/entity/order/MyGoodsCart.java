@@ -1,12 +1,13 @@
 package com.bap.yuwei.entity.order;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/7.
  */
 
-public class MyGoodsCart {
+public class MyGoodsCart implements Serializable {
 
     private Long shopId;//店铺ID
     private String shopName;//店铺名称

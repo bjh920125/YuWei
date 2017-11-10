@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
+import com.bap.yuwei.entity.event.ReceiverAddressEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.sys.ShippingAddress;
@@ -21,6 +23,7 @@ import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.webservice.SysWebService;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -50,6 +53,15 @@ public class ReceiveAddressListActivity extends BaseActivity {
         addressList=new ArrayList<>();
         color=getResources().getColor(R.color.lightblack);
         selectColor=getResources().getColor(R.color.colorPrimary);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ShippingAddress shippingAddress= (ShippingAddress) mListView.getItemAtPosition(i);
+                EventBus.getDefault().post(new ReceiverAddressEvent(shippingAddress));
+                finish();
+            }
+        });
 
         mAdapter=new CommonAdapter<ShippingAddress>(mContext,addressList,R.layout.item_address) {
             @Override

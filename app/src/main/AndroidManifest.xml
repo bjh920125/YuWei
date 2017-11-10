@@ -205,8 +205,12 @@
             android:name=".activity.goods.SearchGoodsCategoryActivity"
             android:label="分类"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.order.EnsureOrderActivity"
+        <activity
+            android:name=".activity.order.EnsureOrderActivity"
             android:label="确认订单"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.order.InvoiceSetActivity"
+            android:label="发票信息"
             android:screenOrientation="portrait" />
     </application>
 

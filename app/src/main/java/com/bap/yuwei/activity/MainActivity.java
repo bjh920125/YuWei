@@ -126,7 +126,7 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateCartNumEvent(UpdateCartNumEvent event){
-        updateCartNum(event.cartNum);
+        getCartNum();
     }
 
     private void getCartNum(){

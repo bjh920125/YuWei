@@ -17,7 +17,6 @@ public class Constants {
     /**X-TOKEN*/
     public static final String XTOKEN_KEY="xtoken.key";
 
-
     /**设备类型*/
     public static final int DEVICE_TYPE=2;
     /**买家*/
@@ -31,4 +30,17 @@ public class Constants {
     public static final int ORDER_MSG=2;
     /**通知消息*/
     public static final int NOTICE_MSG=3;
+
+
+    /**普通发票*/
+    public static final int INVOICE_COMMON=0;
+    /**电子发票*/
+    public static final int INVOICE_ELEC=1;
+    /**增值税发票*/
+    public static final int INVOICE_VAT=2;
+
+    /**个人抬头发票*/
+    public static final int INVOICE_HEADER_PERSONAL=0;
+    /**公司抬头发票*/
+    public static final int INVOICE_HEADER_UNIT=1;
 }

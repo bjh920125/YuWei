@@ -209,8 +209,16 @@
             android:name=".activity.order.EnsureOrderActivity"
             android:label="确认订单"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.order.InvoiceSetActivity"
+        <activity
+            android:name=".activity.order.InvoiceSetActivity"
             android:label="发票信息"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.order.OrderDetailActivity"
+            android:label="订单详情"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.order.OrderListActivity"
+            android:label="全部订单"
             android:screenOrientation="portrait" />
     </application>
 

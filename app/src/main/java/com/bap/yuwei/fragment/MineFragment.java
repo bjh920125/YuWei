@@ -2,14 +2,17 @@ package com.bap.yuwei.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.order.OrderListActivity;
 import com.bap.yuwei.activity.sys.LoginActivity;
 import com.bap.yuwei.activity.sys.MsgMenusActivity;
 import com.bap.yuwei.activity.sys.SettingActivity;
@@ -18,6 +21,7 @@ import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.event.UnreadEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
+import com.bap.yuwei.entity.order.OrderStatistics;
 import com.bap.yuwei.fragment.base.BaseFragment;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bap.yuwei.util.LogUtil;
@@ -25,11 +29,18 @@ import com.bap.yuwei.util.MyApplication;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
 import com.bap.yuwei.webservice.GoodsWebService;
+import com.bap.yuwei.webservice.OrderWebService;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -43,19 +54,24 @@ import retrofit2.Response;
 public class MineFragment extends BaseFragment implements View.OnClickListener{
 
     private RelativeLayout rlPersonInfo;
+    private LinearLayout llAllOrders;
     private ImageView imgHead;
     private TextView txtName;
     private TextView txtGoodsCollectNum,txtShopCollectNum,txtFootmarkNum;
     private TextView txtMsgCount;
     private ImageView imgSet,imgMsg;
+    private TextView btnPay,btnSend,btnReceive,btnComment,btnRefund;
+    private TextView txtPayNum,txtSendNum,txtReceiveNum,txtCommentNum,txtRefundNum;
 
     private GoodsWebService goodsWebService;
+    private OrderWebService orderWebService;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         goodsWebService= MyApplication.getInstance().getWebService(GoodsWebService.class);
+        orderWebService= MyApplication.getInstance().getWebService(OrderWebService.class);
     }
 
     @Override
@@ -63,11 +79,27 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         super.onActivityCreated(savedInstanceState);
         refreshUI();
         getUnreadMsgCount();
+        getOrderStatistics();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.ll_show_all:
+                toOrderListPage(0);
+                break;
+            case R.id.btn_pay:
+                toOrderListPage(1);
+                break;
+            case R.id.btn_send:
+                toOrderListPage(2);
+                break;
+            case R.id.btn_receive:
+                toOrderListPage(3);
+                break;
+            case R.id.btn_comment:
+                toOrderListPage(4);
+                break;
             case R.id.rl_person_info:
                 loginOrUpdateInfo();
                 break;
@@ -82,6 +114,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         }
     }
 
+    private void toOrderListPage(int index){
+        Intent i=new Intent(mContext, OrderListActivity.class);
+        i.putExtra(OrderListActivity.STATUS_INDEX_KEY,index);
+        startActivity(i);
+    }
+
     private void loginOrUpdateInfo(){
         if(null!=mUser){
             startActivity(new Intent(mContext, UserInfoActivity.class));
@@ -90,6 +128,73 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         }
     }
 
+
+    private void getOrderStatistics(){
+        if(null==mUser) return;
+        Call<ResponseBody> call=orderWebService.getOrderStatistics(mUser.getUserId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        JSONArray ja=new JSONObject(result).getJSONArray("result");
+                        List<OrderStatistics> tempList = mGson.fromJson(ja.toString(), new TypeToken<List<OrderStatistics>>() {}.getType());
+                        Map<Integer,String> map=new HashMap<Integer, String>();
+                        for(OrderStatistics os:tempList){
+                            map.put(os.getStatus(),os.getCount());
+                        }
+                        showOrderNum(map);
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    private void showOrderNum(Map<Integer,String> map){
+        String payNum=map.get(Constants.ORDER_STATUS_PENDING_PAY);
+        if(!TextUtils.isEmpty(payNum)){
+            txtPayNum.setVisibility(View.VISIBLE);
+            txtPayNum.setText(payNum);
+        }else {
+            txtPayNum.setVisibility(View.GONE);
+        }
+
+        String sendNum=map.get(Constants.ORDER_STATUS_PRE_DELIVERED);
+        if(!TextUtils.isEmpty(sendNum)){
+            txtSendNum.setVisibility(View.VISIBLE);
+            txtSendNum.setText(sendNum);
+        }else {
+            txtSendNum.setVisibility(View.GONE);
+        }
+
+        String receiveNum=map.get(Constants.ORDER_STATUS_HAS_SENDED);
+        if(!TextUtils.isEmpty(receiveNum)){
+            txtReceiveNum.setVisibility(View.VISIBLE);
+            txtReceiveNum.setText(receiveNum);
+        }else {
+            txtReceiveNum.setVisibility(View.GONE);
+        }
+
+        String commentNum=map.get(Constants.ORDER_STATUS_PRE_EVALUATED);
+        if(!TextUtils.isEmpty(commentNum)){
+            txtCommentNum.setVisibility(View.VISIBLE);
+            txtCommentNum.setText(commentNum);
+        }else {
+            txtCommentNum.setVisibility(View.GONE);
+        }
+    }
 
     /**
      * 获取收藏量
@@ -129,6 +234,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
             txtName.setText(mUser.getUsername());
             ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead, DisplayImageOptionsUtil.getOptions());
             getCollectNum();
+            getOrderStatistics();
         }else{
             txtName.setText("点击登录");
             ImageLoader.getInstance().displayImage("drawable://"+R.drawable.iconfont_touxiang,imgHead, DisplayImageOptionsUtil.getOptions());
@@ -175,12 +281,29 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         imgSet= (ImageView) fragmentView.findViewById(R.id.img_set);
         imgMsg= (ImageView) fragmentView.findViewById(R.id.img_msg);
         txtMsgCount=(TextView) fragmentView.findViewById(R.id.txt_msg_count);
+        btnPay= (TextView) fragmentView.findViewById(R.id.btn_pay);
+        btnSend= (TextView) fragmentView.findViewById(R.id.btn_send);
+        btnReceive= (TextView) fragmentView.findViewById(R.id.btn_receive);
+        btnComment= (TextView) fragmentView.findViewById(R.id.btn_comment);
+        btnRefund= (TextView) fragmentView.findViewById(R.id.btn_refund);
+        llAllOrders= (LinearLayout) fragmentView.findViewById(R.id.ll_show_all);
+        txtPayNum= (TextView) fragmentView.findViewById(R.id.txt_pay_count);
+        txtSendNum= (TextView) fragmentView.findViewById(R.id.txt_send_count);
+        txtReceiveNum= (TextView) fragmentView.findViewById(R.id.txt_receive_count);
+        txtCommentNum= (TextView) fragmentView.findViewById(R.id.txt_comment_count);
+        txtRefundNum= (TextView) fragmentView.findViewById(R.id.txt_refund_count);
         rlPersonInfo.setOnClickListener(this);
         txtGoodsCollectNum.setOnClickListener(this);
         txtShopCollectNum.setOnClickListener(this);
         txtFootmarkNum.setOnClickListener(this);
         imgSet.setOnClickListener(this);
         imgMsg.setOnClickListener(this);
+        btnPay.setOnClickListener(this);
+        btnSend.setOnClickListener(this);
+        btnReceive.setOnClickListener(this);
+        btnComment.setOnClickListener(this);
+        btnRefund.setOnClickListener(this);
+        llAllOrders.setOnClickListener(this);
         return fragmentView;
     }
 

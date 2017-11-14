@@ -66,6 +66,12 @@
         <item name="android:textColor">@color/lightblack</item>
     </style>
 
+    <style name="CustomUnderlineCheckboxTheme.CheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/tb_order_bg</item>
+        <item name="android:textColor">@drawable/text_color</item>
+    </style>
+
     <style name="popupwindow_anim" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/pickerview_slide_in_bottom</item>
         <item name="android:windowExitAnimation">@anim/pickerview_slide_out_bottom</item>

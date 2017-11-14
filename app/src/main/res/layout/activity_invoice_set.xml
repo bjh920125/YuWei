@@ -547,16 +547,17 @@
                         android:layout_height="40dp"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="*收票人省份"
+                        android:text="*收票人省市"
                         android:textSize="13dp" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/et_receiver_city"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:onClick="chooseArea"
                         android:background="@null"
                         android:gravity="center_vertical"
-                        android:hint="请填写收票人省份"
+                        android:hint="请选择收票人省份"
                         android:textColorHint="@color/darkgrey"
                         android:textSize="13dp" />
                 </LinearLayout>

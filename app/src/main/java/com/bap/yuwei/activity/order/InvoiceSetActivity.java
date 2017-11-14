@@ -1,32 +1,45 @@
 package com.bap.yuwei.activity.order;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.event.ChooseInvoiceEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.order.InvoiceContent;
 import com.bap.yuwei.entity.order.OrderEnsure;
 import com.bap.yuwei.entity.order.UserInvoice;
+import com.bap.yuwei.entity.sys.Vat;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
+import com.bap.yuwei.util.SoftInputUtil;
 import com.bap.yuwei.util.StringUtils;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
+import com.bap.yuwei.util.area.GetJsonDataUtil;
+import com.bap.yuwei.util.area.JsonBean;
 import com.bap.yuwei.webservice.OrderWebService;
 import com.bap.yuwei.webservice.SysWebService;
+import com.bigkoo.pickerview.OptionsPickerView;
+import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.RequestBody;
@@ -40,21 +53,28 @@ public class InvoiceSetActivity extends BaseActivity {
     private RadioGroup rgType;
     private RadioGroup rgHeaderType;
     private RadioGroup rgInvoiceContent;
+    private RadioButton rbNoInvoice;
     private EditText etUnitName,etTaxNo;
     private EditText etElecTel,etElecEmail;
     private EditText etCompanyAddress,etCompanyCellphone,etBankAccount,etBankName;
-    private EditText etReceiverName,etReceiverTel,etCity,etAddress;
+    private EditText etReceiverName,etReceiverTel,etAddress;
     private EditText etVatUnitName,etVatTaxNo;
     private LinearLayout llMakeInvoiceType,llHeader,llUnit,llElecReceiverInfo,llVatInfo;
+    private TextView txtCity;
 
     private OrderEnsure orderEnsure;
     private List<InvoiceContent> invoiceContents;
     private String selectContent="";
     private String province,city,area;
     private UserInvoice mUserInvoice;
+    private Long userInvoiceId;
 
     private int type=Constants.INVOICE_COMMON;
     private int headerType= Constants.INVOICE_HEADER_PERSONAL;
+
+    protected ArrayList<JsonBean> options1Items = new ArrayList<>();
+    protected ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    protected ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
 
     private OrderWebService orderWebService;
     private SysWebService webService;
@@ -67,6 +87,7 @@ public class InvoiceSetActivity extends BaseActivity {
         orderWebService= MyApplication.getInstance().getWebService(OrderWebService.class);
         webService = MyApplication.getInstance().getWebService(SysWebService.class);
         setContents();
+        setType();
 
         rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -74,16 +95,20 @@ public class InvoiceSetActivity extends BaseActivity {
                 switch (id){
                     case R.id.rb_paper:
                         type=Constants.INVOICE_COMMON;
+                        rgHeaderType.check(R.id.rb_person);
                         break;
                     case R.id.rb_elec:
                         type=Constants.INVOICE_ELEC;
+                        rgHeaderType.check(R.id.rb_person);
                         break;
                     case R.id.rb_vat:
                         type=Constants.INVOICE_VAT;
+                        headerType=Constants.INVOICE_HEADER_UNIT;
                         break;
                     default:break;
                 }
                 showUIByType();
+                getInvoiceByType();
             }
         });
 
@@ -100,6 +125,7 @@ public class InvoiceSetActivity extends BaseActivity {
                     default:break;
                 }
                 showUIByHeaderType();
+                getInvoiceByType();
             }
         });
 
@@ -114,6 +140,7 @@ public class InvoiceSetActivity extends BaseActivity {
         showUIByType();
         showUIByHeaderType();
         getInvoiceByType();
+        initJsonData();
     }
 
 
@@ -123,23 +150,31 @@ public class InvoiceSetActivity extends BaseActivity {
 
     private UserInvoice getUserInvoiceEntity(){
         UserInvoice userInvoice=new UserInvoice();
+        userInvoice.setUserInvoiceId(userInvoiceId);
         userInvoice.setType(type);
         userInvoice.setHeaderType(headerType);
         userInvoice.setContent(selectContent);
         if(type==Constants.INVOICE_COMMON){
             if(headerType==Constants.INVOICE_HEADER_UNIT){
+                userInvoice.setHeader(StringUtils.getEditTextValue(etUnitName));
                 userInvoice.setCompanyName(StringUtils.getEditTextValue(etUnitName));
                 userInvoice.setTaxpayerNumber(StringUtils.getEditTextValue(etTaxNo));
+            }else {
+                userInvoice.setHeader("个人");
             }
         }else if (type==Constants.INVOICE_ELEC){
             userInvoice.setCellphone(StringUtils.getEditTextValue(etElecTel));
             userInvoice.setEmail(StringUtils.getEditTextValue(etElecEmail));
             if(headerType==Constants.INVOICE_HEADER_UNIT){
+                userInvoice.setHeader(StringUtils.getEditTextValue(etUnitName));
                 userInvoice.setCompanyName(StringUtils.getEditTextValue(etUnitName));
                 userInvoice.setTaxpayerNumber(StringUtils.getEditTextValue(etTaxNo));
+            }else {
+                userInvoice.setHeader("个人");
             }
         }else if (type==Constants.INVOICE_VAT){
             userInvoice.setInvoiceMode(0);//0：订单完成后开票;
+            userInvoice.setHeader(StringUtils.getEditTextValue(etVatUnitName));
             userInvoice.setCompanyName(StringUtils.getEditTextValue(etVatUnitName));
             userInvoice.setTaxpayerNumber(StringUtils.getEditTextValue(etVatTaxNo));
             userInvoice.setCompanyAddress(StringUtils.getEditTextValue(etCompanyAddress));
@@ -171,8 +206,10 @@ public class InvoiceSetActivity extends BaseActivity {
                     LogUtil.print("result",result);
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
-                        JSONObject jo=new JSONObject(result).getJSONObject("result");
-
+                        JSONObject jo=new JSONObject(result);
+                        userInvoiceId=jo.getLong("result");
+                        EventBus.getDefault().post(new ChooseInvoiceEvent(getUserInvoiceEntity()));
+                        finish();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -236,8 +273,8 @@ public class InvoiceSetActivity extends BaseActivity {
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         JSONObject jo=new JSONObject(result).getJSONObject("result");
-                        //mVat=mGson.fromJson(jo.toString(),Vat.class);
-                        initUIWithValues();
+                        Vat vat=mGson.fromJson(jo.toString(),Vat.class);
+                        initUIWithVat(vat);
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -253,9 +290,19 @@ public class InvoiceSetActivity extends BaseActivity {
         });
     }
 
+    private void initUIWithVat(Vat vat){
+        if(null==vat) return;
+        etVatUnitName.setText(vat.getCompanyName());
+        etVatTaxNo.setText(vat.getTaxpayerNo());
+        etCompanyCellphone.setText(vat.getCellphone());
+        etCompanyAddress.setText(vat.getAddress());
+        etBankAccount.setText(vat.getBankAccount());
+        etBankName.setText(vat.getBankName());
+    }
 
     private void initUIWithValues(){
         if(null==mUserInvoice) return;
+        userInvoiceId=mUserInvoice.getUserInvoiceId();
         int type=mUserInvoice.getType();
         if(type==Constants.INVOICE_COMMON){
             rgType.check(R.id.rb_paper);
@@ -271,6 +318,14 @@ public class InvoiceSetActivity extends BaseActivity {
             rgHeaderType.check(R.id.rb_person);
         }
 
+        String content=mUserInvoice.getContent();
+        for(int i=0;i<rgInvoiceContent.getChildCount();i++){
+            RadioButton btn= (RadioButton) rgInvoiceContent.getChildAt(i);
+            if(btn.getText().toString().equals(content)){
+                rgInvoiceContent.check(btn.getId());
+            }
+        }
+
         etUnitName.setText(mUserInvoice.getCompanyName());
         etTaxNo.setText(mUserInvoice.getTaxpayerNumber());
         etElecTel.setText(mUserInvoice.getCellphone());
@@ -283,8 +338,16 @@ public class InvoiceSetActivity extends BaseActivity {
         etBankName.setText(mUserInvoice.getBankName());
         etReceiverName.setText(mUserInvoice.getName());
         etReceiverTel.setText(mUserInvoice.getCellphone());
-        etCity.setText(mUserInvoice.getProvince()+mUserInvoice.getCity()+mUserInvoice.getAddress());
+        if(null!=mUserInvoice.getProvince()){
+            province=mUserInvoice.getProvince();
+            city=mUserInvoice.getCity();
+            area=mUserInvoice.getArea();
+            txtCity.setText(mUserInvoice.getProvince()+mUserInvoice.getCity()+mUserInvoice.getArea());
+        }
         etAddress.setText(mUserInvoice.getAddress());
+        if(TextUtils.isEmpty(mUserInvoice.getBankAccount())){
+            getVat();
+        }
     }
 
     private void showUIByType(){
@@ -293,16 +356,19 @@ public class InvoiceSetActivity extends BaseActivity {
             llHeader.setVisibility(View.VISIBLE);
             llElecReceiverInfo.setVisibility(View.GONE);
             llVatInfo.setVisibility(View.GONE);
+            rbNoInvoice.setVisibility(View.VISIBLE);
         }else if (type==Constants.INVOICE_ELEC){
             llMakeInvoiceType.setVisibility(View.GONE);
             llHeader.setVisibility(View.VISIBLE);
             llElecReceiverInfo.setVisibility(View.VISIBLE);
             llVatInfo.setVisibility(View.GONE);
+            rbNoInvoice.setVisibility(View.GONE);
         }else if (type==Constants.INVOICE_VAT){
             llMakeInvoiceType.setVisibility(View.VISIBLE);
             llHeader.setVisibility(View.GONE);
             llElecReceiverInfo.setVisibility(View.GONE);
             llVatInfo.setVisibility(View.VISIBLE);
+            rbNoInvoice.setVisibility(View.GONE);
         }
     }
 
@@ -325,6 +391,91 @@ public class InvoiceSetActivity extends BaseActivity {
         }
     }
 
+    private void setType(){
+        String[] types=orderEnsure.getInvoiceTypes();
+        for(int i=0;i<types.length;i++){
+            if(types[i].equals("0")){
+                RadioButton btn= (RadioButton) rgType.getChildAt(i);
+                btn.setEnabled(false);
+                btn.setTextColor(getResources().getColor(R.color.darkgrey));
+                btn.setBackgroundResource(R.drawable.checked_darkgrey_bg);
+            }
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        EventBus.getDefault().post(new ChooseInvoiceEvent(getUserInvoiceEntity()));
+        finish();
+    }
+
+    public void chooseArea(View v) {// 弹出选择器
+        SoftInputUtil.hideKeyboard(mContext);
+        OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+                province=options1Items.get(options1).getPickerViewText();
+                city=options2Items.get(options1).get(options2);
+                area=options3Items.get(options1).get(options2).get(options3);
+                txtCity.setText(province+city+area);
+            }
+        }).setTitleText("城市选择").setDividerColor(Color.BLACK)
+                .setCancelText("取消").setSubmitText("确定")
+                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                .setContentTextSize(20)
+                .build();
+
+        pvOptions.setPicker(options1Items, options2Items,options3Items);//三级选择器
+        pvOptions.show();
+    }
+
+    private void initJsonData() {//解析数据
+        String JsonData = new GetJsonDataUtil().getJson(this,"province.json");//获取assets目录下的json文件数据
+        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
+        options1Items = jsonBean;
+        for (int i=0;i<jsonBean.size();i++){//遍历省份
+            ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
+            ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+            for (int c=0; c<jsonBean.get(i).getCityList().size(); c++){//遍历该省份的所有城市
+                String CityName = jsonBean.get(i).getCityList().get(c).getName();
+                CityList.add(CityName);//添加城市
+                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
+                //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
+                if (jsonBean.get(i).getCityList().get(c).getArea() == null
+                        ||jsonBean.get(i).getCityList().get(c).getArea().size()==0) {
+                    City_AreaList.add("");
+                }else {
+                    for (int d=0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
+                        String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
+                        City_AreaList.add(AreaName);//添加该城市所有地区数据
+                    }
+                }
+                Province_AreaList.add(City_AreaList);//添加该省所有地区数据
+            }
+            //添加城市数据
+            options2Items.add(CityList);
+            //添加地区数据
+            options3Items.add(Province_AreaList);
+        }
+    }
+
+    public ArrayList<JsonBean> parseData(String result) {//Gson 解析
+        ArrayList<JsonBean> detail = new ArrayList<>();
+        try {
+            JSONArray data = new JSONArray(result);
+            Gson gson = new Gson();
+            for (int i = 0; i < data.length(); i++) {
+                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
+                detail.add(entity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return detail;
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_invoice_set;
@@ -335,13 +486,14 @@ public class InvoiceSetActivity extends BaseActivity {
         rgType=(RadioGroup) findViewById(R.id.rg_type);
         rgInvoiceContent= (RadioGroup) findViewById(R.id.rg_invoice_content);
         rgHeaderType= (RadioGroup) findViewById(R.id.rg_header_type);
+        rbNoInvoice= (RadioButton) findViewById(R.id.rb_no_invoice);
         llMakeInvoiceType= (LinearLayout) findViewById(R.id.ll_make_invoice_type);
         llHeader= (LinearLayout) findViewById(R.id.ll_header);
         llUnit= (LinearLayout) findViewById(R.id.ll_unit);
         llElecReceiverInfo= (LinearLayout) findViewById(R.id.ll_elec_receiver_info);
         llVatInfo= (LinearLayout) findViewById(R.id.ll_vat_info);
         etUnitName= (EditText) findViewById(R.id.et_unit);
-        etTaxNo= (EditText) findViewById(R.id.et_unit);
+        etTaxNo= (EditText) findViewById(R.id.et_tax_no);
         etElecTel=  (EditText) findViewById(R.id.et_elec_tel);
         etElecEmail =(EditText) findViewById(R.id.et_elec_email);
         etVatUnitName=(EditText) findViewById(R.id.et_vat_unit);
@@ -352,7 +504,7 @@ public class InvoiceSetActivity extends BaseActivity {
         etBankName=(EditText) findViewById(R.id.et_bank);
         etReceiverName=(EditText) findViewById(R.id.et_receiver_name);
         etReceiverTel=(EditText) findViewById(R.id.et_receiver_tel);
-        etCity=(EditText) findViewById(R.id.et_receiver_city);
+        txtCity=(TextView) findViewById(R.id.et_receiver_city);
         etAddress=(EditText) findViewById(R.id.et_receiver_address);
     }
 }

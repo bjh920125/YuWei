@@ -25,4 +25,20 @@ public interface OrderWebService {
 
     @GET("/v1/user/{userId}/type/{type}/headertype/{headerType}")
     Call<ResponseBody> getInvoiceByType(@Path("userId") String userId,@Path("type") int type,@Path("headerType") int headerType);
+
+    @POST("/v1/orders/topay")
+    Call<ResponseBody> commitOrder(@Body RequestBody body);
+
+    @POST("/v1/orders/app-alipay")
+    Call<ResponseBody> pay(@Body RequestBody body);
+
+    @POST("/v1/buyer/{userId}/orders")
+    Call<ResponseBody> getOrderList(@Path("userId") String userId,@Body RequestBody body);
+
+    @GET("/v1/orders/{orderId}")
+    Call<ResponseBody> getOrderDetail(@Path("orderId") Long orderId);
+
+    @GET("/v1/buyer/{userId}/orders/statistics")
+    Call<ResponseBody> getOrderStatistics(@Path("userId") String userId);
+
 }

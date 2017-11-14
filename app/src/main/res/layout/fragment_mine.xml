@@ -47,15 +47,15 @@
                 android:id="@+id/txt_msg_count"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_marginLeft="-5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="-5dp"
                 android:background="@drawable/circle_red"
-                android:visibility="gone"
                 android:gravity="center"
                 android:text=""
                 android:textColor="@color/white"
-                android:textSize="10dp"/>
+                android:textSize="10dp"
+                android:visibility="gone" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
@@ -83,7 +83,7 @@
             android:paddingLeft="10dp"
             android:text="点击登录"
             android:textColor="@color/lightblack"
-            android:textSize="12dp"/>
+            android:textSize="12dp" />
 
 
         <ImageView
@@ -183,6 +183,7 @@
     <include layout="@layout/view_divider" />
 
     <LinearLayout
+        android:id="@+id/ll_show_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -218,17 +219,34 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <Button
+            <TextView
                 android:id="@+id/btn_pay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
+                android:drawablePadding="6dp"
                 android:drawableTop="@drawable/daifukuan"
+                android:gravity="center_horizontal"
                 android:paddingTop="13dp"
-                android:onClick="onTabClicked"
-                android:scaleType="matrix"
                 android:text="待付款"
+                android:textColor="@color/black"
                 android:textSize="10dp" />
+
+
+            <TextView
+                android:id="@+id/txt_pay_count"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/circle_red"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -236,17 +254,33 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <Button
+            <TextView
                 android:id="@+id/btn_send"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:paddingTop="13dp"
+                android:drawablePadding="6dp"
                 android:drawableTop="@drawable/daifahuo"
-                android:onClick="onTabClicked"
-                android:scaleType="matrix"
+                android:gravity="center_horizontal"
+                android:paddingTop="13dp"
                 android:text="待发货"
+                android:textColor="@color/black"
                 android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/txt_send_count"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/circle_red"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:visibility="gone" />
         </RelativeLayout>
 
 
@@ -255,17 +289,33 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <Button
+            <TextView
                 android:id="@+id/btn_receive"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:paddingTop="13dp"
+                android:drawablePadding="6dp"
                 android:drawableTop="@drawable/daishouhuo"
-                android:onClick="onTabClicked"
-                android:scaleType="matrix"
+                android:gravity="center_horizontal"
+                android:paddingTop="13dp"
                 android:text="待收货"
+                android:textColor="@color/black"
                 android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/txt_receive_count"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/circle_red"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -273,17 +323,33 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <Button
+            <TextView
                 android:id="@+id/btn_comment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:paddingTop="13dp"
+                android:drawablePadding="6dp"
                 android:drawableTop="@drawable/daipingjia"
-                android:onClick="onTabClicked"
-                android:scaleType="matrix"
+                android:gravity="center_horizontal"
+                android:paddingTop="13dp"
                 android:text="待评价"
+                android:textColor="@color/black"
                 android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/txt_comment_count"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/circle_red"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -291,17 +357,33 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <Button
+            <TextView
                 android:id="@+id/btn_refund"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:paddingTop="13dp"
+                android:drawablePadding="6dp"
                 android:drawableTop="@drawable/shouhoufuwu"
-                android:onClick="onTabClicked"
-                android:scaleType="matrix"
+                android:gravity="center_horizontal"
+                android:paddingTop="13dp"
                 android:text="退款/退货"
+                android:textColor="@color/black"
                 android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/txt_refund_count"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/circle_red"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:visibility="gone" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -309,5 +391,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lightgray2"/>
+        android:background="@color/lightgray2" />
 </LinearLayout>

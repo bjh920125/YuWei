@@ -10,6 +10,7 @@ import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.event.UpdateCartNumEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.sys.Msg;
@@ -21,6 +22,7 @@ import com.bap.yuwei.webservice.SysWebService;
 import com.google.gson.reflect.TypeToken;
 import com.linearlistview.LinearListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -138,6 +140,12 @@ public class MsgMenusActivity extends BaseActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        EventBus.getDefault().post(new UpdateCartNumEvent());
+        super.onBackPressed();
     }
 
     @Override

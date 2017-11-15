@@ -217,8 +217,12 @@
             android:name=".activity.order.OrderDetailActivity"
             android:label="订单详情"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.order.OrderListActivity"
+        <activity
+            android:name=".activity.order.OrderListActivity"
             android:label="全部订单"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.order.ExpressDetailActivity"
+            android:label="物流详情"
             android:screenOrientation="portrait" />
     </application>
 

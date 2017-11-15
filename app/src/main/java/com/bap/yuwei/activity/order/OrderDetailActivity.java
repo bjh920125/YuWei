@@ -1,9 +1,12 @@
 package com.bap.yuwei.activity.order;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
@@ -12,6 +15,8 @@ import com.bap.yuwei.adapter.OrderItemDetailAdapter;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
+import com.bap.yuwei.entity.order.Express;
+import com.bap.yuwei.entity.order.ExpressItem;
 import com.bap.yuwei.entity.order.OrderDetail;
 import com.bap.yuwei.entity.order.Orders;
 import com.bap.yuwei.util.LogUtil;
@@ -33,6 +38,8 @@ import retrofit2.Response;
 public class OrderDetailActivity extends BaseActivity {
 
     private TextView txtOrderStauts,txtReceiverName,txtReceiverAddress,txtReceiverTel,txtShopName;
+    private TextView txtExpress,txtExpressTime;
+    private RelativeLayout rlExpress;
     private ImageView imgShop;
     private TextView txtGoodsTotalPrice,txtExpressPrice,txtOrderTotalPrice,txtActualPrice;
     private TextView txtOrderId,txtAlitradeNo,txtCreateTime,txtPayTime;
@@ -67,6 +74,7 @@ public class OrderDetailActivity extends BaseActivity {
                         JSONObject jo=new JSONObject(result).getJSONObject("result");
                         orderDetail=mGson.fromJson(jo.toString(),OrderDetail.class);
                         initUIWithValues();
+                        getExpress();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -74,6 +82,37 @@ public class OrderDetailActivity extends BaseActivity {
                     e.printStackTrace();
                 }
                 dismissProgressDialog();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    private void getExpress(){
+        showLoadingDialog();
+        Call<ResponseBody> call=orderWebService.getExpress(orderId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    Express express=mGson.fromJson(result,Express.class);
+                    if(null!=express && null!=express.getData() && express.getData().size()>0){
+                        ExpressItem expressItem=express.getData().get(0);
+                        rlExpress.setVisibility(View.VISIBLE);
+                        txtExpress.setText(expressItem.getContext());
+                        txtExpressTime.setText(expressItem.getFtime());
+                    }
+                    initUIWithValues();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -101,9 +140,18 @@ public class OrderDetailActivity extends BaseActivity {
         txtAlitradeNo.setText("支付宝交易号："+orders.getAlipayTradeNo());
         txtCreateTime.setText("创建时间："+orders.getCreateTime());
         txtPayTime.setText("付款时间："+orders.getPayTime());
-
+        if (TextUtils.isEmpty(orders.getAlipayTradeNo())){
+            txtAlitradeNo.setVisibility(View.GONE);
+            txtPayTime.setVisibility(View.GONE);
+        }
         mAdapter=new OrderItemDetailAdapter(orderDetail.getOrders().getOrderItems(),mContext);
         lvOrderItems.setAdapter(mAdapter);
+    }
+
+    public void showExpressDetail(View view){
+        Intent i=new Intent(mContext,ExpressDetailActivity.class);
+        i.putExtra(Orders.KEY,orderDetail.getOrders());
+        startActivity(i);
     }
 
     public void onBackClick(View v){
@@ -133,5 +181,8 @@ public class OrderDetailActivity extends BaseActivity {
         txtCreateTime= (TextView) findViewById(R.id.txt_create_time);
         txtPayTime= (TextView) findViewById(R.id.txt_pay_time);
         lvOrderItems= (LinearListView) findViewById(R.id.lv_order);
+        txtExpress= (TextView) findViewById(R.id.txt_express);
+        txtExpressTime= (TextView) findViewById(R.id.txt_time);
+        rlExpress= (RelativeLayout) findViewById(R.id.rl_express);
     }
 }

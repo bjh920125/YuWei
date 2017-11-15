@@ -1,11 +1,12 @@
 package com.bap.yuwei.entity.order;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * Created by BAP0004 on 2017/8/25.
  */
-public class OrderItem {
+public class OrderItem implements Serializable {
 
     private Long orderItemId;
     private Long goodsId;

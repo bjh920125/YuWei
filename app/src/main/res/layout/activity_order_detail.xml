@@ -80,6 +80,55 @@
             </FrameLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_express"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@color/white"
+                android:onClick="showExpressDetail"
+                android:clickable="true">
+                <ImageView
+                    android:id="@+id/img_express"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/wlc"
+                    android:padding="3dp"/>
+
+                <TextView
+                    android:id="@+id/txt_express"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/img_express"
+                    android:layout_toLeftOf="@+id/img_arrow_right2"
+                    android:paddingTop="5dp"
+                    android:text=""/>
+
+                <TextView
+                    android:id="@+id/txt_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/img_express"
+                    android:paddingBottom="5dp"
+                    android:text=""
+                    android:textColor="@color/darkgrey"/>
+
+                <ImageView
+                    android:id="@+id/img_arrow_right2"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/arrow_right_xiao"
+                    android:layout_alignParentRight="true"
+                    android:padding="3dp"/>
+            </RelativeLayout>
+            <include layout="@layout/view_marginleft_line"/>
+            <RelativeLayout
                 android:id="@+id/rl_receiver_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

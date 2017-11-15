@@ -12,6 +12,9 @@ import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.ListBaseAdapter;
 import com.bap.yuwei.adapter.OrderListAdapter;
+import com.bap.yuwei.entity.event.CancelOrderEvent;
+import com.bap.yuwei.entity.event.DeleteOrderEvent;
+import com.bap.yuwei.entity.event.ReceiveOrderEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.order.Orders;
@@ -26,6 +29,8 @@ import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -68,7 +73,7 @@ public class OrderListActivity extends BaseActivity {
         orderWebService= MyApplication.getInstance().getWebService(OrderWebService.class);
         defaultIndex=getIntent().getIntExtra(STATUS_INDEX_KEY,0);
         orderses=new ArrayList<>();
-        adapter = new OrderListAdapter(mContext,orderses);
+        adapter = new OrderListAdapter(mContext,orderses,mUser.getUserId());
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
         rvOrder.setAdapter(mLRecyclerViewAdapter);
 
@@ -128,6 +133,21 @@ public class OrderListActivity extends BaseActivity {
         rb.setChecked(true);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void deleteOrderEvent(DeleteOrderEvent event){
+        rvOrder.refresh();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cancelOrderEvent(CancelOrderEvent event){
+        rvOrder.refresh();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveOrderEvent(ReceiveOrderEvent event){
+        rvOrder.refresh();
+    }
+
     private void getOrderList(){
         Map<String,Object> params=new HashMap<>();
         //params.put("dateBegin",categoryNodes);
@@ -170,6 +190,11 @@ public class OrderListActivity extends BaseActivity {
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
+    }
+
+    @Override
+    protected boolean isRegistEventBus() {
+        return true;
     }
 
     @Override

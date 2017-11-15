@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -40,5 +41,23 @@ public interface OrderWebService {
 
     @GET("/v1/buyer/{userId}/orders/statistics")
     Call<ResponseBody> getOrderStatistics(@Path("userId") String userId);
+
+    @POST("/v1/buyer/{userId}/orders/{orderId}/remind_shipping")
+    Call<ResponseBody> remindSend(@Path("userId") String userId,@Path("orderId") Long orderId);
+
+    @PUT("/v1/buyer/orders/cancel")
+    Call<ResponseBody> cancelOrder(@Body RequestBody body);
+
+    @POST("/v1/buyer/{userId}/orders/deleteorders")
+    Call<ResponseBody> deleteOrder(@Path("userId") String userId,@Body RequestBody body);
+
+    @PUT("/v1/buyer/orders/receive")
+    Call<ResponseBody> receiveOrder(@Body RequestBody body);
+
+    @GET("/v1/express/{orderId}")
+    Call<ResponseBody> getExpress(@Path("orderId") Long orderId);
+
+
+
 
 }

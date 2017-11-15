@@ -1,5 +1,6 @@
 package com.bap.yuwei.entity.order;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import static com.bap.yuwei.entity.Constants.ORDER_STATUS_PRE_EVALUATED;
 /**
  * Created by BAP0004 on 2017/8/25.
  */
-public class Orders {
+public class Orders implements Serializable{
+
+    public static final String KEY="orders.key";
 
     /**
      * 订单ID 也是订单号
@@ -323,19 +326,19 @@ public class Orders {
         String result="";
         switch (status){
             case ORDER_STATUS_PENDING_PAY:
-                result="待付款";
+                result="等待买家付款";
             break;
             case ORDER_STATUS_PRE_DELIVERED:
                 result="买家已付款";
                 break;
             case ORDER_STATUS_HAS_SENDED:
-                result="待收货";
+                result="卖家已发货";
                 break;
             case ORDER_3:
                 result="退款中";
                 break;
             case ORDER_STATUS_PRE_EVALUATED:
-                result="待评价";
+                result="交易成功";
                 break;
             case ORDER_STATUS_HAS_COMPLETED:
                 result="已完成";

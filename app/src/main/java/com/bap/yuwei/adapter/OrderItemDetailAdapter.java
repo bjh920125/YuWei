@@ -1,6 +1,7 @@
 package com.bap.yuwei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.order.ChooseRefundTypeActivity;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.order.OrderItem;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
@@ -71,6 +73,23 @@ public class OrderItemDetailAdapter extends BaseAdapter {
         viewHolder.txtModel.setText("类别："+cart.getModel());
         viewHolder.txtPrice.setText("￥"+cart.getPreferentialPrice());
         viewHolder.txtNum.setText("x"+cart.getQuantity()+"");
+
+        viewHolder.txtRefund.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(context, ChooseRefundTypeActivity.class);
+                i.putExtra(OrderItem.KEY,cart);
+                context.startActivity(i);
+            }
+        });
+        //todo 控制退款按钮显示
+        /**
+        Integer status=cart.getStatus();
+        if(null==status){
+            viewHolder.llOperate.setVisibility(View.GONE);
+        }else if(status==){
+
+        }*/
         return convertView;
     }
 

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseChoosePhotoActivity;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -24,7 +25,6 @@ public class ImgGVAdapter extends BaseAdapter{
 	public ImgGVAdapter(List<String> images,Context context){
 		this.imagePathes=images;
 		this.mContext=context;
-		this.showAddBtn=showAddBtn;
 		this.mInflater=LayoutInflater.from(mContext);
 
 	}
@@ -58,9 +58,9 @@ public class ImgGVAdapter extends BaseAdapter{
 		}
 		String path=imagePathes.get(position);
 		if(path.equals(BaseChoosePhotoActivity.ADD_BTN_NAME)){
-			//Glide.with(mContext).load(R.drawable.iconfont_tianjia).into(viewHolder.img);
+			ImageLoader.getInstance().displayImage("drawable://"+R.drawable.add_image,viewHolder.img);
 		}else{
-			//Glide.with(mContext).load(path).into(viewHolder.img);
+			ImageLoader.getInstance().displayImage("file://"+path,viewHolder.img);
 		}
 		return convertView;
 	}

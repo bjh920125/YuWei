@@ -221,8 +221,23 @@
             android:name=".activity.order.OrderListActivity"
             android:label="全部订单"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.order.ExpressDetailActivity"
+        <activity
+            android:name=".activity.order.ExpressDetailActivity"
             android:label="物流详情"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.order.ChooseRefundTypeActivity"
+            android:label="选择类型"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.order.RefundApplyActivity"
+            android:label="申请退款"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.order.RefundDetailActivity"
+            android:label="退款详情"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.order.RefundConsultHistoryActivity"
+            android:label="协商历史"
             android:screenOrientation="portrait" />
     </application>
 

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.bap.yuwei.activity.order.RefundDetailActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/od_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:minHeight="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onBackClick"
+                android:scaleType="centerInside"
+                android:src="@drawable/nav_arrow" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:gravity="center"
+                android:text="退款详情"
+                android:textColor="@color/lightblack"
+                android:textSize="18dp" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:visibility="invisible" />
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/flowlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/orderstatusback" />
+
+            <TextView
+                android:id="@+id/txt_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="25dp"
+                android:text=""
+                android:textColor="@color/white" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_total_money"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:text="退款总金额"
+                android:textColor="@color/lightblack"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/txt_actual_total_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingRight="10dp"
+                android:text=""
+                android:textColor="@color/colorPrimary"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:drawableRight="@drawable/arrow_right_xiao"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:text="协商历史"
+            android:textColor="@color/lightblack"
+            android:textSize="12dp" />
+
+        <include layout="@layout/view_divider" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="退款信息" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/whitesmoke"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/img_goods"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:layout_toEndOf="@+id/img_check"
+                android:layout_toRightOf="@+id/img_check"
+                app:srcCompat="@drawable/default_img" />
+
+            <TextView
+                android:id="@+id/txt_goods_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/img_goods"
+                android:layout_toRightOf="@+id/img_goods"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:paddingRight="10dp"
+                android:text="1"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/txt_model"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/txt_goods_name"
+                android:layout_alignStart="@+id/txt_goods_name"
+                android:layout_below="@+id/txt_goods_name"
+                android:layout_marginTop="5dp"
+                android:text="1"
+                android:textColor="@color/darkgrey"
+                android:textSize="11dp" />
+
+            <TextView
+                android:id="@+id/txt_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/img_goods"
+                android:layout_alignLeft="@+id/txt_model"
+                android:layout_alignStart="@+id/txt_model"
+                android:layout_below="@+id/txt_model"
+                android:gravity="bottom"
+                android:text="1"
+                android:textColor="@color/red"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/txt_num"
+                android:layout_width="30dp"
+                android:layout_height="22dp"
+                android:layout_alignBottom="@+id/txt_price"
+                android:layout_alignParentRight="true"
+                android:layout_toLeftOf="@+id/img_add"
+                android:background="@null"
+                android:gravity="center"
+                android:text="x1"
+                android:textColor="@color/lightblack"
+                android:textSize="12dp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txt_refund_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="退款原因："
+            android:textColor="@color/darkgrey"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/txt_refund_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="3dp"
+            android:text="退款金额："
+            android:textColor="@color/darkgrey"
+            android:textSize="12dp" />
+
+
+        <TextView
+            android:id="@+id/txt_apply_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="3dp"
+            android:text="申请时间："
+            android:textColor="@color/darkgrey"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/txt_refund_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="3dp"
+            android:text="退款编号："
+            android:textColor="@color/darkgrey"
+            android:textSize="12dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/whitesmoke" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="8dp"
+            android:text="联系卖家"
+            android:textColor="@color/lightblack" />
+
+        <include layout="@layout/view_vertical_line" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:text="申请平台介入" />
+    </LinearLayout>
+
+</RelativeLayout>

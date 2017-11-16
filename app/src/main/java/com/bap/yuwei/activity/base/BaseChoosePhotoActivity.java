@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.bap.yuwei.R;
 import com.bap.yuwei.activity.ImageViewPagerActivity;
 import com.bap.yuwei.adapter.ImgGVAdapter;
 import com.bap.yuwei.entity.BaseAttachment;
@@ -40,7 +41,7 @@ public abstract class BaseChoosePhotoActivity extends BaseActivity{
 
 	@Override
 	public void initView() {
-		//fileGridView=(NoScrollGridView) findViewById(R.id.gv_img);
+		fileGridView=(NoScrollGridView) findViewById(R.id.gv_img);
 		filePaths=new ArrayList<>();
 		if (isShowAddBtn){
 			filePaths.add(ADD_BTN_NAME);

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bap.yuwei.activity.order.RefundApplyActivity">
+
+
+    <include layout="@layout/view_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/whitesmoke"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/img_goods"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_toEndOf="@+id/img_check"
+                    android:layout_toRightOf="@+id/img_check"
+                    app:srcCompat="@drawable/default_img" />
+
+                <TextView
+                    android:id="@+id/txt_goods_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/img_goods"
+                    android:layout_toRightOf="@+id/img_goods"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:paddingRight="10dp"
+                    android:text="1"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/txt_model"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/txt_goods_name"
+                    android:layout_alignStart="@+id/txt_goods_name"
+                    android:layout_below="@+id/txt_goods_name"
+                    android:layout_marginTop="5dp"
+                    android:text="1"
+                    android:textColor="@color/darkgrey"
+                    android:textSize="11dp" />
+
+            </RelativeLayout>
+
+            <include layout="@layout/view_divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="7dp"
+                android:onClick="chooseReason">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="退款原因"
+                    android:textColor="@color/lightblack" />
+
+                <TextView
+                    android:id="@+id/txt_reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:drawableRight="@drawable/arrow_right_xiao"
+                    android:gravity="right|center_vertical"
+                    android:drawablePadding="5dp"
+                    android:text="请选择"
+                    android:textSize="12dp"
+                    android:textColor="@color/darkgrey"/>
+            </LinearLayout>
+
+            <include layout="@layout/view_divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:padding="7dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|left"
+                    android:text="退款金额"
+                    android:textColor="@color/lightblack" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|left"
+                    android:paddingLeft="10dp"
+                    android:text="￥"
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/et_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="请输入退款金额"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/darkgrey"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <include layout="@layout/view_divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:padding="7dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|left"
+                    android:text="退款说明"
+                    android:textColor="@color/lightblack" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|left"
+                    android:paddingLeft="10dp"
+                    android:text="    "
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/et_remark"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="选填"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/darkgrey"
+                    android:textSize="14dp" />
+            </LinearLayout>
+            <include layout="@layout/view_divider" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="上传凭证"
+                android:padding="5dp"/>
+
+            <com.bap.yuwei.view.NoScrollGridView
+                android:id="@+id/gv_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="4"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:onClick="applyRefund"/>
+</RelativeLayout>

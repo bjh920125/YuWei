@@ -1,15 +1,21 @@
 package com.bap.yuwei.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.order.ExpressDetailActivity;
+import com.bap.yuwei.activity.order.OrderDetailActivity;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.event.CancelOrderEvent;
 import com.bap.yuwei.entity.event.DeleteOrderEvent;
@@ -28,6 +34,7 @@ import com.linearlistview.LinearListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +66,7 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
     private String userId;
     private Gson mGson;
     private MediaType jsonMediaType= MediaType.parse("application/json; charset=utf-8");
+    private static final int SDK_PAY_FLAG = 1;
 
     public OrderListAdapter(Context context,List<Orders> orderses,String userId) {
         super(context);
@@ -158,6 +166,13 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
         List<OrderItem> items=order.getOrderItems();
         OrderListItemAdapter adapter=new OrderListItemAdapter(mContext,items);
         lvOrderItem.setAdapter(adapter);
+
+        txtPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getPayBody(order.getOrderId());
+            }
+        });
 
         txtAlertSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,6 +344,80 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
+    }
+
+    private void getPayBody(final Long orderId){
+        Map<String,Object> params=new HashMap<>();
+        params.put("orderIds",orderId);
+        //params.put("payAmount",mOrderEnsure.getPayAmount());
+        params.put("payAmount",0.01);
+        params.put("userId",userId);
+        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
+        Call<ResponseBody> call=orderWebService.pay(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        String body=new JSONObject(result).getString("result");
+                        pay(body,orderId);
+                    }else{
+                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+
+
+    private void pay(final String payBody,final Long orderId){
+        Runnable payRunnable = new Runnable() {
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask((Activity) mContext);
+                Map<String, String> result = alipay.payV2(payBody, true);
+                result.put("orderId",orderId+"");
+                Log.i("msp", result.toString());
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
+
+    private Handler mHandler = new Handler() {
+        @SuppressWarnings("unused")
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG: {
+                    //PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    Map<String, String> result= (Map<String, String>) msg.obj;
+                    toOrderDetailPage(Long.valueOf(result.get("orderId")));
+                    break;
+                }
+            }
+        }
+    };
+
+
+    private void toOrderDetailPage(Long orderId){
+        Intent i=new Intent(mContext, OrderDetailActivity.class);
+        i.putExtra(OrderDetailActivity.ORDER_ID_KEY,orderId);
+        mContext.startActivity(i);
     }
 
     /**

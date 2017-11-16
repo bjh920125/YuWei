@@ -57,7 +57,7 @@ public interface OrderWebService {
     @GET("/v1/express/{orderId}")
     Call<ResponseBody> getExpress(@Path("orderId") Long orderId);
 
-
-
+    @POST("/v1/buyer/{userId}/orders/refund")
+    Call<ResponseBody> addRefund(@Path("userId") String userId,@Body RequestBody body);
 
 }

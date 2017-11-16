@@ -490,7 +490,7 @@ public class EnsureOrderActivity extends BaseActivity {
 
     private void toOrderDetailPage(){
         popToPay.dismiss();
-        Intent i=new Intent(mContext, OrderDetail.class);
+        Intent i=new Intent(mContext, OrderDetailActivity.class);
         i.putExtra(OrderDetailActivity.ORDER_ID_KEY,orderIds.split(",")[0]);
         startActivity(i);
     }

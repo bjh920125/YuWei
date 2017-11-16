@@ -48,6 +48,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="35dp"
         android:scrollbars="none"
         android:layout_below="@+id/od_toolbar"
         android:layout_alignParentLeft="true"
@@ -399,4 +400,100 @@
                 android:layout_height="20dp"/>
         </LinearLayout>
     </ScrollView>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/txt_cancel"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:text="取消订单"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/radius_grey_border"
+            android:visibility="gone"
+            android:onClick="operateOrder"/>
+
+        <TextView
+            android:id="@+id/txt_pay"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:text="付款"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/radius_grey_border"
+            android:visibility="gone"
+            android:onClick="operateOrder"/>
+
+        <TextView
+            android:id="@+id/txt_alert_send"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:text="提醒发货"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/radius_grey_border"
+            android:visibility="gone"
+            android:onClick="operateOrder"/>
+
+        <TextView
+            android:id="@+id/txt_show_express"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:text="查看物流"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/radius_grey_border"
+            android:visibility="gone"
+            android:onClick="operateOrder"/>
+
+        <TextView
+            android:id="@+id/txt_receive"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:text="确认收货"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/radius_grey_border"
+            android:visibility="gone"
+            android:onClick="operateOrder"/>
+
+        <TextView
+            android:id="@+id/txt_comment"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:text="评价"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/radius_grey_border"
+            android:visibility="gone"
+            android:onClick="operateOrder"/>
+
+        <TextView
+            android:id="@+id/txt_delete"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:text="删除订单"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/radius_grey_border"
+            android:visibility="gone"
+            android:onClick="operateOrder"/>
+
+
+    </LinearLayout>
 </RelativeLayout>

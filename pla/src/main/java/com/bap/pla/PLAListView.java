@@ -61,7 +61,6 @@ import java.util.ArrayList;
  */
 public class PLAListView extends PLAAbsListView {
 
-    //TODO Not Supproted Features
     //Entry from XML.
     //Choice Mode & Item Selection.
     //Filter

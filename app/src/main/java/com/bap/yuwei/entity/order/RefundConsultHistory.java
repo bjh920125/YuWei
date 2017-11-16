@@ -1,7 +1,5 @@
 package com.bap.yuwei.entity.order;
 
-import java.util.Date;
-
 /**
  * Created by Administrator on 2017/9/11.
  * 退款协商历史
@@ -12,7 +10,7 @@ public class RefundConsultHistory {
     private String username;//名称
     private String historyDesc;//描述
     private Long refundId;
-    private Date createTime;
+    private String createTime;
     private Integer roleName;//角色名称
 
     public Long getHistoryId() {
@@ -55,11 +53,11 @@ public class RefundConsultHistory {
         this.refundId = refundId;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

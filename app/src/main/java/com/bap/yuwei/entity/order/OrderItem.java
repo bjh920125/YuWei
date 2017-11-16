@@ -8,6 +8,8 @@ import java.math.BigDecimal;
  */
 public class OrderItem implements Serializable {
 
+    public static final String KEY="orderitem.key";
+
     private Long orderItemId;
     private Long goodsId;
     private String title;
@@ -21,6 +23,16 @@ public class OrderItem implements Serializable {
     private String createTime;
     private Boolean hasAppendEvaluation;
     private Integer status;
+    private Integer refundType;
+
+
+    public Integer getRefundType() {
+        return refundType;
+    }
+
+    public void setRefundType(Integer refundType) {
+        this.refundType = refundType;
+    }
 
     public Long getOrderItemId() {
         return orderItemId;

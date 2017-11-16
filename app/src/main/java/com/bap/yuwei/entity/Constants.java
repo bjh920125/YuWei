@@ -49,6 +49,10 @@ public class Constants {
     /**订单来源 1表示从购物车*/
     public static final int ORDER_RESUORCE_CART=1;
 
+    /**仅退款*/
+    public static final int REFUND_MONEY=0;
+    /**退货退款*/
+    public static final int REFUND_MONEY_AND_GOODS=1;
 
 
     //0=待付款,1=待发货/已付款,2=已发货,3=退款中,4=待评价,5=已完成,6=已关闭,7=已取消,8=已退款

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bap.yuwei.activity.order.ChooseRefundTypeActivity">
+
+    <include layout="@layout/view_toolbar"/>
+
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/whitesmoke"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/img_goods"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@+id/img_check"
+            android:layout_toRightOf="@+id/img_check"
+            app:srcCompat="@drawable/default_img" />
+
+        <TextView
+            android:id="@+id/txt_goods_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/img_goods"
+            android:layout_toRightOf="@+id/img_goods"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingRight="10dp"
+            android:text="1"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/txt_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/txt_goods_name"
+            android:layout_alignStart="@+id/txt_goods_name"
+            android:layout_below="@+id/txt_goods_name"
+            android:layout_marginTop="5dp"
+            android:text="1"
+            android:textColor="@color/darkgrey"
+            android:textSize="11dp" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/view_divider"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_only_money"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:onClick="chooseType">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:padding="5dp"
+            android:text="仅退款"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:padding="5dp"
+            android:textSize="12dp"
+            android:textColor="@color/darkgrey"
+            android:text="未收到货（包含未签收），或卖家协商同意前提下"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/arrow_right_xiao"/>
+    </RelativeLayout>
+    <include layout="@layout/view_line"/>
+    <RelativeLayout
+        android:id="@+id/rl_money_goods"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:onClick="chooseType">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:padding="5dp"
+            android:text="退款退货"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:padding="5dp"
+            android:textSize="12dp"
+            android:textColor="@color/darkgrey"
+            android:text="已收到货，需要退换已收到的货物"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/arrow_right_xiao"/>
+    </RelativeLayout>
+
+</LinearLayout>

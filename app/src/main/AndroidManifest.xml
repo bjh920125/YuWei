@@ -233,11 +233,19 @@
             android:name=".activity.order.RefundApplyActivity"
             android:label="申请退款"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.order.RefundDetailActivity"
+        <activity
+            android:name=".activity.order.RefundDetailActivity"
             android:label="退款详情"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.order.RefundConsultHistoryActivity"
+        <activity
+            android:name=".activity.order.RefundConsultHistoryActivity"
             android:label="协商历史"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.order.RefundListActivity"
+            android:label="退货退款"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.order.RefundFillExpressActivity"
+            android:label="填写运单号"
             android:screenOrientation="portrait" />
     </application>
 

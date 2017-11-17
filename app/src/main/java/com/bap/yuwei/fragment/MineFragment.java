@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.order.OrderListActivity;
+import com.bap.yuwei.activity.order.RefundListActivity;
 import com.bap.yuwei.activity.sys.LoginActivity;
 import com.bap.yuwei.activity.sys.MsgMenusActivity;
 import com.bap.yuwei.activity.sys.SettingActivity;
@@ -99,6 +100,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                 break;
             case R.id.btn_comment:
                 toOrderListPage(4);
+                break;
+            case R.id.btn_refund:
+                startActivity(new Intent(mContext, RefundListActivity.class));
                 break;
             case R.id.rl_person_info:
                 loginOrUpdateInfo();

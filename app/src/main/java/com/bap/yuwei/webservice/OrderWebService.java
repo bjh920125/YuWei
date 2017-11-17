@@ -57,7 +57,25 @@ public interface OrderWebService {
     @GET("/v1/express/{orderId}")
     Call<ResponseBody> getExpress(@Path("orderId") Long orderId);
 
+    @POST("v1/buyer/refund/refundlist")
+    Call<ResponseBody> getRefundList(@Body RequestBody body);
+
     @POST("/v1/buyer/{userId}/orders/refund")
     Call<ResponseBody> addRefund(@Path("userId") String userId,@Body RequestBody body);
+
+    @GET("/v1/buyer/refund/orderitemid/{orderItemId}")
+    Call<ResponseBody> getRefundDetail(@Path("orderItemId") Long orderItemId);
+
+    @GET("/v1/buyer/refund/{refundId}")
+    Call<ResponseBody> getRefundDetailByRefundId(@Path("refundId") Long refundId);
+
+    @GET("/v1/buyer/refund/{refundId}/platform")
+    Call<ResponseBody> applyPlatformDeal(@Path("refundId") Long refundId);
+
+    @GET("v1/buyer/refund/{refundId}/withdraw")
+    Call<ResponseBody> cancelRefund(@Path("refundId") Long refundId);
+
+    @POST("/v1/buyer/{userId}/refund/fillexpress")
+    Call<ResponseBody> fillExpressInfo(@Path("userId") String userId,@Body RequestBody body);
 
 }

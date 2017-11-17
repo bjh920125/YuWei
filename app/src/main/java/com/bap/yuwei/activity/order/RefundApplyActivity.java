@@ -170,9 +170,13 @@ public class RefundApplyActivity extends BaseChoosePhotoActivity {
 
 
     public void applyRefund(View v){
-        uploadCount=0;
-        for(String ps:getUsefulImagePathes()){
-            updateFile(new File(ps));
+        if(filePaths.size()>1){
+            uploadCount=0;
+            for(String ps:getUsefulImagePathes()){
+                updateFile(new File(ps));
+            }
+        }else {
+            applyRefund();
         }
     }
 

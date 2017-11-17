@@ -11,6 +11,7 @@ public class Express implements Serializable{
     public static final String KEY="express.key";
 
     private String com;
+    private String comCode;
     private String nu;
     private String condition;
     private String ischeck;
@@ -18,6 +19,22 @@ public class Express implements Serializable{
     private String state;
     private String status;
     private List<ExpressItem> data;
+
+    public Express() {
+    }
+
+    public Express(String com, String comCode) {
+        this.com = com;
+        this.comCode = comCode;
+    }
+
+    public String getComCode() {
+        return comCode;
+    }
+
+    public void setComCode(String comCode) {
+        this.comCode = comCode;
+    }
 
     public String getNu() {
         return nu;
@@ -149,7 +166,10 @@ public class Express implements Serializable{
                 result="中通";
                 break;
             case "huitongkuaidi":
-                result="汇通";
+                result="百世汇通";
+                break;
+            case "guotongkuaidi":
+                result="国通";
                 break;
             case "yunda":
                 result="韵达";

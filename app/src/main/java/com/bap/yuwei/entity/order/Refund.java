@@ -1,15 +1,24 @@
 package com.bap.yuwei.entity.order;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
+
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_PRE_BUYER_SEND;
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_PRE_SELLER_RECEIVE;
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_REFUND_CLOSED;
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_REFUND_HAS_REFUSED;
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_REFUND_PRE_DEAL;
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_REFUND_SUCCESS;
 
 /**
  * Created by Administrator on 2017/9/11.
  * 退货退款
  */
-public class Refund {
+public class Refund implements Serializable{
+    public static final String KEY="refund.key";
+
     private Long refundId;
     private Long orderId;//订单Id
     private Long orderItemId;//订单条目id
@@ -24,10 +33,10 @@ public class Refund {
     private Integer quantity;//数量
     private BigDecimal freight;//运费
     private BigDecimal modifiedPrice;//修改后的价格
-    private Date createTime;//创建时间
-    private Date timeoutTime;//超时时间
-    private Date refundTime;//退款完成时间
-    private Date nowTime;//当前时间
+    private String createTime;//创建时间
+    private String timeoutTime;//超时时间
+    private String refundTime;//退款完成时间
+    private String nowTime;//当前时间
     private Long shopId;//店铺id
     private String shopName;//店铺名称
     private String qq;//卖家QQ
@@ -127,27 +136,27 @@ public class Refund {
         this.refundMoney = refundMoney;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getTimeoutTime() {
+    public String getTimeoutTime() {
         return timeoutTime;
     }
 
-    public void setTimeoutTime(Date timeoutTime) {
+    public void setTimeoutTime(String timeoutTime) {
         this.timeoutTime = timeoutTime;
     }
 
-    public Date getRefundTime() {
+    public String getRefundTime() {
         return refundTime;
     }
 
-    public void setRefundTime(Date refundTime) {
+    public void setRefundTime(String refundTime) {
         this.refundTime = refundTime;
     }
 
@@ -311,11 +320,11 @@ public class Refund {
         this.modifiedPrice = modifiedPrice;
     }
 
-    public Date getNowTime() {
-        return new Date();
+    public String getNowTime() {
+        return new String();
     }
 
-    public void setNowTime(Date nowTime) {
+    public void setNowTime(String nowTime) {
         this.nowTime = nowTime;
     }
 
@@ -325,5 +334,31 @@ public class Refund {
 
     public void setQq(String qq) {
         this.qq = qq;
+    }
+
+    public String getStatusText(){
+        String result=null;
+        switch (status){
+            case ORDER_ITEM_STATUS_REFUND_PRE_DEAL:
+                result="退款待处理";
+                break;
+             case ORDER_ITEM_STATUS_REFUND_HAS_REFUSED:
+                result="退款被拒绝";
+                break;
+            case ORDER_ITEM_STATUS_PRE_BUYER_SEND:
+                result="待买家发货";
+                break;
+            case ORDER_ITEM_STATUS_PRE_SELLER_RECEIVE:
+                result="待商家确认收货";
+             break;
+            case ORDER_ITEM_STATUS_REFUND_CLOSED:
+                result="退款关闭";
+                 break;
+            case ORDER_ITEM_STATUS_REFUND_SUCCESS:
+              result="退款成功";
+                 break;
+            default:break;
+        }
+        return result;
     }
 }

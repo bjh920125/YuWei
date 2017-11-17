@@ -1,10 +1,12 @@
 package com.bap.yuwei.entity.order;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/9/11.
  * 退款附件
  */
-public class RefundImage {
+public class RefundImage implements Serializable{
     private Long refundImageId;
     private String imagePath;
     private Long refundId;

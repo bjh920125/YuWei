@@ -12,12 +12,18 @@ import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.order.ChooseRefundTypeActivity;
+import com.bap.yuwei.activity.order.RefundDetailActivity;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.order.OrderItem;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
+
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_HAS_BUYER_RECEIVED;
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_PRE_BUYER_RECEIVE;
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_REFUND_PRE_DEAL;
+import static com.bap.yuwei.entity.Constants.ORDER_ITEM_STATUS_REFUND_SUCCESS;
 
 /**
  * Created by Administrator on 2017/11/10.
@@ -62,6 +68,8 @@ public class OrderItemDetailAdapter extends BaseAdapter {
             viewHolder.txtPrice= (TextView) convertView.findViewById(R.id.txt_price);
             viewHolder.txtNum= (TextView) convertView.findViewById(R.id.txt_num);
             viewHolder.txtRefund= (TextView) convertView.findViewById(R.id.txt_refund);
+            viewHolder.txtRefunding= (TextView) convertView.findViewById(R.id.txt_refunding);
+            viewHolder.txtRefundSuccess=(TextView) convertView.findViewById(R.id.txt_refund_success);
             viewHolder.llOperate= (LinearLayout) convertView.findViewById(R.id.ll_order_item_operate);
             convertView.setTag(viewHolder);
         }else{
@@ -82,14 +90,38 @@ public class OrderItemDetailAdapter extends BaseAdapter {
                 context.startActivity(i);
             }
         });
-        //todo 控制退款按钮显示
-        /**
+
+        viewHolder.txtRefunding.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(context, RefundDetailActivity.class);
+                i.putExtra(OrderItem.KEY,cart);
+                context.startActivity(i);
+            }
+        });
+        //控制退款按钮显示
         Integer status=cart.getStatus();
         if(null==status){
-            viewHolder.llOperate.setVisibility(View.GONE);
-        }else if(status==){
-
-        }*/
+            viewHolder.llOperate.setVisibility(View.VISIBLE);
+            viewHolder.txtRefund.setVisibility(View.VISIBLE);
+            viewHolder.txtRefunding.setVisibility(View.GONE);
+            viewHolder.txtRefundSuccess.setVisibility(View.GONE);
+        }else if(status==ORDER_ITEM_STATUS_REFUND_PRE_DEAL){//退款待处理
+            viewHolder.llOperate.setVisibility(View.VISIBLE);
+            viewHolder.txtRefund.setVisibility(View.GONE);
+            viewHolder.txtRefunding.setVisibility(View.VISIBLE);
+            viewHolder.txtRefundSuccess.setVisibility(View.GONE);
+        }else if(status==ORDER_ITEM_STATUS_PRE_BUYER_RECEIVE || status==ORDER_ITEM_STATUS_HAS_BUYER_RECEIVED){
+            viewHolder.llOperate.setVisibility(View.VISIBLE);
+            viewHolder.txtRefund.setVisibility(View.GONE);
+            viewHolder.txtRefunding.setVisibility(View.VISIBLE);
+            viewHolder.txtRefundSuccess.setVisibility(View.GONE);
+        }else if(status==ORDER_ITEM_STATUS_REFUND_SUCCESS){//退款成功
+            viewHolder.llOperate.setVisibility(View.VISIBLE);
+            viewHolder.txtRefund.setVisibility(View.GONE);
+            viewHolder.txtRefunding.setVisibility(View.GONE);
+            viewHolder.txtRefundSuccess.setVisibility(View.VISIBLE);
+        }
         return convertView;
     }
 
@@ -100,6 +132,8 @@ public class OrderItemDetailAdapter extends BaseAdapter {
         TextView txtPrice;
         TextView txtNum;
         TextView txtRefund;
+        TextView txtRefunding;
+        TextView txtRefundSuccess;
         LinearLayout llOperate;
     }
 }

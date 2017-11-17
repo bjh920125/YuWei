@@ -12,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:minHeight="?attr/actionBarSize">
+        android:minHeight="?attr/actionBarSize"
+        app:contentInsetStart="0dp"
+        android:contentInsetEnd="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,14 +42,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:scaleType="centerInside"
-                android:visibility="invisible" />
+                android:scaleType="centerInside" />
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/od_toolbar"
         android:orientation="vertical">
 
         <FrameLayout
@@ -109,10 +111,11 @@
             android:drawableRight="@drawable/arrow_right_xiao"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:paddingRight="5dp"
+            android:paddingRight="10dp"
             android:text="协商历史"
             android:textColor="@color/lightblack"
-            android:textSize="12dp" />
+            android:textSize="12dp"
+            android:onClick="showHistory"/>
 
         <include layout="@layout/view_divider" />
 
@@ -245,7 +248,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:orientation="horizontal"
@@ -253,7 +256,7 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:paddingBottom="8dp"
@@ -265,12 +268,15 @@
         <include layout="@layout/view_vertical_line" />
 
         <TextView
+            android:id="@+id/txt_platform"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:paddingRight="10dp"
-            android:text="申请平台介入" />
+            android:text="申请平台介入"
+            android:onClick="applyPlatformDeal"
+            android:textColor="@color/lightblack"/>
     </LinearLayout>
 
 </RelativeLayout>

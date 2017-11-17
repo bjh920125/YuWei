@@ -7,8 +7,9 @@ package com.bap.yuwei.entity;
 public class Constants {
 
     public static final String URL="http://122.152.192.178:9877/";
-    public static final String PICTURE_URL="http://oxqok0jcq.bkt.clouddn.com/";
+    //public static final String URL="http://192.168.1.182:9877/eoogo/";
 
+    public static final String PICTURE_URL="http://oxqok0jcq.bkt.clouddn.com/";
 
     /**当前用户*/
     public static final String USER_KEY="user.key";

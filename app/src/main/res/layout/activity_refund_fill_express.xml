@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.bap.yuwei.activity.order.RefundFillExpressActivity">
+
+
+    <include layout="@layout/view_toolbar" />
+
+    <include layout="@layout/view_divider"/>
+
+
+    <TextView
+        android:id="@+id/txt_com"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:drawableRight="@drawable/arrow_right_xiao"
+        android:layout_marginRight="15dp"
+        android:padding="5dp"
+        android:text="请选择快递公司"
+        android:gravity="center_vertical"
+        android:onClick="chooseCom"/>
+
+
+    <EditText
+        android:id="@+id/et_express_no"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:hint="请填写运单号"
+        android:padding="5dp"
+        android:textSize="14dp" />
+
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="100dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="完成"
+        android:textColor="@color/white"
+        android:onClick="fillExpressInfo"/>
+</LinearLayout>

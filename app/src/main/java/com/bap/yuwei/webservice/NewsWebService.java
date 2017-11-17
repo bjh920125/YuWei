@@ -15,13 +15,13 @@ import retrofit2.http.Path;
 public interface NewsWebService {
 
 
-    @GET("/v1/banner/2")
+    @GET("v1/banner/2")
     Call<ResponseBody> getBanner();
 
-    @POST("/v1/news/all")
+    @POST("v1/news/all")
     Call<ResponseBody> getNews(@Body RequestBody body);
 
-    @GET("/v1/news/{newsId}")
+    @GET("v1/news/{newsId}")
     Call<ResponseBody> getNewsDetail(@Path("newsId") Long newsId);
 
 }

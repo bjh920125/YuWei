@@ -26,10 +26,10 @@ public interface SysWebService {
     @POST("/v1/user/register")
     Call<ResponseBody> register(@Body RequestBody body);
 
-    @POST("/v1/user/login")
+    @POST("v1/user/login")
     Call<ResponseBody> login(@Body RequestBody body);
 
-    @GET("/v1/user/logout")
+    @GET("v1/user/logout")
     Call<ResponseBody> loginout();
 
     @POST("/v1/user/app/qrcodeLogin")

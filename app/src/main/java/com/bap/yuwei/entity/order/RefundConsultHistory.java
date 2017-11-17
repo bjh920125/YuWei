@@ -1,10 +1,12 @@
 package com.bap.yuwei.entity.order;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/9/11.
  * 退款协商历史
  */
-public class RefundConsultHistory {
+public class RefundConsultHistory implements Serializable {
     private Long historyId;
     private String headImage;//头像
     private String username;//名称

@@ -2,6 +2,7 @@ package com.bap.yuwei.adapter.commonadapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.Html;
 import android.text.TextPaint;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -12,10 +13,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-  
+
 public class ViewHolder{
     private final SparseArray<View> mViews;  
     private int mPosition;  
@@ -60,8 +62,21 @@ public class ViewHolder{
         TextView view = getView(viewId);  
         view.setText(text);  
         return this;  
-    } 
-    
+    }
+
+
+    /**
+     * 设置TextView的值
+     * @param viewId
+     * @param text
+     * @return
+     */
+    public ViewHolder setHtmlText(int viewId, String text){
+        TextView view = getView(viewId);
+        view.setText( Html.fromHtml(text));
+        return this;
+    }
+
     /** 
      * 设置ButtonTextView的值
      * @param viewId 

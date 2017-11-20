@@ -13,10 +13,20 @@ public class BaseAttachment implements Serializable {
 	
 	private String id;
 	private String site;//附件地址
+	private String showSite;
 	private String thumbnailSite;//缩略图地址
 	private int timeLength;//时长
 	private int type;
 	private int fileOrder;
+
+
+	public String getShowSite() {
+		return showSite;
+	}
+
+	public void setShowSite(String showSite) {
+		this.showSite = showSite;
+	}
 
 	public String getId() {
 		return id;

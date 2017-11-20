@@ -31,7 +31,7 @@ public class ImageViewPagerActivity extends AppCompatActivity implements OnPageC
 	private TextView tvIndex;
 	
 	private ImgVPAdapter mAdapter;
-	private List<Object> mFilePathes;
+	private List<String> mFilePathes;
 	private int startIndex;
 	private int currentIndex;
 	private boolean needDeleteImg;
@@ -39,7 +39,7 @@ public class ImageViewPagerActivity extends AppCompatActivity implements OnPageC
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initView();
-		mFilePathes=(List<Object>) getIntent().getSerializableExtra(BaseAttachment.KEY);
+		mFilePathes=(List<String>) getIntent().getSerializableExtra(BaseAttachment.KEY);
 		removeAddIcon();
 		startIndex=getIntent().getIntExtra(BaseAttachment.POSITION, 0);
 		currentIndex=startIndex;

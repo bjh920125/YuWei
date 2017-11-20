@@ -176,7 +176,7 @@ public class OrderDetailActivity extends BaseActivity {
             txtAlitradeNo.setVisibility(View.GONE);
             txtPayTime.setVisibility(View.GONE);
         }
-        mAdapter=new OrderItemDetailAdapter(orderDetail.getOrders().getOrderItems(),mContext);
+        mAdapter=new OrderItemDetailAdapter(orders,orderDetail.getOrders().getOrderItems(),mContext);
         lvOrderItems.setAdapter(mAdapter);
         setOperateBtns(orders);
     }
@@ -384,8 +384,7 @@ public class OrderDetailActivity extends BaseActivity {
     private void getPayBody(final Long orderId){
         Map<String,Object> params=new HashMap<>();
         params.put("orderIds",orderId);
-        //params.put("payAmount",mOrderEnsure.getPayAmount());
-        params.put("payAmount",0.01);
+        params.put("payAmount",orderDetail.getOrders().getPayAmount());
         params.put("userId",mUser.getUserId());
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
         Call<ResponseBody> call=orderWebService.pay(body);
@@ -515,20 +514,28 @@ public class OrderDetailActivity extends BaseActivity {
                 .show();
     }
 
+    private void toComment(){
+        Intent i=new Intent(mContext, CommentActivity.class);
+        i.putExtra(Orders.KEY,orderDetail.getOrders());
+        mContext.startActivity(i);
+    }
+
     public void operateOrder(View v){
         switch (v.getId()){
             case R.id.txt_pay:
-
+                getPayBody(orderId);
                 break;
             case R.id.txt_alert_send:
                 remindSend(orderId);
                 break;
             case R.id.txt_show_express:
+                showExpressDetail(null);
                 break;
             case R.id.txt_receive:
                 comfirmReceive(orderId);
                 break;
             case R.id.txt_comment:
+                toComment();
                 break;
             case R.id.txt_cancel:
                 chooseCancelReason(orderId);
@@ -539,6 +546,7 @@ public class OrderDetailActivity extends BaseActivity {
             default:break;
         }
     }
+
 
     public void onBackClick(View v){
         finish();

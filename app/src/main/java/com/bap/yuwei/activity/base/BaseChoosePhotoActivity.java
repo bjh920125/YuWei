@@ -119,6 +119,10 @@ public abstract class BaseChoosePhotoActivity extends BaseActivity{
 	 */
 	protected void showImages(int startIndex){
 		Intent intent=new Intent(mContext,ImageViewPagerActivity.class);
+		List<String> filePaths=new ArrayList<>();
+		for(int i=1;i<this.filePaths.size();i++){
+			filePaths.add("file://"+this.filePaths.get(i));
+		}
 		intent.putExtra(BaseAttachment.KEY, (Serializable) filePaths);
 		intent.putExtra(BaseAttachment.POSITION, startIndex);
 		startActivity(intent);

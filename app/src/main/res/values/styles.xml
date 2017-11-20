@@ -81,4 +81,10 @@
         <item name="android:windowEnterAnimation">@anim/slide_in_from_top</item>
         <item name="android:windowExitAnimation">@anim/slide_out_to_top</item>
     </style>
+
+    <style name="RadingStyle" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/layer_live_rating_bar</item>
+        <item name="android:minHeight">30dip</item>
+        <item name="android:maxHeight">30dip</item>
+    </style>
 </resources>

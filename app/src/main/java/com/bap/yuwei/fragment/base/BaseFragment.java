@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.sys.LoginActivity;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.event.QueryUnreadCountEvent;
 import com.bap.yuwei.entity.event.UnreadEvent;
 import com.bap.yuwei.entity.event.UserInfoEvent;
 import com.bap.yuwei.entity.http.AppResponse;
@@ -164,6 +165,11 @@ public abstract class BaseFragment extends Fragment {
         return true;
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateUserInfo(QueryUnreadCountEvent event){
+        getUnreadMsgCount();
+    }
 
     protected void getUnreadMsgCount(){
         if(null==mUser) return;

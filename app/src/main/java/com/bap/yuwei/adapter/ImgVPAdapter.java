@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bap.yuwei.R;
 import com.example.photoview.PhotoView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -16,10 +17,10 @@ import java.util.List;
  * 大图浏览Adapter
  */
 public class ImgVPAdapter extends PagerAdapter{
-	private List<Object> mPicUrls;
+	private List<String> mPicUrls;
 	private Context mContext;
 
-	public ImgVPAdapter(List<Object> picUrls, Context mContext) {
+	public ImgVPAdapter(List<String> picUrls, Context mContext) {
 		this.mPicUrls = picUrls;
 		this.mContext = mContext;
 	}
@@ -30,7 +31,7 @@ public class ImgVPAdapter extends PagerAdapter{
 		View view=LayoutInflater.from(mContext).inflate(R.layout.item_vp_image, null);
 		PhotoView photoView=(PhotoView) view.findViewById(R.id.img_vp);
 		final TextView txtProgress= (TextView) view.findViewById(R.id.txt_progress);
-		//Glide.with(mContext).load(mPicUrls.get(position)).into(photoView);
+		ImageLoader.getInstance().displayImage(mPicUrls.get(position),photoView);
 		container.addView(view);
 		return view;
 	}

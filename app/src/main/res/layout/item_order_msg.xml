@@ -52,4 +52,14 @@
         android:textColor="@color/grey"
         android:textSize="12dp" />
 
+
+    <ImageView
+        android:id="@+id/img_red_dot"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:src="@drawable/circle_red"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+
 </RelativeLayout>

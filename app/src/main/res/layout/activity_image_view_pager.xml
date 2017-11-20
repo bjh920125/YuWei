@@ -5,7 +5,7 @@
 	android:paddingTop="15dp"
      android:background="#000000">
 
-	<com.bap.haoyidian.view.PhotoViewInViewPager
+	<com.bap.yuwei.view.PhotoViewInViewPager
 	    android:id="@+id/vp_image"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" />

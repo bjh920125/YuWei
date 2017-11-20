@@ -14,11 +14,13 @@ import android.widget.TextView;
 
 import com.alipay.sdk.app.PayTask;
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.order.CommentActivity;
 import com.bap.yuwei.activity.order.ExpressDetailActivity;
 import com.bap.yuwei.activity.order.OrderDetailActivity;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.event.CancelOrderEvent;
 import com.bap.yuwei.entity.event.DeleteOrderEvent;
+import com.bap.yuwei.entity.event.PayOrderEvent;
 import com.bap.yuwei.entity.event.ReceiveOrderEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
@@ -170,7 +172,7 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
         txtPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getPayBody(order.getOrderId());
+                getPayBody(order);
             }
         });
 
@@ -208,6 +210,15 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
             @Override
             public void onClick(View view) {
                 comfirmReceive(order.getOrderId());
+            }
+        });
+
+        txtComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(mContext, CommentActivity.class);
+                i.putExtra(Orders.KEY,order);
+                mContext.startActivity(i);
             }
         });
 
@@ -346,11 +357,10 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
         });
     }
 
-    private void getPayBody(final Long orderId){
+    private void getPayBody(final Orders order){
         Map<String,Object> params=new HashMap<>();
-        params.put("orderIds",orderId);
-        //params.put("payAmount",mOrderEnsure.getPayAmount());
-        params.put("payAmount",0.01);
+        params.put("orderIds",order.getOrderId());
+        params.put("payAmount",order.getPayAmount());
         params.put("userId",userId);
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
         Call<ResponseBody> call=orderWebService.pay(body);
@@ -363,7 +373,7 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         String body=new JSONObject(result).getString("result");
-                        pay(body,orderId);
+                        pay(body,order.getOrderId());
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -406,6 +416,7 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
                 case SDK_PAY_FLAG: {
                     //PayResult payResult = new PayResult((Map<String, String>) msg.obj);
                     Map<String, String> result= (Map<String, String>) msg.obj;
+                    EventBus.getDefault().post(new PayOrderEvent());
                     toOrderDetailPage(Long.valueOf(result.get("orderId")));
                     break;
                 }

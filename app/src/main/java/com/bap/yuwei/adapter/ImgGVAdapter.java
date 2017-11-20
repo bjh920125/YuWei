@@ -26,9 +26,7 @@ public class ImgGVAdapter extends BaseAdapter{
 		this.imagePathes=images;
 		this.mContext=context;
 		this.mInflater=LayoutInflater.from(mContext);
-
 	}
-
 
 	@Override
 	public int getCount() {
@@ -36,7 +34,7 @@ public class ImgGVAdapter extends BaseAdapter{
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public String getItem(int position) {
 		return imagePathes.get(position);
 	}
 

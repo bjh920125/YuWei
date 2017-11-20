@@ -18,7 +18,6 @@
 
 package com.pizidea.imagepicker.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,8 +26,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,7 +36,6 @@ import com.pizidea.imagepicker.ImgLoader;
 import com.pizidea.imagepicker.R;
 import com.pizidea.imagepicker.UilImgLoader;
 import com.pizidea.imagepicker.bean.ImageItem;
-import com.pizidea.imagepicker.widget.TouchImageView;
 
 import java.util.List;
 
@@ -156,57 +152,7 @@ public class ImagePreviewFragment extends Fragment{
 
     }
 
-    @SuppressLint("ValidFragment")
-    private class SinglePreviewFragment extends Fragment {
-        public static final String KEY_URL = "key_url";
-        private TouchImageView imageView;
-        private String url;
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            Bundle bundle = getArguments();
-
-            ImageItem imageItem = (ImageItem) bundle.getSerializable(KEY_URL);
-
-            url = imageItem.path;
-
-            Log.i(TAG, "=====current show image path:" + url);
-
-            imageView = new TouchImageView(mContext);
-            imageView.setBackgroundColor(0xff000000);
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
-            imageView.setLayoutParams(params);
-
-            imageView.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
-                @Override
-                public boolean onSingleTapConfirmed(MotionEvent e) {
-                    if (enableSingleTap) {
-                        if(mContext instanceof OnImageSingleTapClickListener){
-                            ((OnImageSingleTapClickListener)mContext).onImageSingleTap(e);
-                        }
-                    }
-                    return false;
-                }
-                @Override public boolean onDoubleTapEvent(MotionEvent e) {
-                    return false;
-                }
-                @Override public boolean onDoubleTap(MotionEvent e) {
-                    return false;
-                }
-
-            });
-
-            ((UilImgLoader)mImagePresenter).onPresentImage(imageView, url, imageView.getWidth());//display the image with your own ImageLoader
-
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-            return imageView;
-        }
-
-    }
 
 
     /**

@@ -14,6 +14,7 @@ import com.bap.yuwei.adapter.ListBaseAdapter;
 import com.bap.yuwei.adapter.OrderListAdapter;
 import com.bap.yuwei.entity.event.CancelOrderEvent;
 import com.bap.yuwei.entity.event.DeleteOrderEvent;
+import com.bap.yuwei.entity.event.PayOrderEvent;
 import com.bap.yuwei.entity.event.ReceiveOrderEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
@@ -145,6 +146,11 @@ public class OrderListActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveOrderEvent(ReceiveOrderEvent event){
+        rvOrder.refresh();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void payOrderEvent(PayOrderEvent event){
         rvOrder.refresh();
     }
 

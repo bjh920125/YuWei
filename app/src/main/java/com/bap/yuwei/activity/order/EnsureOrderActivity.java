@@ -27,7 +27,6 @@ import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.order.GoodsCart;
 import com.bap.yuwei.entity.order.GoodsItemForm;
-import com.bap.yuwei.entity.order.OrderDetail;
 import com.bap.yuwei.entity.order.OrderEnsure;
 import com.bap.yuwei.entity.order.OrderItemForm;
 import com.bap.yuwei.entity.order.OrderShop;
@@ -125,8 +124,7 @@ public class EnsureOrderActivity extends BaseActivity {
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
         params.put("orderIds",orderIds);
-        //params.put("payAmount",mOrderEnsure.getPayAmount());
-        params.put("payAmount",0.01);
+        params.put("payAmount",mOrderEnsure.getPayAmount());
         params.put("userId",mUser.getUserId());
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
         Call<ResponseBody> call=orderWebService.pay(body);

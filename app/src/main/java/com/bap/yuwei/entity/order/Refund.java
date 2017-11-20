@@ -349,7 +349,7 @@ public class Refund implements Serializable{
                 result="待买家发货";
                 break;
             case ORDER_ITEM_STATUS_PRE_SELLER_RECEIVE:
-                result="待商家确认收货";
+                result="待商家收货";
              break;
             case ORDER_ITEM_STATUS_REFUND_CLOSED:
                 result="退款关闭";

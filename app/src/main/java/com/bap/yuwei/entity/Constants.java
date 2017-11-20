@@ -68,8 +68,8 @@ public class Constants {
     public static final int ORDER_8 = 8; //已退款
 
 
-    public static final int ORDER_ITEM_STATUS_PRE_BUYER_RECEIVE = 0;//待收货
     public static final int ORDER_ITEM_STATUS_HAS_BUYER_RECEIVED = 1;//已收货
+    public static final int ORDER_ITEM_STATUS_PRE_BUYER_RECEIVE = 0;//待收货
     public static final int ORDER_ITEM_STATUS_REFUND_PRE_DEAL = 2;//退款待处理
     public static final int ORDER_ITEM_STATUS_REFUND_HAS_REFUSED = 3;//已拒绝退款
     public static final int ORDER_ITEM_STATUS_PRE_BUYER_SEND = 4;//待买家发货

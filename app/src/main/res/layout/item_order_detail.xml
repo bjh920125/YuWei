@@ -85,6 +85,16 @@
             android:text="退款"
             android:background="@drawable/radius_grey_border"/>
 
+
+        <TextView
+            android:id="@+id/txt_service"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="申请售后"
+            android:background="@drawable/radius_grey_border"/>
+
         <TextView
             android:id="@+id/txt_refunding"
             android:layout_width="60dp"

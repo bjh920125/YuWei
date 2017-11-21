@@ -3,6 +3,8 @@ package com.bap.yuwei.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,9 @@ import com.bap.yuwei.R;
 import com.bap.yuwei.activity.ImageViewPagerActivity;
 import com.bap.yuwei.entity.BaseAttachment;
 import com.bap.yuwei.entity.Constants;
+import com.bap.yuwei.entity.order.EvaluateItemForm;
 import com.bap.yuwei.entity.order.OrderItem;
+import com.bap.yuwei.util.StringUtils;
 import com.bap.yuwei.view.NoScrollGridView;
 import com.bap.yuwei.view.RatingBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,12 +40,14 @@ import static com.bap.yuwei.activity.base.BaseChoosePhotoActivity.ADD_BTN_NAME;
 public class CommentCommitAdapter extends BaseAdapter{
 
     private List<OrderItem> orderItems;
+    private List<EvaluateItemForm> itemForms;
     private Context context;
     private LayoutInflater mInflater;
 
-    public CommentCommitAdapter(List<OrderItem> orderItems, Context context){
+    public CommentCommitAdapter(List<OrderItem> orderItems,List<EvaluateItemForm> itemForms, Context context){
         this.context=context;
         this.orderItems=orderItems;
+        this.itemForms=itemForms;
         this.mInflater= LayoutInflater.from(context);
     }
 
@@ -63,7 +69,7 @@ public class CommentCommitAdapter extends BaseAdapter{
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder=null;
+       final ViewHolder viewHolder;
         if(convertView==null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.item_comment_commit, parent, false);
@@ -76,9 +82,32 @@ public class CommentCommitAdapter extends BaseAdapter{
             viewHolder= (ViewHolder) convertView.getTag();
         }
         OrderItem orderItem=orderItems.get(i);
+        final EvaluateItemForm form=itemForms.get(i);
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+orderItem.getGoodsImage(),viewHolder.imgGoods);
         viewHolder.txtTitle.setText(orderItem.getTitle());
         viewHolder.rbDesc.setStar(5.0f);
+        form.setGoodsScore(5);
+        form.setIsAnonymous(false);
+        viewHolder.rbDesc.setOnRatingChangeListener(new RatingBar.OnRatingChangeListener() {
+            @Override
+            public void onRatingChange(float ratingCount) {
+                form.setGoodsScore((int)ratingCount);
+            }
+        });
+        viewHolder.etDesc.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                form.setEvaluateComment(StringUtils.getEditTextValue(viewHolder.etDesc));
+            }
+        });
+
+
         final List<String> filePaths=new ArrayList<>();
         filePaths.add(ADD_BTN_NAME);
         final ImgGVAdapter adapter=new ImgGVAdapter(filePaths, context);
@@ -92,6 +121,9 @@ public class CommentCommitAdapter extends BaseAdapter{
                         public void onImagePickComplete(List<ImageItem> items) {
                             if (items != null && items.size() > 0) {
                                 updateGridView(items,filePaths,adapter);
+                                form.setFilePathes(filePaths);
+                                String[] ss=new String[filePaths.size()-1];
+                                form.setEvaluationImages(ss);
                             }
                         }
                     });

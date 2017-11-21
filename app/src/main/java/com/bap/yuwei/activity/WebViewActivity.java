@@ -25,7 +25,7 @@ public class WebViewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTxtTitle.setText(getIntent().getStringExtra(TITLE));
+        //mTxtTitle.setText(getIntent().getStringExtra(TITLE));
         url=getIntent().getStringExtra(URL);
 
         webView.setWebViewClient(new WebViewClient() {

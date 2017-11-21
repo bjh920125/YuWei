@@ -55,10 +55,14 @@ public class ImgGVAdapter extends BaseAdapter{
 			viewHolder=(ViewHolder) convertView.getTag();
 		}
 		String path=imagePathes.get(position);
-		if(path.equals(BaseChoosePhotoActivity.ADD_BTN_NAME)){
-			ImageLoader.getInstance().displayImage("drawable://"+R.drawable.add_image,viewHolder.img);
+		if(path.startsWith("http")){
+			ImageLoader.getInstance().displayImage(path,viewHolder.img);
 		}else{
-			ImageLoader.getInstance().displayImage("file://"+path,viewHolder.img);
+			if(path.equals(BaseChoosePhotoActivity.ADD_BTN_NAME)){
+				ImageLoader.getInstance().displayImage("drawable://"+R.drawable.add_image,viewHolder.img);
+			}else{
+				ImageLoader.getInstance().displayImage("file://"+path,viewHolder.img);
+			}
 		}
 		return convertView;
 	}

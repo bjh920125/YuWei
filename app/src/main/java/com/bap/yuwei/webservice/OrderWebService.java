@@ -79,6 +79,6 @@ public interface OrderWebService {
     Call<ResponseBody> fillExpressInfo(@Path("userId") String userId,@Body RequestBody body);
 
     @POST("/v1/buyer/evaluations")
-    Call<ResponseBody> comment(@Path("refundId") Long refundId);
+    Call<ResponseBody> comment(@Body RequestBody body);
 
 }

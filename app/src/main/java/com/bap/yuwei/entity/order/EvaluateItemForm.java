@@ -1,10 +1,8 @@
 package com.bap.yuwei.entity.order;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-/**
- * Created by BAP0004 on 2017/9/5.
- */
 public class EvaluateItemForm {
 
     private Long goodsId;
@@ -15,6 +13,15 @@ public class EvaluateItemForm {
     private String[] evaluationImages;
     private Boolean isAnonymous;
     private String model;
+    private transient  List<String> filePathes;
+
+    public List<String> getFilePathes() {
+        return filePathes;
+    }
+
+    public void setFilePathes(List<String> filePathes) {
+        this.filePathes = filePathes;
+    }
 
     public Long getGoodsId() {
         return goodsId;

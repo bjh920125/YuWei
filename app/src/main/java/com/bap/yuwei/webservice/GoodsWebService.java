@@ -102,4 +102,7 @@ public interface GoodsWebService {
     @GET("/v1/user/{userId}/carts/count")
     Call<ResponseBody> getCartsNum(@Path("userId") String userId);
 
+    @POST("/v1/goods/{goodsId}/evaluations")
+    Call<ResponseBody> getEvaluations(@Path("goodsId") Long goodsId,@Body RequestBody body);
+
 }

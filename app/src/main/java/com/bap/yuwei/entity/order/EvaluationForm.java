@@ -2,9 +2,6 @@ package com.bap.yuwei.entity.order;
 
 import java.util.List;
 
-/**
- * Created by BAP0004 on 2017/9/5.
- */
 public class EvaluationForm {
 
     private Long userId;

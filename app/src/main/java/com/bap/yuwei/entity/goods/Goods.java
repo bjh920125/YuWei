@@ -137,6 +137,26 @@ public class Goods implements Serializable{
 
     private String goodsName;
 
+    private int hasAdditionalCommentCount;
+
+    private int hasImageCount;
+
+    public int getHasAdditionalCommentCount() {
+        return hasAdditionalCommentCount;
+    }
+
+    public void setHasAdditionalCommentCount(int hasAdditionalCommentCount) {
+        this.hasAdditionalCommentCount = hasAdditionalCommentCount;
+    }
+
+    public int getHasImageCount() {
+        return hasImageCount;
+    }
+
+    public void setHasImageCount(int hasImageCount) {
+        this.hasImageCount = hasImageCount;
+    }
+
     public String getGoodsName() {
         return goodsName;
     }

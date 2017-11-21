@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.activity.order.EnsureOrderActivity;
+import com.bap.yuwei.adapter.CommentAdapter;
 import com.bap.yuwei.adapter.GoodsImageAdapter;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.goods.Goods;
@@ -27,6 +29,7 @@ import com.bap.yuwei.entity.goods.GoodsModel;
 import com.bap.yuwei.entity.goods.Shop;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
+import com.bap.yuwei.entity.order.Evaluation;
 import com.bap.yuwei.entity.order.GoodsCart;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bap.yuwei.util.LogUtil;
@@ -38,14 +41,22 @@ import com.bap.yuwei.view.StickyScrollView;
 import com.bap.yuwei.webservice.GoodsWebService;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,6 +74,11 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView txtShopCollectUserTotal,txtRecentGoodsTotal,txtGoodsTotal;
     private TextView txtProduct,txtDetail,txtComment;
     private TextView txtIntroduce,txtSpecification,txtPackage;
+    private LinearLayout llComment,llCommentDetail;
+    private TextView txtTotalComment,txtUserName,txtDesc,txtModel;
+    private TextView txtAllCommentTitle,txtAllComment,txtAdditionCommentTitle,txtAdditionComment,txtHasPicCommentTitle,txtHasPicComment;
+    private LRecyclerView rvComment;
+    private ImageView imgHead;
     private TextView txtAddCarts,txtBuy;
     private RelativeLayout rlPackage;
     private WebView mWebView;
@@ -84,6 +100,19 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private Goods mGoods;
     private Shop mShop;
 
+    private int queryCommentType=0;
+    private final int ALL_COMMENT=0;//全部
+    private final int ADDITION_COMMENT=1;//追评
+    private final int HAS_PIC_COMMENT=2;//有图片
+    private boolean isInitCommentUI=false;
+    private List<Evaluation> evaluations;
+    private CommentAdapter mCommentAdapter;
+    private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
+
+    private int pageSize=10;
+    private int pageIndex=1;
+
+
     private int topDetail;
 
     private GoodsWebService goodsWebService;
@@ -94,11 +123,34 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         showLoadingDialog();
         goodsWebService= MyApplication.getInstance().getWebService(GoodsWebService.class);
         mGoods= (Goods) getIntent().getSerializableExtra(Goods.KEY);
+        evaluations=new ArrayList<>();
         addFootmark();
         getGoodsDetail();
         initRotationMaps();
         color=getResources().getColor(R.color.lightblack);
         selectColor=getResources().getColor(R.color.colorPrimary);
+
+        mCommentAdapter=new CommentAdapter(mContext);
+        mLRecyclerViewAdapter = new LRecyclerViewAdapter(mCommentAdapter);
+        rvComment.setAdapter(mLRecyclerViewAdapter);
+
+        rvComment.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                evaluations.clear();
+                mCommentAdapter.clear();
+                pageIndex=1;
+                getEvaluations();
+            }
+        });
+
+        rvComment.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                pageIndex++;
+                getEvaluations();
+            }
+        });
     }
 
     /**
@@ -172,6 +224,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                         mGoods= mGson.fromJson(jo.toString(), Goods.class);
                         getShopDetail();
                         getGoodsCollect();
+                        getEvaluations();
                         initGoodsUIWithValues();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
@@ -379,6 +432,49 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                     LogUtil.print("result",result);
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
+            }
+        });
+    }
+
+    /**
+     * 获取评价列表
+     */
+    private void getEvaluations(){
+        Map<String,Object> params=new HashMap<>();
+        params.put("page",pageIndex);
+        params.put("size",pageSize);
+        params.put("type",queryCommentType);
+        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
+        Call<ResponseBody> call=goodsWebService.getEvaluations(mGoods.getGoodsId(),body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result=response.body().string();
+                    LogUtil.print("result",result);
+                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
+                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        JSONArray jo=new JSONObject(result).getJSONObject("result").getJSONArray("list");
+                        List<Evaluation> tempList = mGson.fromJson(jo.toString(), new TypeToken<List<Evaluation>>() {}.getType());
+                        if(tempList!=null && tempList.size()>0){
+                            evaluations.addAll(tempList);
+                            mCommentAdapter.addAll(tempList);
+                            mCommentAdapter.notifyDataSetChanged();
+                            initCommentUIWithValues();
+                        }else{
+                            rvComment.setNoMore(true);
+                        }
+                        rvComment.refreshComplete(tempList.size());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -415,6 +511,30 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         initRotationMaps();
         mWebView.loadDataWithBaseURL(null, mGoods.getGoodsPhoneDesc(), "text/html", "GB2312", null);
         initChooseModelView();
+    }
+
+    private void initCommentUIWithValues(){
+        if(isInitCommentUI) return;
+        txtAllComment.setText(mGoods.getTotalComment()+"");
+        txtAdditionComment.setText(mGoods.getHasAdditionalCommentCount()+"");
+        txtHasPicComment.setText(mGoods.getHasImageCount()+"");
+
+        int totalComment=mGoods.getTotalComment();
+        if(totalComment>0){
+            Evaluation evaluation=evaluations.get(0);
+            if(null==evaluation) return;
+            llComment.setVisibility(View.VISIBLE);
+            txtTotalComment.setText("商品评价（"+totalComment+"）");
+            String userName=evaluation.getEvaluaterUsername();
+            StringBuilder sb=new StringBuilder(userName);
+            txtUserName.setText(sb.replace(1,userName.length()-1,"***"));
+            txtDesc.setText(evaluation.getEvaluationComment());
+            txtModel.setText("型号："+evaluation.getGoodsModel());
+            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+evaluation.getAvatar(),imgHead);
+        }else {
+            llComment.setVisibility(View.GONE);
+        }
+        isInitCommentUI=true;
     }
 
     private void initShopUIWithValues(){
@@ -463,6 +583,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             default:break;
         }
     }
+
 
     private void buyNow(){
         GoodsCart cart=new GoodsCart();
@@ -539,16 +660,65 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.txt_product:
                 mScrollView.smoothScrollTo(0,0);
                 txtProduct.setTextColor(selectColor);
+                showDetail();
                 break;
             case R.id.txt_detail:
                 mScrollView.smoothScrollTo(0,topDetail);
                 txtDetail.setTextColor(selectColor);
+                showDetail();
                 break;
             case R.id.txt_comment:
                 txtComment.setTextColor(selectColor);
+                mScrollView.setVisibility(View.GONE);
+                llCommentDetail.setVisibility(View.VISIBLE);
+                rvComment.setVisibility(View.VISIBLE);
                 break;
             default:break;
         }
+    }
+
+    public void getCommentByType(View v){
+        txtAllComment.setTextColor(color);
+        txtAllCommentTitle.setTextColor(color);
+        txtAdditionCommentTitle.setTextColor(color);
+        txtAdditionComment.setTextColor(color);
+        txtHasPicCommentTitle.setTextColor(color);
+        txtHasPicComment.setTextColor(color);
+        switch (v.getId()){
+            case R.id.ll_all_comment:
+                queryCommentType=ALL_COMMENT;
+                txtAllComment.setTextColor(selectColor);
+                txtAllCommentTitle.setTextColor(selectColor);
+                break;
+            case R.id.ll_addtional_comment:
+                queryCommentType=ADDITION_COMMENT;
+                txtAdditionCommentTitle.setTextColor(selectColor);
+                txtAdditionComment.setTextColor(selectColor);
+                break;
+            case R.id.ll_pic_comment:
+                queryCommentType=HAS_PIC_COMMENT;
+                txtHasPicCommentTitle.setTextColor(selectColor);
+                txtHasPicComment.setTextColor(selectColor);
+                break;
+            default:break;
+        }
+        rvComment.refresh();
+    }
+
+    public void showAllComment(View v){
+        mScrollView.setVisibility(View.GONE);
+        llCommentDetail.setVisibility(View.VISIBLE);
+        rvComment.setVisibility(View.VISIBLE);
+        txtProduct.setTextColor(color);
+        txtDetail.setTextColor(color);
+        txtComment.setTextColor(color);
+        txtComment.setTextColor(selectColor);
+    }
+
+    private void showDetail(){
+        mScrollView.setVisibility(View.VISIBLE);
+        llCommentDetail.setVisibility(View.GONE);
+        rvComment.setVisibility(View.GONE);
     }
 
     public void onBackClick(View v){
@@ -654,7 +824,6 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-
     @Override
     protected void initView() {
         convenientBanner=(ConvenientBanner) findViewById(R.id.banner);
@@ -687,6 +856,25 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtOldPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
         txtAddCarts= (TextView) findViewById(R.id.txt_open_model_view);
         txtBuy= (TextView) findViewById(R.id.txt_buy);
+        llComment= (LinearLayout) findViewById(R.id.ll_comment);
+        llCommentDetail= (LinearLayout) findViewById(R.id.ll_comment_detail);
+        txtTotalComment= (TextView) findViewById(R.id.txt_total_comment);
+        txtUserName= (TextView) findViewById(R.id.txt_user_name);
+        txtDesc= (TextView) findViewById(R.id.txt_desc);
+        txtModel= (TextView) findViewById(R.id.txt_model);
+        imgHead= (ImageView) findViewById(R.id.img_head);
+        rvComment= (LRecyclerView) findViewById(R.id.rv_comment);
+        txtAllCommentTitle= (TextView) findViewById(R.id.txt_all_comment_title);
+        txtAllComment= (TextView) findViewById(R.id.txt_all_comment);
+        txtAdditionCommentTitle= (TextView) findViewById(R.id.txt_addition_comment_title);
+        txtAdditionComment= (TextView) findViewById(R.id.txt_addition_comment);
+        txtHasPicCommentTitle= (TextView) findViewById(R.id.txt_has_pic_comment_title);
+        txtHasPicComment= (TextView) findViewById(R.id.txt_has_pic_comment);
+        rvComment.setHasFixedSize(true);
+        rvComment.setLayoutManager(new LinearLayoutManager(mContext));
+        rvComment.setHeaderViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
+        rvComment.setFooterViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
+        rvComment.setFooterViewHint("拼命加载中","已经全部为你呈现了","网络不给力啊，点击再试一次吧");
         txtAddCarts.setOnClickListener(this);
         txtBuy.setOnClickListener(this);
     }

@@ -8,6 +8,7 @@ import android.widget.CompoundButton;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.CommentCommitAdapter;
+import com.bap.yuwei.entity.event.CommentOrderEvent;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.order.EvaluateItemForm;
@@ -23,6 +24,7 @@ import com.bap.yuwei.webservice.OrderWebService;
 import com.bap.yuwei.webservice.SysWebService;
 import com.linearlistview.LinearListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -164,6 +166,7 @@ public class CommentActivity extends BaseActivity {
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         ToastUtil.showShort(mContext,"评价成功！");
+                        EventBus.getDefault().post(new CommentOrderEvent());
                         finish();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
@@ -197,17 +200,6 @@ public class CommentActivity extends BaseActivity {
                 }
             }
         }
-
-
-        /**
-        if(filePaths.size()>1){
-            uploadCount=0;
-            for(String ps:getUsefulImagePathes()){
-                updateFile(new File(ps));
-            }
-        }else {
-            comment();
-        }*/
     }
 
     @Override

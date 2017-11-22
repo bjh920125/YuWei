@@ -13,6 +13,7 @@ import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.adapter.ListBaseAdapter;
 import com.bap.yuwei.adapter.OrderListAdapter;
 import com.bap.yuwei.entity.event.CancelOrderEvent;
+import com.bap.yuwei.entity.event.CommentOrderEvent;
 import com.bap.yuwei.entity.event.DeleteOrderEvent;
 import com.bap.yuwei.entity.event.PayOrderEvent;
 import com.bap.yuwei.entity.event.ReceiveOrderEvent;
@@ -153,6 +154,12 @@ public class OrderListActivity extends BaseActivity {
     public void payOrderEvent(PayOrderEvent event){
         rvOrder.refresh();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void commentOrderEvent(CommentOrderEvent event){
+        rvOrder.refresh();
+    }
+
 
     private void getOrderList(){
         Map<String,Object> params=new HashMap<>();

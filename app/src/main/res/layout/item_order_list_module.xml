@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:clickable="true"/>
+        android:clickable="true" />
 
 
     <RelativeLayout
@@ -153,6 +154,18 @@
             android:layout_height="25dp"
             android:layout_marginLeft="5dp"
             android:text="评价"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/radius_grey_border"
+            android:visibility="gone"/>
+
+
+        <TextView
+            android:id="@+id/txt_addition_comment"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:text="追评"
             android:gravity="center"
             android:textSize="12dp"
             android:background="@drawable/radius_grey_border"

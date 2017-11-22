@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class ListBaseAdapter<T> extends RecyclerView.Adapter<SuperViewHolder> implements View.OnClickListener{
+public abstract class ListBaseAdapter<T> extends RecyclerView.Adapter<SuperViewHolder> implements View.OnClickListener,View.OnLongClickListener{
     protected Context mContext;
     private LayoutInflater mInflater;
 
@@ -25,6 +25,7 @@ public abstract class ListBaseAdapter<T> extends RecyclerView.Adapter<SuperViewH
     public SuperViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(getLayoutId(), parent, false);
         itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
         return new SuperViewHolder(itemView);
     }
 
@@ -108,4 +109,24 @@ public abstract class ListBaseAdapter<T> extends RecyclerView.Adapter<SuperViewH
         void onItemClick(View view , int position);
     }
 
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (onItemLongClickListener != null) {
+            //注意这里使用getTag方法获取position
+            onItemLongClickListener.onItemLongClick(v,(int)v.getTag());
+        }
+        return true;
+    }
+
+    private OnItemLongClickListener onItemLongClickListener=null;
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.onItemLongClickListener = listener;
+    }
+
+    //define interface
+    public static interface OnItemLongClickListener {
+        void onItemLongClick(View view , int position);
+    }
 }

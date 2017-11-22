@@ -105,4 +105,10 @@ public interface GoodsWebService {
     @POST("/v1/goods/{goodsId}/evaluations")
     Call<ResponseBody> getEvaluations(@Path("goodsId") Long goodsId,@Body RequestBody body);
 
+    @POST("/v1/goodscollect/user/{userId}")
+    Call<ResponseBody> getGoodsCollect(@Path("userId") String userId,@Body RequestBody body);
+
+    @POST("/v1/shopcollect/user/{userId}")
+    Call<ResponseBody> getShopCollect(@Path("userId") String userId,@Body RequestBody body);
+
 }

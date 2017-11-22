@@ -107,6 +107,7 @@
         android:padding="5dp">
 
         <RelativeLayout
+            android:id="@+id/rl_goods_collect"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
@@ -131,6 +132,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_shop_collect"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
@@ -156,6 +158,7 @@
 
 
         <RelativeLayout
+            android:id="@+id/rl_footmark"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.alipay.sdk.app.PayTask;
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.order.AppendCommentActivity;
 import com.bap.yuwei.activity.order.CommentActivity;
 import com.bap.yuwei.activity.order.ExpressDetailActivity;
 import com.bap.yuwei.activity.order.OrderDetailActivity;
@@ -98,6 +99,8 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
         TextView txtComment=holder.getView(R.id.txt_comment);
         TextView txtCancel=holder.getView(R.id.txt_cancel);
         TextView txtDelete=holder.getView(R.id.txt_delete);
+        TextView txtAdditionComment=holder.getView(R.id.txt_addition_comment);
+
 
         final Orders order=orderses.get(position);
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+order.getShopIcon(),imgshop);
@@ -106,68 +109,54 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
         txtTotalNum.setText("共"+order.getTotalGoodsCount()+"件商品");
         txtTotalPrice.setText("合计：￥"+order.getRealPayAmount()+"（含运费￥"+order.getFreight()+"）");
 
+        txtPay.setVisibility(View.GONE);
+        txtAlertSend.setVisibility(View.GONE);
+        txtShowExpress.setVisibility(View.GONE);
+        txtReceive.setVisibility(View.GONE);
+        txtComment.setVisibility(View.GONE);
+        txtCancel.setVisibility(View.GONE);
+        txtDelete.setVisibility(View.GONE);
+        txtAdditionComment.setVisibility(View.GONE);
         int status=order.getStatus();
         if(status==ORDER_STATUS_PENDING_PAY){//待付款
             txtPay.setVisibility(View.VISIBLE);
-            txtAlertSend.setVisibility(View.GONE);
-            txtShowExpress.setVisibility(View.GONE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
             txtCancel.setVisibility(View.VISIBLE);
-            txtDelete.setVisibility(View.GONE);
+            txtAdditionComment.setVisibility(View.GONE);
         }else if(status==ORDER_STATUS_PRE_DELIVERED){//待发货
-            txtPay.setVisibility(View.GONE);
             txtAlertSend.setVisibility(View.VISIBLE);
-            txtShowExpress.setVisibility(View.GONE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
-            txtDelete.setVisibility(View.GONE);
         }else if(status==ORDER_STATUS_HAS_SENDED){//待收货
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
             txtShowExpress.setVisibility(View.VISIBLE);
             txtReceive.setVisibility(View.VISIBLE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
-            txtDelete.setVisibility(View.GONE);
         }else if(status==ORDER_STATUS_PRE_EVALUATED){//待评价
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
             txtShowExpress.setVisibility(View.VISIBLE);
-            txtReceive.setVisibility(View.GONE);
             txtComment.setVisibility(View.VISIBLE);
-            txtCancel.setVisibility(View.GONE);
             txtDelete.setVisibility(View.VISIBLE);
         }else if(status==ORDER_STATUS_HAS_COMPLETED){//已完成
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
             txtShowExpress.setVisibility(View.VISIBLE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
             txtDelete.setVisibility(View.VISIBLE);
+            if(null!=order.getCanAppendEvaluate() && order.getCanAppendEvaluate()==true){
+                txtAdditionComment.setVisibility(View.VISIBLE);
+            }else{
+                txtAdditionComment.setVisibility(View.GONE);
+            }
         }else if(status==ORDER_STATUS_HAS_CANCELED){//已取消
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
-            txtShowExpress.setVisibility(View.GONE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
             txtDelete.setVisibility(View.VISIBLE);
         }else if(status==ORDER_STATUS_CLOSED){//已关闭
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
-            txtShowExpress.setVisibility(View.GONE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
             txtDelete.setVisibility(View.VISIBLE);
         }
 
         List<OrderItem> items=order.getOrderItems();
         OrderListItemAdapter adapter=new OrderListItemAdapter(mContext,items);
         lvOrderItem.setAdapter(adapter);
+
+        lvOrderItem.setOnItemClickListener(new LinearListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(LinearListView parent, View view, int position, long id) {
+                Intent i=new Intent(mContext,OrderDetailActivity.class);
+                i.putExtra(OrderDetailActivity.ORDER_ID_KEY,order.getOrderId());
+                mContext.startActivity(i);
+            }
+        });
 
         txtPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,6 +211,14 @@ public class OrderListAdapter extends ListBaseAdapter<Orders> {
             }
         });
 
+        txtAdditionComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(mContext, AppendCommentActivity.class);
+                i.putExtra(Orders.KEY,order);
+                mContext.startActivity(i);
+            }
+        });
 
     }
 

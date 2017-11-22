@@ -70,6 +70,7 @@ public class NewsListActivity extends BaseActivity implements SwipeRefreshLayout
                 startActivity(intent);
             }
         });
+        swipeRefresh.setRefreshing(true);
         getNews();
     }
 
@@ -82,6 +83,7 @@ public class NewsListActivity extends BaseActivity implements SwipeRefreshLayout
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                swipeRefresh.setRefreshing(false);
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -100,6 +102,7 @@ public class NewsListActivity extends BaseActivity implements SwipeRefreshLayout
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                swipeRefresh.setRefreshing(false);
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });

@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.goods.MyCollectListActivity;
 import com.bap.yuwei.activity.order.OrderListActivity;
 import com.bap.yuwei.activity.order.RefundListActivity;
 import com.bap.yuwei.activity.sys.LoginActivity;
@@ -63,6 +64,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     private ImageView imgSet,imgMsg;
     private TextView btnPay,btnSend,btnReceive,btnComment,btnRefund;
     private TextView txtPayNum,txtSendNum,txtReceiveNum,txtCommentNum,txtRefundNum;
+    private RelativeLayout rlGoodsCollect,rlShopCollect,rlFootMark;
 
     private GoodsWebService goodsWebService;
     private OrderWebService orderWebService;
@@ -114,8 +116,22 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                 if(isLogined())
                     startActivity(new Intent(mContext, MsgMenusActivity.class));
                 break;
+            case R.id.rl_goods_collect:
+                showMyCollects(0);
+                break;
+            case R.id.rl_shop_collect:
+                showMyCollects(1);
+                break;
+            case R.id.rl_footmark:
+                break;
             default:break;
         }
+    }
+
+    private void showMyCollects(int showTypeIndex){
+        Intent i=new Intent(mContext,MyCollectListActivity.class);
+        i.putExtra(MyCollectListActivity.SHOW_TYPE_INDEX,showTypeIndex);
+        startActivity(i);
     }
 
     private void toOrderListPage(int index){
@@ -296,6 +312,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         txtReceiveNum= (TextView) fragmentView.findViewById(R.id.txt_receive_count);
         txtCommentNum= (TextView) fragmentView.findViewById(R.id.txt_comment_count);
         txtRefundNum= (TextView) fragmentView.findViewById(R.id.txt_refund_count);
+        rlGoodsCollect= (RelativeLayout) fragmentView.findViewById(R.id.rl_goods_collect);
+        rlShopCollect= (RelativeLayout) fragmentView.findViewById(R.id.rl_shop_collect);
+        rlFootMark= (RelativeLayout) fragmentView.findViewById(R.id.rl_footmark);
+        rlGoodsCollect.setOnClickListener(this);
+        rlShopCollect.setOnClickListener(this);
+        rlFootMark.setOnClickListener(this);
         rlPersonInfo.setOnClickListener(this);
         txtGoodsCollectNum.setOnClickListener(this);
         txtShopCollectNum.setOnClickListener(this);

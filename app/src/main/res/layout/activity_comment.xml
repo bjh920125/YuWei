@@ -133,7 +133,7 @@
             android:onClick="comment"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="发票评价"
+            android:text="发表评价"
             android:textColor="@color/white"
             android:textSize="15dp" />
 

@@ -187,6 +187,9 @@ public class EnsureOrderActivity extends BaseActivity {
         return payOrderForm;
     }
 
+    /**
+     * 提交订单
+     */
     public void commitOrder(View v){
         showLoadingDialog();
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(getCommitOrderEntity()));
@@ -413,6 +416,7 @@ public class EnsureOrderActivity extends BaseActivity {
             @Override
             public void onDismiss() {
                 backgroundAlpha(1f);
+                toOrderDetailPage();
             }
         });
 
@@ -489,7 +493,7 @@ public class EnsureOrderActivity extends BaseActivity {
     private void toOrderDetailPage(){
         popToPay.dismiss();
         Intent i=new Intent(mContext, OrderDetailActivity.class);
-        i.putExtra(OrderDetailActivity.ORDER_ID_KEY,orderIds.split(",")[0]);
+        i.putExtra(OrderDetailActivity.ORDER_ID_KEY,Long.valueOf(orderIds.split(",")[0]));
         startActivity(i);
     }
 }

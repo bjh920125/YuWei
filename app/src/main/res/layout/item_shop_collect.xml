@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img_shop"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:src="@drawable/default_img"
+        android:scaleType="fitXY"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:id="@+id/txt_shop_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/img_shop"
+        android:padding="5dp"
+        android:text="123"/>
+
+
+    <TextView
+        android:id="@+id/txt_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/img_shop"
+        android:layout_alignLeft="@+id/txt_all"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="12dp"
+        android:textColor="@color/colorPrimary"/>
+
+    <TextView
+        android:id="@+id/txt_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txt_num"
+        android:text="全部"
+        android:textSize="12dp"
+        android:textColor="@color/colorPrimary"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:id="@+id/view_divider_line"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/txt_all"
+        android:background="@color/lightgray2"/>
+</RelativeLayout>

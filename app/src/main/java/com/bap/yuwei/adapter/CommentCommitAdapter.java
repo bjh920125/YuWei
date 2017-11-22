@@ -69,7 +69,7 @@ public class CommentCommitAdapter extends BaseAdapter{
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
-       final ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if(convertView==null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.item_comment_commit, parent, false);

@@ -18,16 +18,19 @@ import android.widget.TextView;
 import com.alipay.sdk.app.PayTask;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
+import com.bap.yuwei.activity.goods.GoodsDetailActivity;
 import com.bap.yuwei.adapter.OrderItemDetailAdapter;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.event.CancelOrderEvent;
 import com.bap.yuwei.entity.event.DeleteOrderEvent;
 import com.bap.yuwei.entity.event.ReceiveOrderEvent;
+import com.bap.yuwei.entity.goods.Goods;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.entity.order.Express;
 import com.bap.yuwei.entity.order.ExpressItem;
 import com.bap.yuwei.entity.order.OrderDetail;
+import com.bap.yuwei.entity.order.OrderItem;
 import com.bap.yuwei.entity.order.Orders;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
@@ -42,6 +45,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -50,13 +54,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.bap.yuwei.entity.Constants.ORDER_STATUS_CLOSED;
-import static com.bap.yuwei.entity.Constants.ORDER_STATUS_HAS_CANCELED;
-import static com.bap.yuwei.entity.Constants.ORDER_STATUS_HAS_COMPLETED;
-import static com.bap.yuwei.entity.Constants.ORDER_STATUS_HAS_SENDED;
-import static com.bap.yuwei.entity.Constants.ORDER_STATUS_PENDING_PAY;
-import static com.bap.yuwei.entity.Constants.ORDER_STATUS_PRE_DELIVERED;
-import static com.bap.yuwei.entity.Constants.ORDER_STATUS_PRE_EVALUATED;
 
 public class OrderDetailActivity extends BaseActivity {
 
@@ -66,7 +63,7 @@ public class OrderDetailActivity extends BaseActivity {
     private ImageView imgShop;
     private TextView txtGoodsTotalPrice,txtExpressPrice,txtOrderTotalPrice,txtActualPrice;
     private TextView txtOrderId,txtAlitradeNo,txtCreateTime,txtPayTime;
-    private TextView txtPay,txtAlertSend,txtShowExpress,txtReceive,txtComment,txtCancel,txtDelete;
+    private TextView txtPay,txtAlertSend,txtShowExpress,txtReceive,txtComment,txtAdditionComment,txtCancel,txtDelete;
 
     private LinearListView lvOrderItems;
     private OrderItemDetailAdapter mAdapter;
@@ -157,7 +154,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     private void initUIWithValues(){
         if(null == orderDetail) return;
-        Orders orders=orderDetail.getOrders();
+        final Orders orders=orderDetail.getOrders();
         txtOrderStauts.setText(orders.getStatusText());
         txtShopName.setText(orders.getShopName());
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+orders.getShopIcon(),imgShop);
@@ -176,69 +173,58 @@ public class OrderDetailActivity extends BaseActivity {
             txtAlitradeNo.setVisibility(View.GONE);
             txtPayTime.setVisibility(View.GONE);
         }
-        mAdapter=new OrderItemDetailAdapter(orders,orderDetail.getOrders().getOrderItems(),mContext);
+        final List<OrderItem> orderItems=orders.getOrderItems();
+        mAdapter=new OrderItemDetailAdapter(orders,orderItems,mContext);
         lvOrderItems.setAdapter(mAdapter);
+        lvOrderItems.setOnItemClickListener(new LinearListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(LinearListView parent, View view, int position, long id) {
+                Intent i=new Intent(mContext, GoodsDetailActivity.class);
+                Goods goods=new Goods();
+                goods.setGoodsId(orderItems.get(position).getGoodsId());
+                i.putExtra(Goods.KEY,goods);
+                startActivity(i);
+            }
+        });
+
         setOperateBtns(orders);
     }
 
 
     private void setOperateBtns(Orders order){
+        txtPay.setVisibility(View.GONE);
+        txtAlertSend.setVisibility(View.GONE);
+        txtShowExpress.setVisibility(View.GONE);
+        txtReceive.setVisibility(View.GONE);
+        txtComment.setVisibility(View.GONE);
+        txtCancel.setVisibility(View.GONE);
+        txtDelete.setVisibility(View.GONE);
+        txtAdditionComment.setVisibility(View.GONE);
         int status=order.getStatus();
-        if(status==ORDER_STATUS_PENDING_PAY){//待付款
+        if(status==Constants.ORDER_STATUS_PENDING_PAY){//待付款
             txtPay.setVisibility(View.VISIBLE);
-            txtAlertSend.setVisibility(View.GONE);
-            txtShowExpress.setVisibility(View.GONE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
             txtCancel.setVisibility(View.VISIBLE);
-            txtDelete.setVisibility(View.GONE);
-        }else if(status==ORDER_STATUS_PRE_DELIVERED){//待发货
-            txtPay.setVisibility(View.GONE);
+            txtAdditionComment.setVisibility(View.GONE);
+        }else if(status==Constants.ORDER_STATUS_PRE_DELIVERED){//待发货
             txtAlertSend.setVisibility(View.VISIBLE);
-            txtShowExpress.setVisibility(View.GONE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
-            txtDelete.setVisibility(View.GONE);
-        }else if(status==ORDER_STATUS_HAS_SENDED){//待收货
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
+        }else if(status==Constants.ORDER_STATUS_HAS_SENDED){//待收货
             txtShowExpress.setVisibility(View.VISIBLE);
             txtReceive.setVisibility(View.VISIBLE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
-            txtDelete.setVisibility(View.GONE);
-        }else if(status==ORDER_STATUS_PRE_EVALUATED){//待评价
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
+        }else if(status==Constants.ORDER_STATUS_PRE_EVALUATED){//待评价
             txtShowExpress.setVisibility(View.VISIBLE);
-            txtReceive.setVisibility(View.GONE);
             txtComment.setVisibility(View.VISIBLE);
-            txtCancel.setVisibility(View.GONE);
             txtDelete.setVisibility(View.VISIBLE);
-        }else if(status==ORDER_STATUS_HAS_COMPLETED){//已完成
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
+        }else if(status==Constants.ORDER_STATUS_HAS_COMPLETED){//已完成
             txtShowExpress.setVisibility(View.VISIBLE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
             txtDelete.setVisibility(View.VISIBLE);
-        }else if(status==ORDER_STATUS_HAS_CANCELED){//已取消
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
-            txtShowExpress.setVisibility(View.GONE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
+            if(null!=order.getCanAppendEvaluate() && order.getCanAppendEvaluate()==true){
+                txtAdditionComment.setVisibility(View.VISIBLE);
+            }else{
+                txtAdditionComment.setVisibility(View.GONE);
+            }
+        }else if(status== Constants.ORDER_STATUS_HAS_CANCELED){//已取消
             txtDelete.setVisibility(View.VISIBLE);
-        }else if(status==ORDER_STATUS_CLOSED){//已关闭
-            txtPay.setVisibility(View.GONE);
-            txtAlertSend.setVisibility(View.GONE);
-            txtShowExpress.setVisibility(View.GONE);
-            txtReceive.setVisibility(View.GONE);
-            txtComment.setVisibility(View.GONE);
-            txtCancel.setVisibility(View.GONE);
+        }else if(status==Constants.ORDER_STATUS_CLOSED){//已关闭
             txtDelete.setVisibility(View.VISIBLE);
         }
     }
@@ -287,7 +273,7 @@ public class OrderDetailActivity extends BaseActivity {
         Map<String,Object> params=new HashMap<>();
         params.put("cancelReason",reason);
         params.put("orderId",orderId);
-        params.put("status", ORDER_STATUS_HAS_CANCELED);
+        params.put("status", Constants.ORDER_STATUS_HAS_CANCELED);
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
         Call<ResponseBody> call=orderWebService.cancelOrder(body);
         call.enqueue(new Callback<ResponseBody>() {
@@ -300,6 +286,7 @@ public class OrderDetailActivity extends BaseActivity {
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         EventBus.getDefault().post(new CancelOrderEvent());
                         ToastUtil.showShort(mContext,"订单已取消！");
+                        getOrderDetail();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -333,6 +320,7 @@ public class OrderDetailActivity extends BaseActivity {
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         EventBus.getDefault().post(new DeleteOrderEvent());
                         ToastUtil.showShort(mContext,"订单已删除！");
+                        finish();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -366,6 +354,7 @@ public class OrderDetailActivity extends BaseActivity {
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         EventBus.getDefault().post(new ReceiveOrderEvent());
                         ToastUtil.showShort(mContext,"已收货！");
+                        getOrderDetail();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -439,7 +428,7 @@ public class OrderDetailActivity extends BaseActivity {
                 case SDK_PAY_FLAG: {
                     //PayResult payResult = new PayResult((Map<String, String>) msg.obj);
                     Map<String, String> result= (Map<String, String>) msg.obj;
-                    toOrderDetailPage(Long.valueOf(result.get("orderId")));
+                    getOrderDetail();
                     break;
                 }
             }
@@ -447,11 +436,6 @@ public class OrderDetailActivity extends BaseActivity {
     };
 
 
-    private void toOrderDetailPage(Long orderId){
-        Intent i=new Intent(mContext, OrderDetailActivity.class);
-        i.putExtra(OrderDetailActivity.ORDER_ID_KEY,orderId);
-        mContext.startActivity(i);
-    }
 
     /**
      * 选择取消理由
@@ -520,6 +504,12 @@ public class OrderDetailActivity extends BaseActivity {
         mContext.startActivity(i);
     }
 
+    private void toAppendComment(){
+        Intent i=new Intent(mContext, AppendCommentActivity.class);
+        i.putExtra(Orders.KEY,orderDetail.getOrders());
+        mContext.startActivity(i);
+    }
+
     public void operateOrder(View v){
         switch (v.getId()){
             case R.id.txt_pay:
@@ -536,6 +526,9 @@ public class OrderDetailActivity extends BaseActivity {
                 break;
             case R.id.txt_comment:
                 toComment();
+                break;
+            case R.id.txt_addition_comment:
+                toAppendComment();
                 break;
             case R.id.txt_cancel:
                 chooseCancelReason(orderId);
@@ -585,5 +578,6 @@ public class OrderDetailActivity extends BaseActivity {
         txtComment= (TextView) findViewById(R.id.txt_comment);
         txtCancel= (TextView) findViewById(R.id.txt_cancel);
         txtDelete= (TextView) findViewById(R.id.txt_delete);
+        txtAdditionComment=(TextView) findViewById(R.id.txt_addition_comment);
     }
 }

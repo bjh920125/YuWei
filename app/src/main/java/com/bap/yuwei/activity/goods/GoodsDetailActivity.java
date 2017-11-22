@@ -112,7 +112,6 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private int pageSize=10;
     private int pageIndex=1;
 
-
     private int topDetail;
 
     private GoodsWebService goodsWebService;
@@ -347,6 +346,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
      * 收藏商品
      */
     private void addGoodsCollect(){
+        if(null==mShop || null==mUser) return;
         Map<String,Object> params=new HashMap<>();
         params.put("goodsId", mGoods.getGoodsId());
         params.put("goodsTitle", mGoods.getTitle());

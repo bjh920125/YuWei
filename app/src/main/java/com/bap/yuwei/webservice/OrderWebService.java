@@ -81,4 +81,7 @@ public interface OrderWebService {
     @POST("/v1/buyer/evaluations")
     Call<ResponseBody> comment(@Body RequestBody body);
 
+    @POST("/v1/{userId}/batch_append_evaluation")
+    Call<ResponseBody> appendComment(@Path("userId") String userId,@Body RequestBody body);
+
 }

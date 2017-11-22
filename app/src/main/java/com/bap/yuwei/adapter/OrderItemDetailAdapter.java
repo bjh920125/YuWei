@@ -124,46 +124,34 @@ public class OrderItemDetailAdapter extends BaseAdapter {
         });
 
         //控制退款按钮显示
-        if(order.getStatus()==Constants.ORDER_STATUS_PENDING_PAY){//未付款
+        if(order.getStatus()==Constants.ORDER_STATUS_PENDING_PAY || order.getStatus()==Constants.ORDER_STATUS_CLOSED ||
+                order.getStatus()==Constants.ORDER_STATUS_HAS_CANCELED){//未付款
             viewHolder.llOperate.setVisibility(View.GONE);
         }else {//已付款
             Integer status = cart.getStatus();
+            viewHolder.llOperate.setVisibility(View.GONE);
+            viewHolder.txtRefund.setVisibility(View.GONE);
+            viewHolder.txtRefunding.setVisibility(View.GONE);
+            viewHolder.txtRefundSuccess.setVisibility(View.GONE);
+            viewHolder.txtService.setVisibility(View.GONE);
             if (null == status) {//未发货
                 viewHolder.llOperate.setVisibility(View.VISIBLE);
                 viewHolder.txtRefund.setVisibility(View.VISIBLE);
-                viewHolder.txtRefunding.setVisibility(View.GONE);
-                viewHolder.txtRefundSuccess.setVisibility(View.GONE);
-                viewHolder.txtService.setVisibility(View.GONE);
             } else if (status == ORDER_ITEM_STATUS_REFUND_PRE_DEAL) {//退款待处理
                 viewHolder.llOperate.setVisibility(View.VISIBLE);
-                viewHolder.txtRefund.setVisibility(View.GONE);
                 viewHolder.txtRefunding.setVisibility(View.VISIBLE);
-                viewHolder.txtRefundSuccess.setVisibility(View.GONE);
-                viewHolder.txtService.setVisibility(View.GONE);
             } else if (status == ORDER_ITEM_STATUS_PRE_BUYER_RECEIVE) {//待收货
                 viewHolder.llOperate.setVisibility(View.VISIBLE);
                 viewHolder.txtRefund.setVisibility(View.VISIBLE);
-                viewHolder.txtRefunding.setVisibility(View.GONE);
-                viewHolder.txtRefundSuccess.setVisibility(View.GONE);
-                viewHolder.txtService.setVisibility(View.GONE);
             } else if (status == ORDER_ITEM_STATUS_REFUND_SUCCESS) {//退款成功
                 viewHolder.llOperate.setVisibility(View.VISIBLE);
-                viewHolder.txtRefund.setVisibility(View.GONE);
-                viewHolder.txtRefunding.setVisibility(View.GONE);
                 viewHolder.txtRefundSuccess.setVisibility(View.VISIBLE);
-                viewHolder.txtService.setVisibility(View.GONE);
             } else if (status == ORDER_ITEM_STATUS_HAS_BUYER_RECEIVED) {//已收货
                 viewHolder.llOperate.setVisibility(View.VISIBLE);
-                viewHolder.txtRefund.setVisibility(View.GONE);
-                viewHolder.txtRefunding.setVisibility(View.GONE);
-                viewHolder.txtRefundSuccess.setVisibility(View.GONE);
                 viewHolder.txtService.setVisibility(View.VISIBLE);
             } else if (status == ORDER_ITEM_STATUS_PRE_SELLER_RECEIVE) {//待商家收货
                 viewHolder.llOperate.setVisibility(View.VISIBLE);
-                viewHolder.txtRefund.setVisibility(View.GONE);
                 viewHolder.txtRefunding.setVisibility(View.VISIBLE);
-                viewHolder.txtRefundSuccess.setVisibility(View.GONE);
-                viewHolder.txtService.setVisibility(View.GONE);
             }
         }
         return convertView;

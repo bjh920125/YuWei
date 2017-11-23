@@ -17,6 +17,7 @@ import com.bap.pla.PLALoadMoreListView;
 import com.bap.pla.PLALoadMoreListView.OnLoadMoreListener;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.goods.GoodsDetailActivity;
+import com.bap.yuwei.activity.goods.OverallSearchActivity;
 import com.bap.yuwei.activity.sys.MsgMenusActivity;
 import com.bap.yuwei.adapter.commonadapter.CommonAdapter;
 import com.bap.yuwei.adapter.commonadapter.ViewHolder;
@@ -56,7 +57,7 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
 
     private SwipeRefreshLayout swipeRefresh;
     private PLALoadMoreListView mGvGoods;
-    private TextView btnMsg,txtMsgCount;
+    private TextView btnMsg,txtMsgCount,txtSearch;
     private TextView txtCategory1,txtCategory2,txtCategory3,txtCategory4;
 
     private PopupWindow popCategory;
@@ -389,20 +390,28 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
                 childrenAdapter.notifyDataSetChanged();
                 break;
             case R.id.txt_category2:
-                mParent.clear();
-                mParent.addAll(mCategories2);
-                parentAdapter.notifyDataSetChanged();
-                mChildren.clear();
-                mChildren.addAll(mCategories3);
-                childrenAdapter.notifyDataSetChanged();
+                if(mCategories3.size()>0){
+                    mParent.clear();
+                    mParent.addAll(mCategories2);
+                    parentAdapter.notifyDataSetChanged();
+                    mChildren.clear();
+                    mChildren.addAll(mCategories3);
+                    childrenAdapter.notifyDataSetChanged();
+                }else{
+                    onClick(txtCategory1);
+                }
                 break;
             case R.id.txt_category3:
-                mParent.clear();
-                mParent.addAll(mCategories3);
-                parentAdapter.notifyDataSetChanged();
-                mChildren.clear();
-                mChildren.addAll(mCategories4);
-                childrenAdapter.notifyDataSetChanged();
+                if(mCategories4.size()>0){
+                    mParent.clear();
+                    mParent.addAll(mCategories3);
+                    parentAdapter.notifyDataSetChanged();
+                    mChildren.clear();
+                    mChildren.addAll(mCategories4);
+                    childrenAdapter.notifyDataSetChanged();
+                }else{
+                    onClick(txtCategory2);
+                }
                 break;
             case R.id.txt_category4:
                 mParent.clear();
@@ -446,12 +455,19 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         txtCategory4= (TextView) fragmentView.findViewById(R.id.txt_category4);
         btnMsg=(TextView) fragmentView.findViewById(R.id.btn_msg);
         txtMsgCount=(TextView) fragmentView.findViewById(R.id.txt_msg_count);
+        txtSearch=(TextView) fragmentView.findViewById(R.id.txt_search);
         mGvGoods.setOnLoadMoreListener(this);
         swipeRefresh.setOnRefreshListener(this);
         txtCategory1.setOnClickListener(this);
         txtCategory2.setOnClickListener(this);
         txtCategory3.setOnClickListener(this);
         txtCategory4.setOnClickListener(this);
+        txtSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, OverallSearchActivity.class));
+            }
+        });
         btnMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

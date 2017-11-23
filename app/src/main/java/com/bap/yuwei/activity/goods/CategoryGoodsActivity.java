@@ -108,6 +108,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         mCategory= (Category) getIntent().getSerializableExtra(Category.KEY);
         cid=mCategory.getCategoryId()+",";
         txtCategory1.setText(mCategory.getAlias());
+        swipeRefresh.setRefreshing(true);
         initPopCategoryView();
         initGoodsGV();
         getGoods();
@@ -193,6 +194,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                swipeRefresh.setRefreshing(false);
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
@@ -443,20 +445,28 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
                 childrenAdapter.notifyDataSetChanged();
                 break;
             case R.id.txt_category2:
-                mParent.clear();
-                mParent.addAll(mCategories2);
-                parentAdapter.notifyDataSetChanged();
-                mChildren.clear();
-                mChildren.addAll(mCategories3);
-                childrenAdapter.notifyDataSetChanged();
+                if(mCategories3.size()>0){
+                    mParent.clear();
+                    mParent.addAll(mCategories2);
+                    parentAdapter.notifyDataSetChanged();
+                    mChildren.clear();
+                    mChildren.addAll(mCategories3);
+                    childrenAdapter.notifyDataSetChanged();
+                }else{
+                    onClick(txtCategory1);
+                }
                 break;
             case R.id.txt_category3:
-                mParent.clear();
-                mParent.addAll(mCategories3);
-                parentAdapter.notifyDataSetChanged();
-                mChildren.clear();
-                mChildren.addAll(mCategories4);
-                childrenAdapter.notifyDataSetChanged();
+                if(mCategories4.size()>0){
+                    mParent.clear();
+                    mParent.addAll(mCategories3);
+                    parentAdapter.notifyDataSetChanged();
+                    mChildren.clear();
+                    mChildren.addAll(mCategories4);
+                    childrenAdapter.notifyDataSetChanged();
+                }else{
+                    onClick(txtCategory2);
+                }
                 break;
             case R.id.txt_category4:
                 mParent.clear();

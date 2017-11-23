@@ -23,7 +23,7 @@ import retrofit2.http.Query;
 public interface SysWebService {
 
 
-    @POST("/v1/user/register")
+    @POST("v1/user/register")
     Call<ResponseBody> register(@Body RequestBody body);
 
     @POST("v1/user/login")
@@ -32,26 +32,26 @@ public interface SysWebService {
     @GET("v1/user/logout")
     Call<ResponseBody> loginout();
 
-    @POST("/v1/user/app/qrcodeLogin")
+    @POST("v1/user/app/qrcodeLogin")
     @FormUrlEncoded
     Call<ResponseBody> login(@Field("userId") String userId,@Field("token") String token);
 
-    @GET("/v1/user/{userId}/profile")
+    @GET("v1/user/{userId}/profile")
     Call<ResponseBody> getUserInfo(@Path("userId") String userId);
 
-    @PUT("/v1/user/{userId}/profile")
+    @PUT("v1/user/{userId}/profile")
     Call<ResponseBody> updateUserInfo(@Path("userId") String userId,@Body RequestBody body);
 
-    @POST("/v1/user/check_pwd")
+    @POST("v1/user/check_pwd")
     Call<ResponseBody> checkPassword(@Body RequestBody body);
 
-    @PUT("/v1/user/pass")
+    @PUT("v1/user/pass")
     Call<ResponseBody> updatePassword(@Body RequestBody body);
 
-    @PUT("/v1/user/phone")
+    @PUT("v1/user/phone")
     Call<ResponseBody> updatePhone(@Body RequestBody body);
 
-    @POST("/v1/user/password_reset")
+    @POST("v1/user/password_reset")
     Call<ResponseBody> forgetPassword(@Body RequestBody body);
 
     @POST("http://ip.taobao.com/service/getIpInfo2.php")
@@ -59,47 +59,47 @@ public interface SysWebService {
     Call<ResponseBody> getIp(@Field("ip") String params);
 
     @Multipart
-    @POST("/v1/upload")
+    @POST("v1/upload")
     Call<ResponseBody> uploadFile(@Part MultipartBody.Part file);
 
-    @GET("/v1/user/{userId}/addresses")
+    @GET("v1/user/{userId}/addresses")
     Call<ResponseBody> getReceiveAddress(@Path("userId") String userId);
 
-    @POST("/v1/user/{userId}/addresses")
+    @POST("v1/user/{userId}/addresses")
     Call<ResponseBody> addReceiveAddress(@Path("userId") String userId,@Body RequestBody body);
 
     @PUT("v1/user/{userId}/addresses/{addressId}/setdefaultaddress")
     Call<ResponseBody> setDefaultAddress(@Path("userId") String userId,@Path("addressId") Long addressId);
 
-    @PUT("/v1/user/{userId}/addresses/{addressId}")
+    @PUT("v1/user/{userId}/addresses/{addressId}")
     Call<ResponseBody> updateReceiveAddress(@Path("userId") String userId,@Path("addressId") Long addressId,@Body RequestBody body);
 
-    @DELETE("/v1/user/{userId}/addresses/{addressId}")
+    @DELETE("v1/user/{userId}/addresses/{addressId}")
     Call<ResponseBody> deleteReceiveAddress(@Path("userId") String userId,@Path("addressId") Long addressId);
 
-    @GET("/v1/vat/{userId}")
+    @GET("v1/vat/{userId}")
     Call<ResponseBody> getVat(@Path("userId") String userId);
 
-    @POST("/v1/vat")
+    @POST("v1/vat")
     Call<ResponseBody> updateVat(@Body RequestBody body);
 
-    @POST("/v1/user/smscode")
+    @POST("v1/user/smscode")
     @FormUrlEncoded
     Call<ResponseBody> getSmsCode(@Field("phone") String phone);
 
-    @POST("/v1/user/sms/valid")
+    @POST("v1/user/sms/valid")
     Call<ResponseBody> validSmsCode(@Body RequestBody body);
 
-    @GET("/v1/{userId}/app/messages")
+    @GET("v1/{userId}/app/messages")
     Call<ResponseBody> getMsgs(@Path("userId") String userId);
 
-    @POST("/v1/{userId}/messages")
+    @POST("v1/{userId}/messages")
     Call<ResponseBody> getMsgsByType(@Path("userId") String userId,@Body RequestBody body);
 
-    @GET("/v1/{userId}/messages")
+    @GET("v1/{userId}/messages")
     Call<ResponseBody> getOrderMsgs(@Path("userId") String userId,@Query("shopId") Long shopId,@Query("userType") int userType);
 
-    @GET("/v1/{userId}/messages/unread-count")
+    @GET("v1/{userId}/messages/unread-count")
     Call<ResponseBody> getUnreadMsgsCount(@Path("userId") String userId, @Query("userType") int userType);
 
 }

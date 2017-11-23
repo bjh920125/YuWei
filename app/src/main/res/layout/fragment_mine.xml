@@ -127,6 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_goods_collect_num"
                 android:gravity="center_horizontal"
+                android:textColor="@color/grey"
                 android:text="商品收藏"
                 android:textSize="12dp" />
         </RelativeLayout>
@@ -152,6 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_shop_collect_num"
                 android:gravity="center_horizontal"
+                android:textColor="@color/grey"
                 android:text="店铺收藏"
                 android:textSize="12dp" />
         </RelativeLayout>
@@ -177,6 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_footmark_num"
+                android:textColor="@color/grey"
                 android:gravity="center"
                 android:text="足迹"
                 android:textSize="12dp" />

@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
@@ -54,6 +56,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     private TextView txtPrice,txtPay,txtEdit;
     private LinearListView lvCarts;
+    private RelativeLayout rlBottom;
     private CheckBox cbAll;
     private List<MyGoodsCart> myGoodsCarts;
     private CartAdapter mAdapter;
@@ -212,11 +215,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                         JSONObject jo=new JSONObject(result).getJSONObject("result");
                         JSONArray ja=jo.getJSONArray("shopItems");
                         List<MyGoodsCart> templist=mGson.fromJson(ja.toString(), new TypeToken<List<MyGoodsCart>>() {}.getType());
-                        myGoodsCarts.addAll(templist);
-                        mAdapter.notifyDataSetChanged();
-                        EventBus.getDefault().post(new UpdateCartNumEvent());
-                        txtPrice.setText("￥0");
-                        cbAll.setChecked(false);
+                        if(null!=templist && templist.size()>0){
+                            rlBottom.setVisibility(View.VISIBLE);
+                            myGoodsCarts.addAll(templist);
+                            mAdapter.notifyDataSetChanged();
+                            EventBus.getDefault().post(new UpdateCartNumEvent());
+                            txtPrice.setText("￥0");
+                            cbAll.setChecked(false);
+                        }else{
+                            rlBottom.setVisibility(View.GONE);
+                        }
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -268,15 +276,20 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     }
 
     private void payOrDelete(){
-        if(model==PAY){
-            ArrayList<String> cartIds=new ArrayList<>();
-            for(MyGoodsCart goodsCart:myGoodsCarts) {
-                for (GoodsCart cartItem : goodsCart.getCartItems()) {
-                    if(cartItem.isChecked()){
-                        cartIds.add(cartItem.getGoodsCartId()+"");
-                    }
+        ArrayList<String> cartIds=new ArrayList<>();
+        for(MyGoodsCart goodsCart:myGoodsCarts) {
+            for (GoodsCart cartItem : goodsCart.getCartItems()) {
+                if(cartItem.isChecked()){
+                    cartIds.add(cartItem.getGoodsCartId()+"");
                 }
             }
+        }
+        if(cartIds.size()<=0){
+            ToastUtil.showShort(mContext,"请先选择商品！");
+            return;
+        }
+
+        if(model==PAY){
             Intent i=new Intent(mContext, EnsureOrderActivity.class);
             i.putStringArrayListExtra(EnsureOrderActivity.CART_IDS_KEY,cartIds);
             startActivity(i);
@@ -305,8 +318,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         txtPrice=(TextView) fragmentView.findViewById(R.id.txt_price);
         txtEdit=(TextView) fragmentView.findViewById(R.id.txt_edit);
         cbAll= (CheckBox) fragmentView.findViewById(R.id.cb_all);
+        rlBottom= (RelativeLayout) fragmentView.findViewById(R.id.rl_bottom);
         txtEdit.setOnClickListener(this);
         txtPay.setOnClickListener(this);
+        LinearLayout emptyView= (LinearLayout) fragmentView.findViewById(R.id.view_empty_cart);
+        lvCarts.setEmptyView(emptyView);
         return fragmentView;
     }
 

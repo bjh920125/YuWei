@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.goods.FootmarkActivity;
 import com.bap.yuwei.activity.goods.MyCollectListActivity;
 import com.bap.yuwei.activity.order.OrderListActivity;
 import com.bap.yuwei.activity.order.RefundListActivity;
@@ -123,6 +124,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                 showMyCollects(1);
                 break;
             case R.id.rl_footmark:
+                if(isLogined())
+                    startActivity(new Intent(mContext, FootmarkActivity.class));
                 break;
             default:break;
         }

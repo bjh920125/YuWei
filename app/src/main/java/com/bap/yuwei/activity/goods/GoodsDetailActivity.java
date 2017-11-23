@@ -3,6 +3,7 @@ package com.bap.yuwei.activity.goods;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
@@ -418,6 +419,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
      * 新增足迹
      */
     private void addFootmark(){
+        if(null==mUser) return;
         Map<String,Object> params=new HashMap<>();
         params.put("goodsId", mGoods.getGoodsId());
         params.put("userId",mUser.getUserId());
@@ -713,6 +715,11 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtDetail.setTextColor(color);
         txtComment.setTextColor(color);
         txtComment.setTextColor(selectColor);
+    }
+
+    public void contactSeller(View v){
+        String url="mqqwpa://im/chat?chat_type=wpa&uin="+mShop.getQq();
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
     private void showDetail(){

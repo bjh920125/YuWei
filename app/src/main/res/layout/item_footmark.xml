@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/txt_time"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/lightgray2"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text=""
+        android:textSize="12dp" />
+
+    <ImageView
+        android:id="@+id/img_check"
+        android:layout_width="25dp"
+        android:layout_height="85dp"
+        android:layout_below="@+id/txt_time"
+        android:paddingTop="5dp"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/checke_kong" />
+
+
+    <ImageView
+        android:id="@+id/img_goods"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_below="@+id/txt_time"
+        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_toEndOf="@+id/img_check"
+        android:layout_toRightOf="@+id/img_check"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        app:srcCompat="@drawable/default_img" />
+
+    <TextView
+        android:id="@+id/txt_goods_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_time"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@+id/img_goods"
+        android:layout_toRightOf="@+id/img_goods"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:text="1"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/txt_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txt_goods_name"
+        android:layout_alignStart="@+id/txt_goods_name"
+        android:layout_below="@+id/txt_goods_name"
+        android:layout_marginTop="5dp"
+        android:text="1"
+        android:textColor="@color/red"
+        android:textSize="11dp" />
+</RelativeLayout>

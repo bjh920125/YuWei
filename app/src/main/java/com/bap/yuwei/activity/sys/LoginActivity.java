@@ -56,6 +56,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void login(View v){
+        showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
         String username=StringUtils.getEditTextValue(etUserName);
         String password= MD5Utils.encode(StringUtils.getEditTextValue(etPassword)).toLowerCase();
@@ -73,6 +74,7 @@ public class LoginActivity extends BaseActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -98,6 +100,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });

@@ -2,13 +2,18 @@ package com.bap.yuwei.activity.sys;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
+import com.bap.yuwei.R;
+import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
 import com.bap.yuwei.util.LogUtil;
+import com.bap.yuwei.util.MyApplication;
 import com.bap.yuwei.util.StringUtils;
 import com.bap.yuwei.util.ThrowableUtil;
 import com.bap.yuwei.util.ToastUtil;
+import com.bap.yuwei.webservice.SysWebService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,28 +24,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateReceiveAddressActivity extends AddReceiveAddressActivity {
+public class AdviceActivity extends BaseActivity {
+
+    private EditText etTitle,etContent,etTel;
+
+    private SysWebService sysWebService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sysWebService= MyApplication.getInstance().getWebService(SysWebService.class);
     }
 
-    @Override
-    public void addAddress(View v){
-        showLoadingDialog();
+
+    public void commit(View v){
         Map<String,Object> params=new HashMap<>();
-        params.put("cellphone", StringUtils.getEditTextValue(etTel));
-        params.put("city", city);
-        params.put("consignee",StringUtils.getEditTextValue(etName));
-        params.put("isDefault",cbDefault.isChecked()? true:false);
-        params.put("province",province);
-        params.put("region",region);
-        params.put("street",StringUtils.getEditTextValue(etAddress));
-        params.put("userId",mUser.getUserId());
-        params.put("shippingAddressId",address.getShippingAddressId());
+        params.put("userName", null!=mUser ? mUser.getUsername() : "");
+        params.put("telphone",StringUtils.getEditTextValue(etTel));
+        params.put("title",StringUtils.getEditTextValue(etTitle));
+        params.put("content",StringUtils.getEditTextValue(etContent));
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
-        Call<ResponseBody> call=sysWebService.updateReceiveAddress(mUser.getUserId(),address.getShippingAddressId(),body);
+        Call<ResponseBody> call=sysWebService.addAdvice(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -50,6 +54,7 @@ public class UpdateReceiveAddressActivity extends AddReceiveAddressActivity {
                     LogUtil.print("result",result);
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
+                        ToastUtil.showShort(mContext,"反馈成功！");
                         finish();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
@@ -67,20 +72,15 @@ public class UpdateReceiveAddressActivity extends AddReceiveAddressActivity {
         });
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_advice;
+    }
 
     @Override
-    protected void initUiWithValue() {
-        province=address.getProvince();
-        city=address.getCity();
-        region=address.getRegion();
-        etName.setText(address.getConsignee());
-        etTel.setText(address.getCellphone());
-        txtArea.setText(address.getProvince()+address.getCity()+address.getRegion());
-        etAddress.setText(address.getStreet());
-        if(address.getIsDefault()){
-            cbDefault.setChecked(true);
-        }else {
-            cbDefault.setChecked(false);
-        }
+    protected void initView() {
+        etTitle= (EditText) findViewById(R.id.et_title);
+        etContent= (EditText) findViewById(R.id.et_content);
+        etTel= (EditText) findViewById(R.id.et_tel);
     }
 }

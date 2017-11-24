@@ -319,6 +319,7 @@ public class ShopHomeActivity extends BaseActivity {
      * 收藏店铺
      */
     protected void addShopCollect(){
+        if(null==mUser || null==mShop) return;
         Map<String,Object> params=new HashMap<>();
         params.put("shopId",mShop.getShopId());
         params.put("shopName", mShop.getShopName());
@@ -355,6 +356,7 @@ public class ShopHomeActivity extends BaseActivity {
      * 取消收藏店铺
      */
     protected void cancelShopCollect(){
+        if(null==mUser || null==mShop) return;
         Map<String,Object> params=new HashMap<>();
         params.put("shopId",mShop.getShopId());
         params.put("userId",mUser.getUserId());

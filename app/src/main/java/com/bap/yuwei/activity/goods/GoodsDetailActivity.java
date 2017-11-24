@@ -165,6 +165,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
      * 收藏
      */
     public void collectGoods(View v){
+        if(isLogined())
         if(hasCollected){
             cancelGoodsCollect();
         }else{
@@ -384,6 +385,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
      * 取消收藏商品
      */
     private void cancelGoodsCollect(){
+        if(null==mUser) return;
         Map<String,Object> params=new HashMap<>();
         params.put("goodsId", mGoods.getGoodsId());
         params.put("userId",mUser.getUserId());
@@ -565,13 +567,16 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.txt_add_cart:
-                addCarts();
+                if(isLogined())
+                    addCarts();
                 break;
             case R.id.txt_buy:
-                buyNow();
+                if(isLogined())
+                    buyNow();
                 break;
             case R.id.txt_open_model_view:
-                chooseModel(null);
+                if(isLogined())
+                    chooseModel(null);
                 break;
             case R.id.img_close:
                 popModels.dismiss();

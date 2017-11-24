@@ -53,6 +53,7 @@ public class ResetPwdByOldPwdActivity extends BaseActivity {
      * 更新用户信息
      */
     private void updateUser(){
+        showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
         String password= MD5Utils.encode(StringUtils.getEditTextValue(etPwd)).toLowerCase();
         params.put("password", password);
@@ -63,6 +64,7 @@ public class ResetPwdByOldPwdActivity extends BaseActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -82,6 +84,7 @@ public class ResetPwdByOldPwdActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });

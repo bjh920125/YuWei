@@ -137,6 +137,7 @@ public class OverallSearchActivity extends BaseActivity {
      * 获取我的搜索记录
      */
     private void getSearchHistory(){
+        if(null==mUser) return;
         Map<String,Object> params=new HashMap<>();
         params.put("page",1);
         params.put("size",10);
@@ -172,6 +173,7 @@ public class OverallSearchActivity extends BaseActivity {
      * 删除我的搜索记录
      */
     public void deleteSearchHistory(View v){
+        if(null==mUser) return;
         Call<ResponseBody> call=goodsWebService.deleteSearchHistory(mUser.getUserId());
         call.enqueue(new Callback<ResponseBody>() {
             @Override

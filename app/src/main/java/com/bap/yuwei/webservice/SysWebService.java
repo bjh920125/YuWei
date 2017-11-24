@@ -102,4 +102,6 @@ public interface SysWebService {
     @GET("v1/{userId}/messages/unread-count")
     Call<ResponseBody> getUnreadMsgsCount(@Path("userId") String userId, @Query("userType") int userType);
 
+    @POST("v1/feedback")
+    Call<ResponseBody> addAdvice(@Body RequestBody body);
 }

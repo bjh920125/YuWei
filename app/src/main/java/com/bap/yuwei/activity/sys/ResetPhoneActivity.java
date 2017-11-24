@@ -53,6 +53,7 @@ public class ResetPhoneActivity extends BaseActivity {
      * 更新用户信息
      */
     private void updateUser(){
+        showLoadingDialog();
         final String phone = StringUtils.getEditTextValue(etPhone);
         Map<String,Object> params=new HashMap<>();
         params.put("phone",phone);
@@ -62,6 +63,7 @@ public class ResetPhoneActivity extends BaseActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -81,6 +83,7 @@ public class ResetPhoneActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });

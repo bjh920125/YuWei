@@ -30,10 +30,12 @@ public class QRLoginActivity extends BaseActivity {
     }
 
     public void qrLogin(View v){
+        showLoadingDialog();
         Call<ResponseBody> call=sysWebService.login(mUser.getUserId(),token);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -50,6 +52,7 @@ public class QRLoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });

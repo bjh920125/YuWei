@@ -1,17 +1,22 @@
 package com.bap.yuwei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
+import com.bap.yuwei.activity.ImageViewPagerActivity;
+import com.bap.yuwei.entity.BaseAttachment;
 import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.order.Evaluation;
 import com.bap.yuwei.view.NoScrollGridView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +24,7 @@ import java.util.List;
  * Created by Administrator on 2017/11/21.
  */
 public class CommentAdapter extends ListBaseAdapter<Evaluation> {
+
 
     public CommentAdapter(Context context) {
         super(context);
@@ -31,7 +37,7 @@ public class CommentAdapter extends ListBaseAdapter<Evaluation> {
 
     @Override
     public void onBindItemHolder(SuperViewHolder holder, int position) {
-        Evaluation evaluation=mDataList.get(position);
+        final Evaluation evaluation=mDataList.get(position);
         ImageView imgHead=holder.getView(R.id.img_head);
         TextView txtUserName=holder.getView(R.id.txt_user_name);
         TextView txtDesc=holder.getView(R.id.txt_desc);
@@ -64,13 +70,13 @@ public class CommentAdapter extends ListBaseAdapter<Evaluation> {
         }else {
             llReply.setVisibility(View.GONE);
         }
-
+        List<String> imgList=null;
         String[] images=evaluation.getEvaluationImages();
         if(null!=images && images.length>0){
             for(int i=0;i<images.length;i++){
                 images[i]=Constants.PICTURE_URL+ images[i];
             }
-            List<String> imgList=Arrays.asList(evaluation.getEvaluationImages());
+            imgList=Arrays.asList(evaluation.getEvaluationImages());
             ImgGVAdapter adapter=new ImgGVAdapter(imgList,mContext);
             gvImages.setAdapter(adapter);
         }
@@ -84,6 +90,18 @@ public class CommentAdapter extends ListBaseAdapter<Evaluation> {
             llStart.addView(imageView);
         }
 
+        gvImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Intent intent=new Intent(mContext,ImageViewPagerActivity.class);
+                intent.putExtra(BaseAttachment.KEY, (Serializable) Arrays.asList(evaluation.getEvaluationImages()));
+                intent.putExtra(BaseAttachment.POSITION, i);
+                intent.putExtra(BaseAttachment.DELETE_FLAG, false);
+                mContext.startActivity(intent);
+            }
+        });
     }
+
 }
 

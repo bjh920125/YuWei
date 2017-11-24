@@ -94,6 +94,7 @@ public class SettingActivity extends BaseActivity {
             case R.id.txt_service:
                 break;
             case R.id.txt_feedback:
+                startActivity(new Intent(mContext,AdviceActivity.class));
                 break;
             case R.id.txt_about:
                 break;

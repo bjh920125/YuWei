@@ -39,7 +39,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyApplication extends Application {
 	
-	private static List<Activity> activities=new LinkedList<Activity>();
+	private static List<Activity> activities=new LinkedList<>();
 	private static MyApplication instance;
 	private static Retrofit mRetrofit;
 	private static HashMap<Class, Object> apis = new HashMap<>();

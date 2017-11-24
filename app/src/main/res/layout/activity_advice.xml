@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context="com.bap.yuwei.activity.sys.AdviceActivity">
+
+    <include layout="@layout/view_toolbar"/>
+
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:minLines="2"
+        android:background="@drawable/radius_gray_border"
+        android:hint="请输入标题"
+        android:gravity="top"
+        android:padding="7dp"
+        android:textSize="14dp" />
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:minLines="8"
+        android:background="@drawable/radius_gray_border"
+        android:hint="如果您遇到问题或者有什么建议，请留下您的宝贵意见和联系方式，我们会及时与您联系，排查解决相关问题。"
+        android:gravity="top"
+        android:padding="7dp"
+        android:textSize="14dp" />
+
+    <EditText
+        android:id="@+id/et_tel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:minLines="1"
+        android:background="@drawable/radius_gray_border"
+        android:hint="请输入联系电话或qq号码"
+        android:inputType="phone"
+        android:gravity="top"
+        android:padding="7dp"
+        android:textSize="14dp" />
+
+
+    <TextView
+        android:layout_width="270dp"
+        android:layout_height="45dp"
+        android:text="提交"
+        android:gravity="center"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/radius_purple_bg"
+        android:textColor="@color/white"
+        android:onClick="commit"/>
+
+</LinearLayout>

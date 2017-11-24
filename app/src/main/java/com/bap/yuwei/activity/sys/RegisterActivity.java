@@ -59,6 +59,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     public void regist(){
+        showLoadingDialog();
         String password= MD5Utils.encode(StringUtils.getEditTextValue(etPwd)).toLowerCase();
         Map<String,Object> params=new HashMap<>();
         params.put("username", StringUtils.getEditTextValue(etName));
@@ -72,6 +73,7 @@ public class RegisterActivity extends BaseActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -89,6 +91,7 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });

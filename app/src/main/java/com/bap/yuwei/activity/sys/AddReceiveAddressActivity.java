@@ -62,6 +62,7 @@ public class AddReceiveAddressActivity extends BaseActivity {
     }
 
     public void addAddress(View v){
+        showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
         params.put("cellphone", StringUtils.getEditTextValue(etTel));
         params.put("city", city);
@@ -76,6 +77,7 @@ public class AddReceiveAddressActivity extends BaseActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissProgressDialog();
                 try {
                     String result=response.body().string();
                     LogUtil.print("result",result);
@@ -92,6 +94,7 @@ public class AddReceiveAddressActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissProgressDialog();
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });

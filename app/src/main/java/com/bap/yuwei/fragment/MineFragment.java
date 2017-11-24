@@ -105,6 +105,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                 toOrderListPage(4);
                 break;
             case R.id.btn_refund:
+                if(isLogined())
                 startActivity(new Intent(mContext, RefundListActivity.class));
                 break;
             case R.id.rl_person_info:
@@ -132,15 +133,19 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     }
 
     private void showMyCollects(int showTypeIndex){
-        Intent i=new Intent(mContext,MyCollectListActivity.class);
-        i.putExtra(MyCollectListActivity.SHOW_TYPE_INDEX,showTypeIndex);
-        startActivity(i);
+        if(isLogined()){
+            Intent i=new Intent(mContext,MyCollectListActivity.class);
+            i.putExtra(MyCollectListActivity.SHOW_TYPE_INDEX,showTypeIndex);
+            startActivity(i);
+        }
     }
 
     private void toOrderListPage(int index){
-        Intent i=new Intent(mContext, OrderListActivity.class);
-        i.putExtra(OrderListActivity.STATUS_INDEX_KEY,index);
-        startActivity(i);
+        if(isLogined()){
+            Intent i=new Intent(mContext, OrderListActivity.class);
+            i.putExtra(OrderListActivity.STATUS_INDEX_KEY,index);
+            startActivity(i);
+        }
     }
 
     private void loginOrUpdateInfo(){

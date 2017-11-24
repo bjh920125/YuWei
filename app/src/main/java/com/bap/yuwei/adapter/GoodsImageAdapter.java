@@ -42,6 +42,8 @@ public class GoodsImageAdapter implements Holder<GoodsImage> {
      * @param data
      */
     private void showDetail(Context context,GoodsImage data){
+
+
     }
 
 

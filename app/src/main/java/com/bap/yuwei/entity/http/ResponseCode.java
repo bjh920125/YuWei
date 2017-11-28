@@ -15,4 +15,6 @@ public class ResponseCode {
 	public static final int ERROR=500;
 
 
+	/**商品已下架*/
+	public static final int GOODS_HAS_WITHDRAW=441;
 }

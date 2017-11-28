@@ -88,7 +88,7 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="结算"
+            android:text="结算（0）"
             android:textColor="@color/white"
             android:textSize="15dp" />
 

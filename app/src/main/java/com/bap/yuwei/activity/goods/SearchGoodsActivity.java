@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -206,7 +208,7 @@ public class SearchGoodsActivity extends BaseActivity {
         params.put("sort",querySort);
         params.put("page",pageIndex);
         params.put("size",12);
-        params.put("ui", null!=mUser ? SharedPreferencesUtil.getString(mContext, Constants.XTOKEN_KEY) : "");
+        params.put("ui", null!=mUser ? getXToken() : "");
         Call<ResponseBody> call=goodsWebService.goodssearch(params);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -227,7 +229,6 @@ public class SearchGoodsActivity extends BaseActivity {
                             gvGoods.setNoMore(true);
                         }
                         gvGoods.refreshComplete(tempList.size());
-
                         JSONArray categoryStr=jo.getJSONArray("categoryNames");
                         categoryNames = mGson.fromJson(URLDecoder.decode(categoryStr.toString(),"utf-8"), new TypeToken<List<String>>() {}.getType());
                     }else{
@@ -243,6 +244,12 @@ public class SearchGoodsActivity extends BaseActivity {
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
+    }
+
+    @NonNull
+    private String getXToken(){
+        String str=SharedPreferencesUtil.getString(mContext,Constants.TOKEN_KEY)+":"+mUser.getUserId()+":1";
+        return Base64.encodeToString(str.getBytes(), Base64.NO_WRAP).trim();
     }
 
     public void onBackClick(View v){

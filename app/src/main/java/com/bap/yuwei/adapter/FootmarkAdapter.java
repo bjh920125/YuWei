@@ -32,9 +32,11 @@ public class FootmarkAdapter extends ListBaseAdapter<Footmark> {
     public void onBindItemHolder(SuperViewHolder holder, int position) {
         ImageView imgCheck=holder.getView(R.id.img_check);
         ImageView imgGoods=holder.getView(R.id.img_goods);
+        ImageView imgSellout=holder.getView(R.id.img_sell_out);
         TextView txtTitle=holder.getView(R.id.txt_goods_name);
         TextView txtPrice=holder.getView(R.id.txt_price);
         TextView txtTime=holder.getView(R.id.txt_time);
+
 
         final Footmark footmark=mDataList.get(position);
         if(isEditMode){
@@ -48,6 +50,13 @@ public class FootmarkAdapter extends ListBaseAdapter<Footmark> {
         }else {
             ImageLoader.getInstance().displayImage("drawable://"+R.drawable.checke_kong,imgCheck, DisplayImageOptionsUtil.getOptionsWithoutFade());
         }
+
+        if(footmark.getStatus()==1){
+            imgSellout.setVisibility(View.GONE);
+        }else {
+            imgSellout.setVisibility(View.VISIBLE);
+        }
+
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+footmark.getGoodsImage(),imgGoods, DisplayImageOptionsUtil.getOptionsWithoutFade());
         txtTitle.setText(footmark.getTitle());
         txtPrice.setText("￥"+footmark.getPreferentialPrice());

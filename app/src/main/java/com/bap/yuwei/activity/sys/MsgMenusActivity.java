@@ -96,6 +96,7 @@ public class MsgMenusActivity extends BaseActivity {
                 break;
             default:break;
         }
+        mAdapter.notifyDataSetChanged();
         Intent intent=new Intent(mContext,MsgListActivity.class);
         intent.putExtra(MsgListActivity.MSG_TYPE_KEY,messageType);//0系统消息 1物流消息 2订单消息 3通知消息
         startActivity(intent);

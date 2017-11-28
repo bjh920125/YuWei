@@ -64,9 +64,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     private BigDecimal total;
 
-    public final int PAY=0;
-    public final int EDIT=1;
-    private int model=PAY;
+    public static final Integer PAY=0;
+    public static final Integer EDIT=1;
+    public static Integer model=PAY;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,12 +87,17 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                 for(MyGoodsCart goodsCart:myGoodsCarts) {
                     goodsCart.setChecked(b);
                     for (GoodsCart cartItem : goodsCart.getCartItems()) {
-                        cartItem.setChecked(b);
+                        if(model==PAY){
+                            if(cartItem.getIsValid()) {
+                                cartItem.setChecked(b);
+                            }
+                        }else {
+                            cartItem.setChecked(b);
+                        }
                     }
                 }
                 mAdapter.notifyDataSetChanged();
                 calcMoney();
-                txtPrice.setText("￥"+total);
             }
         });
         getCarts();
@@ -106,22 +111,30 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateCarts(UpdateCartEvent event){
-        updateCarts(event.cartId,event.num);
+        updateCarts(event.cart,event.cartId,event.num);
     }
 
 
-
+    /**
+     * 计算总金额
+     */
     private void calcMoney(){
+        if(model==EDIT) return;
+        int num=0;
         BigDecimal money=new BigDecimal(0);
         for(MyGoodsCart goodsCart:myGoodsCarts){
             for(GoodsCart cartItem:goodsCart.getCartItems()){
                 if(cartItem.isChecked()){
                     money =money.add(cartItem.getPreferentialPrice().multiply(new BigDecimal(cartItem.getGoodsCount())));
+                    num+=cartItem.getGoodsCount();
                 }
             }
         }
         total=money;
+        txtPay.setText("结算（"+num+"）");
+        txtPrice.setText("￥"+total);
     }
+
 
     private List<Long> getSelectCartIds(){
         List<Long> cartIds=new ArrayList<>();
@@ -135,7 +148,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         return cartIds;
     }
 
-    private void updateCarts(Long cartId,int goodsCount){
+    private void updateCarts(final GoodsCart cart, Long cartId, final int goodsCount){
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
         params.put("goodsCount", goodsCount);
@@ -149,7 +162,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     LogUtil.print("result",result);
                     AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
-                        getCarts();
+                        //getCarts();
+                        cart.setGoodsCount(goodsCount);
+                        mAdapter.notifyDataSetChanged();
+                        calcMoney();
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -218,13 +234,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                         if(null!=templist && templist.size()>0){
                             rlBottom.setVisibility(View.VISIBLE);
                             myGoodsCarts.addAll(templist);
-                            mAdapter.notifyDataSetChanged();
-                            EventBus.getDefault().post(new UpdateCartNumEvent());
                             txtPrice.setText("￥0");
                             cbAll.setChecked(false);
                         }else{
                             rlBottom.setVisibility(View.GONE);
                         }
+                        mAdapter.notifyDataSetChanged();
+                        EventBus.getDefault().post(new UpdateCartNumEvent());
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -307,7 +323,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
             model=PAY;
             txtPay.setText("结算");
             txtEdit.setText("编辑");
+            for(MyGoodsCart goodsCart:myGoodsCarts) {
+                for (GoodsCart cartItem : goodsCart.getCartItems()) {
+                    if(!cartItem.getIsValid()) {
+                        cartItem.setChecked(false);
+                    }
+                }
+            }
+            mAdapter.notifyDataSetChanged();
         }
+        calcMoney();
     }
 
     @Override

@@ -41,6 +41,18 @@
         android:paddingTop="5dp"
         app:srcCompat="@drawable/default_img" />
 
+    <ImageView
+        android:id="@+id/img_sell_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:layout_alignLeft="@+id/img_goods"
+        android:layout_alignBottom="@+id/img_goods"
+        android:layout_alignRight="@+id/img_goods"
+        android:layout_alignTop="@+id/img_goods"
+        app:srcCompat="@drawable/sell_out"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/txt_goods_name"
         android:layout_width="match_parent"

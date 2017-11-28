@@ -22,12 +22,24 @@ public class Category implements Serializable{
 
     private String alias;
 
+    private boolean isChecked;
+
+
+
     public Category() {
     }
 
     public Category(Long categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     public Long getCategoryId() {

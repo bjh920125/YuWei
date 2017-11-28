@@ -13,6 +13,7 @@ import com.bap.yuwei.entity.Constants;
 import com.bap.yuwei.entity.event.CartMoneyEvent;
 import com.bap.yuwei.entity.event.UpdateCartEvent;
 import com.bap.yuwei.entity.order.GoodsCart;
+import com.bap.yuwei.fragment.CartFragment;
 import com.bap.yuwei.util.DisplayImageOptionsUtil;
 import com.bap.yuwei.util.StringUtils;
 import com.bap.yuwei.util.ToastUtil;
@@ -67,6 +68,7 @@ public class CartItemAdapter extends BaseAdapter {
             viewHolder.txtModel= (TextView) convertView.findViewById(R.id.txt_model);
             viewHolder.txtPrice= (TextView) convertView.findViewById(R.id.txt_price);
             viewHolder.txtNum= (TextView) convertView.findViewById(R.id.txt_num);
+            viewHolder.imgSellOut= (ImageView) convertView.findViewById(R.id.img_sell_out);
             convertView.setTag(viewHolder);
         }else{
             viewHolder= (ViewHolder) convertView.getTag();
@@ -83,16 +85,26 @@ public class CartItemAdapter extends BaseAdapter {
         viewHolder.txtPrice.setText("￥"+cart.getPreferentialPrice());
         viewHolder.txtNum.setText(cart.getGoodsCount()+"");
 
+        if(cart.getIsValid()){
+            viewHolder.imgSellOut.setVisibility(View.GONE);
+        }else {
+            viewHolder.imgSellOut.setVisibility(View.VISIBLE);
+        }
+
         viewHolder.imgCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(cart.isChecked()){
-                    cart.setChecked(false);
+                if(CartFragment.model==CartFragment.PAY){
+                    if(cart.getIsValid()){
+                        cart.setChecked(!cart.isChecked());
+                        EventBus.getDefault().post(new CartMoneyEvent());
+                    }else {
+                        ToastUtil.showShort(context,"该商品已失效，不可选择！");
+                    }
                 }else {
-                    cart.setChecked(true);
+                    cart.setChecked(!cart.isChecked());
                 }
                 notifyDataSetChanged();
-                EventBus.getDefault().post(new CartMoneyEvent());
             }
         });
 
@@ -101,8 +113,7 @@ public class CartItemAdapter extends BaseAdapter {
             public void onClick(View view) {
                 int num= Integer.parseInt(StringUtils.getTextViewValue(viewHolder.txtNum));
                 if(num<cart.getMaxQuantity()){
-                    viewHolder.txtNum.setText(++num+"");
-                    EventBus.getDefault().post(new UpdateCartEvent(cart.getGoodsCartId(),num));
+                    EventBus.getDefault().post(new UpdateCartEvent(cart,cart.getGoodsCartId(),++num));
                 }else{
                     ToastUtil.showShort(context,"数量不能超过库存！");
                 }
@@ -113,8 +124,7 @@ public class CartItemAdapter extends BaseAdapter {
             public void onClick(View view) {
                 int num= Integer.parseInt(StringUtils.getTextViewValue(viewHolder.txtNum));
                 if(num>=2){
-                    viewHolder.txtNum.setText(--num+"");
-                    EventBus.getDefault().post(new UpdateCartEvent(cart.getGoodsCartId(),num));
+                    EventBus.getDefault().post(new UpdateCartEvent(cart,cart.getGoodsCartId(),--num));
                 }
             }
         });
@@ -131,5 +141,6 @@ public class CartItemAdapter extends BaseAdapter {
         TextView txtNum;
         ImageView imgMore;
         ImageView imgLess;
+        ImageView imgSellOut;
     }
 }

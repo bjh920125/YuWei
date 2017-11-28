@@ -125,9 +125,11 @@ public class MainActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateCartNumEvent(UpdateCartNumEvent event){
+    public void updateCartNum(UpdateCartNumEvent event){
         getCartNum();
     }
+
+
 
     private void getCartNum(){
         if(null==mUser) return;
@@ -147,6 +149,7 @@ public class MainActivity extends BaseActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    updateCartNum(0);
                 }
             }
 
@@ -160,7 +163,6 @@ public class MainActivity extends BaseActivity {
     private void updateCartNum(int num){
         if(num==0){
             txtCartNum.setVisibility(View.GONE);
-            txtCartNum.setText(0);
         }else {
             txtCartNum.setVisibility(View.VISIBLE);
             txtCartNum.setText(num+"");

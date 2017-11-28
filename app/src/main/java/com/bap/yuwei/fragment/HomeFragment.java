@@ -238,7 +238,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private void getHotRecommend(){
         Map<String,Object> params=new HashMap<>();
         params.put("pageNumber",1);
-        params.put("pageSize",12);
+        params.put("pageSize",6);
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
         Call<ResponseBody> call=goodsWebService.getHotRecommend(body);
         call.enqueue(new Callback<ResponseBody>() {

@@ -79,9 +79,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //判断是否有Toolbar,并默认显示返回按钮
-        if(null != getToolbar() && isShowBacking()){
-            showBack();
-        }
+        //if(null != getToolbar() && isShowBacking()){
+            //showBack();
+        //}
     }
 
     /**
@@ -223,6 +223,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         //   window.setWindowAnimations(R.style.PopWindowAnimStyle);
     }
 
+    public void onBackClick(View v){
+        onBackPressed();
+    }
 
     protected boolean isLogined(){
         if(null==mUser){

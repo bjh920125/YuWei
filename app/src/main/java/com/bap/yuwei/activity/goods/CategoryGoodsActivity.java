@@ -70,6 +70,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
     private CommonAdapter<Category> parentAdapter,childrenAdapter;
     private List<Category> mParent,mChildren;
     private List<Category> mCategories1,mCategories2,mCategories3,mCategories4;
+    private Map<Integer,Long> mSelectedCategories;
 
     private String querySort="";
     private int  pageIndex = 1;
@@ -79,6 +80,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
 
     private int color;
     private int selectColor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +94,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         mParent=new ArrayList<>();
         mChildren=new ArrayList<>();
         mGoods=new ArrayList<>();
-
+        mSelectedCategories=new HashMap<>();
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -299,24 +301,28 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         JSONArray jo=new JSONObject(result).getJSONArray("result");
                         List<Category> tempList = mGson.fromJson(jo.toString(), new TypeToken<List<Category>>() {}.getType());
+                        mChildren.clear();
+                        mChildren.addAll(tempList);
+                        childrenAdapter.notifyDataSetChanged();
+                        if(parentLevel==0){
+                            mCategories2.clear();
+                        }else if(parentLevel==1){
+                            mCategories3.clear();
+                        }else if(parentLevel==2){
+                            mCategories4.clear();
+                        }
                         if(tempList!=null && tempList.size()>0){
                             if(isShowNextLevel){
                                 mParent.clear();
                                 mParent.addAll(mChildren);
                                 parentAdapter.notifyDataSetChanged();
                             }
-                            mChildren.clear();
-                            mChildren.addAll(tempList);
-                            childrenAdapter.notifyDataSetChanged();
 
                             if(parentLevel==0){
-                                mCategories2.clear();
                                 mCategories2.addAll(tempList);
                             }else if(parentLevel==1){
-                                mCategories3.clear();
                                 mCategories3.addAll(tempList);
                             }else if(parentLevel==2){
-                                mCategories4.clear();
                                 mCategories4.addAll(tempList);
                             }
                         }else{
@@ -350,7 +356,11 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         parentAdapter=new CommonAdapter<Category>(mContext,mParent,R.layout.item_category_text_white_bg) {
             @Override
             public void convert(ViewHolder viewHolder, Category item) {
-                viewHolder.setText(R.id.txt_category,item.getCategoryName());
+                if(item.isChecked()){
+                    viewHolder.setTextWithColor(R.id.txt_category,item.getCategoryName(),selectColor);
+                }else {
+                    viewHolder.setTextWithColor(R.id.txt_category,item.getCategoryName(),color);
+                }
             }
         };
         lvParent.setAdapter(parentAdapter);
@@ -358,7 +368,11 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         childrenAdapter=new CommonAdapter<Category>(mContext,mChildren,R.layout.item_category_text_white_bg) {
             @Override
             public void convert(ViewHolder viewHolder, Category item) {
-                viewHolder.setText(R.id.txt_category,item.getCategoryName());
+                if(item.isChecked()){
+                    viewHolder.setTextWithColor(R.id.txt_category,item.getCategoryName(),selectColor);
+                }else {
+                    viewHolder.setTextWithColor(R.id.txt_category,item.getCategoryName(),color);
+                }
             }
         };
         lvChildren.setAdapter(childrenAdapter);
@@ -370,6 +384,12 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
                 int index=category.getLevel();
                 getChildrenCategory(category.getCategoryId(),index,false);
                 setHeadText(index,category);
+                mSelectedCategories.put(index,category.getCategoryId());
+                for(Category c:mParent){
+                    c.setChecked(false);
+                }
+                category.setChecked(true);
+                parentAdapter.notifyDataSetChanged();
             }
         });
 
@@ -380,6 +400,12 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
                 int index=category.getLevel();
                 getChildrenCategory(category.getCategoryId(),index,true);
                 setHeadText(index,category);
+                mSelectedCategories.put(index,category.getCategoryId());
+                for(Category c:mChildren){
+                    c.setChecked(false);
+                }
+                category.setChecked(true);
+                childrenAdapter.notifyDataSetChanged();
             }
         });
 

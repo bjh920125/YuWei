@@ -78,6 +78,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout llComment,llCommentDetail;
     private TextView txtTotalComment,txtUserName,txtDesc,txtModel;
     private TextView txtAllCommentTitle,txtAllComment,txtAdditionCommentTitle,txtAdditionComment,txtHasPicCommentTitle,txtHasPicComment;
+    private TextView txtSellOut;
     private LRecyclerView rvComment;
     private ImageView imgHead;
     private TextView txtAddCarts,txtBuy;
@@ -157,6 +158,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
      * 选择型号
      */
     public void chooseModel(View v){
+        if(null==popModels) return;
         popModels.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);
         backgroundAlpha(0.5f);
     }
@@ -228,7 +230,11 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                         getEvaluations();
                         initGoodsUIWithValues();
                     }else{
-                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                        if(appResponse.getCode()==ResponseCode.GOODS_HAS_WITHDRAW) {
+                            setCannotBuy();
+                        }else{
+                            ToastUtil.showShort(mContext,appResponse.getMessage());
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -268,7 +274,11 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                         getGoodsCollect();
                         initGoodsUIWithValues();
                     }else{
-                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                        if(appResponse.getCode()==ResponseCode.GOODS_HAS_WITHDRAW) {
+                            setCannotBuy();
+                        }else{
+                            ToastUtil.showShort(mContext,appResponse.getMessage());
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -283,6 +293,15 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+
+    private void setCannotBuy(){
+        int color=getResources().getColor(R.color.darkgrey);
+        txtSellOut.setVisibility(View.VISIBLE);
+        txtAddCarts.setEnabled(false);
+        txtBuy.setEnabled(false);
+        txtAddCarts.setTextColor(color);
+        txtBuy.setTextColor(color);
+    }
 
     private void getShopDetail(){
         Call<ResponseBody> call=goodsWebService.getShopDetail(mGoods.getShopId());
@@ -602,6 +621,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void showShop(View v){
+        if(null==mShop) return;
         Intent intent=new Intent(mContext,ShopHomeActivity.class);
         intent.putExtra(Shop.KEY,mShop);
         startActivity(intent);
@@ -723,6 +743,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void contactSeller(View v){
+        if(null==mShop) return;
         String url="mqqwpa://im/chat?chat_type=wpa&uin="+mShop.getQq();
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
@@ -882,6 +903,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtAdditionComment= (TextView) findViewById(R.id.txt_addition_comment);
         txtHasPicCommentTitle= (TextView) findViewById(R.id.txt_has_pic_comment_title);
         txtHasPicComment= (TextView) findViewById(R.id.txt_has_pic_comment);
+        txtSellOut= (TextView) findViewById(R.id.txt_sell_out);
         rvComment.setHasFixedSize(true);
         rvComment.setLayoutManager(new LinearLayoutManager(mContext));
         rvComment.setHeaderViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);

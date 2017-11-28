@@ -13,6 +13,7 @@ import com.bap.yuwei.R;
 import com.bap.yuwei.entity.event.CartMoneyEvent;
 import com.bap.yuwei.entity.order.GoodsCart;
 import com.bap.yuwei.entity.order.MyGoodsCart;
+import com.bap.yuwei.fragment.CartFragment;
 import com.linearlistview.LinearListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,7 +23,6 @@ import java.util.List;
 /**
  * Created by Administrator on 2017/11/9.
  */
-
 public class CartAdapter extends BaseAdapter{
 
     private List<MyGoodsCart> myGoodsCarts;
@@ -32,7 +32,7 @@ public class CartAdapter extends BaseAdapter{
     public CartAdapter(List<MyGoodsCart> myGoodsCarts,Context context){
         this.context=context;
         this.myGoodsCarts=myGoodsCarts;
-        mInflater= LayoutInflater.from(context);
+        this.mInflater= LayoutInflater.from(context);
     }
 
     @Override
@@ -74,7 +74,13 @@ public class CartAdapter extends BaseAdapter{
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 for(GoodsCart cartItem:myGoodsCart.getCartItems()){
-                    cartItem.setChecked(b);
+                    if(CartFragment.model==CartFragment.PAY){
+                        if(cartItem.getIsValid()) {
+                            cartItem.setChecked(b);
+                        }
+                    }else {
+                        cartItem.setChecked(b);
+                    }
                 }
                 adapter.notifyDataSetChanged();
                 EventBus.getDefault().post(new CartMoneyEvent());

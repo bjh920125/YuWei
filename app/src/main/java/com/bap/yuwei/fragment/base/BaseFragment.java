@@ -73,7 +73,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void showLoadingDialog() {
-        tipTextView.setText("正在加载中...");// 设置加载信息
+        tipTextView.setText("加载中...");// 设置加载信息
         mProgressDialog.show();
     }
 

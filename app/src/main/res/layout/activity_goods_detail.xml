@@ -660,6 +660,18 @@
         android:layout_marginBottom="41dp"
         android:visibility="gone"/>
 
+    <TextView
+        android:id="@+id/txt_sell_out"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:text="该商品已经下架啦~"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@color/grey"
+        android:textSize="13dp"
+        android:layout_above="@+id/view_divider_line2"
+        android:visibility="gone"/>
+
     <View
         android:id="@+id/view_divider_line2"
         android:layout_width="match_parent"

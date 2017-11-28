@@ -71,15 +71,21 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
     private List<Category> mCategories1,mCategories2,mCategories3,mCategories4;
     private CommonAdapter<Goods> mGoodsAdapter;
     private GoodsWebService goodsWebService;
+    private Map<Integer,Long> mSelectedCategories;
 
     private String cid="";
 
     private int  pageIndex = 1;
 
+    private int color;
+    private int selectColor;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         goodsWebService= MyApplication.getInstance().getWebService(GoodsWebService.class);
+        color=getResources().getColor(R.color.lightblack);
+        selectColor=getResources().getColor(R.color.colorPrimary);
     }
 
     @Override
@@ -92,6 +98,7 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         mParent=new ArrayList<>();
         mChildren=new ArrayList<>();
         mGoods=new ArrayList<>();
+        mSelectedCategories=new HashMap<>();
         initPopCategoryView();
         initGoodsGV();
         getTopCategory();
@@ -199,24 +206,28 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         JSONArray jo=new JSONObject(result).getJSONArray("result");
                         List<Category> tempList = mGson.fromJson(jo.toString(), new TypeToken<List<Category>>() {}.getType());
+                        mChildren.clear();
+                        mChildren.addAll(tempList);
+                        childrenAdapter.notifyDataSetChanged();
+                        if(parentLevel==0){
+                            mCategories2.clear();
+                        }else if(parentLevel==1){
+                            mCategories3.clear();
+                        }else if(parentLevel==2){
+                            mCategories4.clear();
+                        }
                         if(tempList!=null && tempList.size()>0){
                             if(isShowNextLevel){
                                 mParent.clear();
                                 mParent.addAll(mChildren);
                                 parentAdapter.notifyDataSetChanged();
                             }
-                            mChildren.clear();
-                            mChildren.addAll(tempList);
-                            childrenAdapter.notifyDataSetChanged();
 
                             if(parentLevel==0){
-                                mCategories2.clear();
                                 mCategories2.addAll(tempList);
                             }else if(parentLevel==1){
-                                mCategories3.clear();
                                 mCategories3.addAll(tempList);
                             }else if(parentLevel==2){
-                                mCategories4.clear();
                                 mCategories4.addAll(tempList);
                             }
                         }else{
@@ -289,7 +300,11 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         parentAdapter=new CommonAdapter<Category>(mContext,mParent,R.layout.item_category_text_white_bg) {
             @Override
             public void convert(ViewHolder viewHolder, Category item) {
-                viewHolder.setText(R.id.txt_category,item.getCategoryName());
+                if(item.isChecked()){
+                    viewHolder.setTextWithColor(R.id.txt_category,item.getCategoryName(),selectColor);
+                }else {
+                    viewHolder.setTextWithColor(R.id.txt_category,item.getCategoryName(),color);
+                }
             }
         };
         lvParent.setAdapter(parentAdapter);
@@ -297,7 +312,11 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         childrenAdapter=new CommonAdapter<Category>(mContext,mChildren,R.layout.item_category_text_white_bg) {
             @Override
             public void convert(ViewHolder viewHolder, Category item) {
-                viewHolder.setText(R.id.txt_category,item.getCategoryName());
+                if(item.isChecked()){
+                    viewHolder.setTextWithColor(R.id.txt_category,item.getCategoryName(),selectColor);
+                }else {
+                    viewHolder.setTextWithColor(R.id.txt_category,item.getCategoryName(),color);
+                }
             }
         };
         lvChildren.setAdapter(childrenAdapter);
@@ -309,6 +328,12 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
                 int index=category.getLevel();
                 getChildrenCategory(category.getCategoryId(),index,false);
                 setHeadText(index,category);
+                mSelectedCategories.put(index,category.getCategoryId());
+                for(Category c:mParent){
+                    c.setChecked(false);
+                }
+                category.setChecked(true);
+                parentAdapter.notifyDataSetChanged();
             }
         });
 
@@ -319,6 +344,12 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
                 int index=category.getLevel();
                 getChildrenCategory(category.getCategoryId(),index,true);
                 setHeadText(index,category);
+                mSelectedCategories.put(index,category.getCategoryId());
+                for(Category c:mChildren){
+                    c.setChecked(false);
+                }
+                category.setChecked(true);
+                childrenAdapter.notifyDataSetChanged();
             }
         });
 

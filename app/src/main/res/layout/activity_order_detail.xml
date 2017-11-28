@@ -348,7 +348,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="8dp"
                     android:text="联系卖家"
-                    android:textColor="@color/lightblack" />
+                    android:textColor="@color/lightblack"
+                    android:onClick="contactSeller"/>
 
                 <include layout="@layout/view_vertical_line" />
 
@@ -357,8 +358,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:paddingRight="10dp"
-                    android:text="拨打电话" />
+                    android:text="拨打电话"
+                    android:clickable="true"
+                    android:onClick="telSeller"/>
             </LinearLayout>
 
             <include layout="@layout/view_divider" />

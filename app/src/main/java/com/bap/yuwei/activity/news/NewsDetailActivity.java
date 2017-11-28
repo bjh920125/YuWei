@@ -1,13 +1,15 @@
 package com.bap.yuwei.activity.news;
 
 import android.os.Bundle;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
-import com.bap.yuwei.entity.news.News;
 import com.bap.yuwei.entity.http.AppResponse;
 import com.bap.yuwei.entity.http.ResponseCode;
+import com.bap.yuwei.entity.news.News;
 import com.bap.yuwei.util.LogUtil;
 import com.bap.yuwei.util.MyApplication;
 import com.bap.yuwei.util.ThrowableUtil;
@@ -69,5 +71,20 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     protected void initView() {
         mWebView= (WebView) findViewById(R.id.webview_content);
+        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setSupportZoom(true);
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        //mWebView.getSettings().setUseWideViewPort(true);
+        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        mWebView.getSettings().setLoadWithOverviewMode(true);
+        mWebView.requestFocus();
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
     }
 }

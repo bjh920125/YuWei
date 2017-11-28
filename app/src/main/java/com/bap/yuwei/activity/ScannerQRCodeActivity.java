@@ -7,19 +7,14 @@ import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 import com.bap.yuwei.activity.sys.QRLoginActivity;
 import com.bap.yuwei.entity.Constants;
-import com.bap.yuwei.util.MyApplication;
-import com.bap.yuwei.webservice.SysWebService;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class ScannerQRCodeActivity extends BaseActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         scan();
     }
 
@@ -57,9 +52,6 @@ public class ScannerQRCodeActivity extends BaseActivity {
             }
         }
     }
-
-
-
 
 
     @Override

@@ -1,12 +1,16 @@
 package com.bap.yuwei.activity.order;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,19 +61,19 @@ import retrofit2.Response;
 
 public class OrderDetailActivity extends BaseActivity {
 
-    private TextView txtOrderStauts,txtReceiverName,txtReceiverAddress,txtReceiverTel,txtShopName;
-    private TextView txtExpress,txtExpressTime;
+    private TextView txtOrderStauts, txtReceiverName, txtReceiverAddress, txtReceiverTel, txtShopName;
+    private TextView txtExpress, txtExpressTime;
     private RelativeLayout rlExpress;
     private ImageView imgShop;
-    private TextView txtGoodsTotalPrice,txtExpressPrice,txtOrderTotalPrice,txtActualPrice;
-    private TextView txtOrderId,txtAlitradeNo,txtCreateTime,txtPayTime;
-    private TextView txtPay,txtAlertSend,txtShowExpress,txtReceive,txtComment,txtAdditionComment,txtCancel,txtDelete;
+    private TextView txtGoodsTotalPrice, txtExpressPrice, txtOrderTotalPrice, txtActualPrice;
+    private TextView txtOrderId, txtAlitradeNo, txtCreateTime, txtPayTime;
+    private TextView txtPay, txtAlertSend, txtShowExpress, txtReceive, txtComment, txtAdditionComment, txtCancel, txtDelete;
 
     private LinearListView lvOrderItems;
     private OrderItemDetailAdapter mAdapter;
 
     private Long orderId;
-    public static final String ORDER_ID_KEY="order.id.key";
+    public static final String ORDER_ID_KEY = "order.id.key";
     private static final int SDK_PAY_FLAG = 1;
 
     private OrderDetail orderDetail;
@@ -78,8 +82,8 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        orderWebService= MyApplication.getInstance().getWebService(OrderWebService.class);
-        orderId=getIntent().getLongExtra(ORDER_ID_KEY,-1);
+        orderWebService = MyApplication.getInstance().getWebService(OrderWebService.class);
+        orderId = getIntent().getLongExtra(ORDER_ID_KEY, -1);
         getOrderDetail();
     }
 
@@ -89,23 +93,23 @@ public class OrderDetailActivity extends BaseActivity {
         getOrderDetail();
     }
 
-    private void getOrderDetail(){
+    private void getOrderDetail() {
         showLoadingDialog();
-        Call<ResponseBody> call=orderWebService.getOrderDetail(orderId);
+        Call<ResponseBody> call = orderWebService.getOrderDetail(orderId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    String result=response.body().string();
-                    LogUtil.print("result",result);
-                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
-                    if(appResponse.getCode()== ResponseCode.SUCCESS){
-                        JSONObject jo=new JSONObject(result).getJSONObject("result");
-                        orderDetail=mGson.fromJson(jo.toString(),OrderDetail.class);
+                    String result = response.body().string();
+                    LogUtil.print("result", result);
+                    AppResponse appResponse = mGson.fromJson(result, AppResponse.class);
+                    if (appResponse.getCode() == ResponseCode.SUCCESS) {
+                        JSONObject jo = new JSONObject(result).getJSONObject("result");
+                        orderDetail = mGson.fromJson(jo.toString(), OrderDetail.class);
                         initUIWithValues();
                         getExpress();
-                    }else{
-                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    } else {
+                        ToastUtil.showShort(mContext, appResponse.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,19 +125,19 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
-    private void getExpress(){
+    private void getExpress() {
         showLoadingDialog();
-        Call<ResponseBody> call=orderWebService.getExpress(orderId);
+        Call<ResponseBody> call = orderWebService.getExpress(orderId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 dismissProgressDialog();
                 try {
-                    String result=response.body().string();
-                    LogUtil.print("result",result);
-                    Express express=mGson.fromJson(result,Express.class);
-                    if(null!=express && null!=express.getData() && express.getData().size()>0){
-                        ExpressItem expressItem=express.getData().get(0);
+                    String result = response.body().string();
+                    LogUtil.print("result", result);
+                    Express express = mGson.fromJson(result, Express.class);
+                    if (null != express && null != express.getData() && express.getData().size() > 0) {
+                        ExpressItem expressItem = express.getData().get(0);
                         rlExpress.setVisibility(View.VISIBLE);
                         txtExpress.setText(expressItem.getContext());
                         txtExpressTime.setText(expressItem.getFtime());
@@ -152,37 +156,37 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
-    private void initUIWithValues(){
-        if(null == orderDetail) return;
-        final Orders orders=orderDetail.getOrders();
+    private void initUIWithValues() {
+        if (null == orderDetail) return;
+        final Orders orders = orderDetail.getOrders();
         txtOrderStauts.setText(orders.getStatusText());
         txtShopName.setText(orders.getShopName());
-        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+orders.getShopIcon(),imgShop);
+        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL + orders.getShopIcon(), imgShop);
         txtReceiverName.setText(orders.getBuyerName());
         txtReceiverTel.setText(orders.getBuyerPhone());
         txtReceiverAddress.setText(orders.getBuyerAddress());
-        txtGoodsTotalPrice.setText("￥"+orders.getPayAmount());
-        txtExpressPrice.setText("￥"+orders.getFreight());
-        txtOrderTotalPrice.setText("￥"+orders.getPayAmount());
-        txtActualPrice.setText("￥"+orders.getRealPayAmount());
-        txtOrderId.setText("订单编号："+orders.getOrderId());
-        txtAlitradeNo.setText("支付宝交易号："+orders.getAlipayTradeNo());
-        txtCreateTime.setText("创建时间："+orders.getCreateTime());
-        txtPayTime.setText("付款时间："+orders.getPayTime());
-        if (TextUtils.isEmpty(orders.getAlipayTradeNo())){
+        txtGoodsTotalPrice.setText("￥" + orders.getPayAmount());
+        txtExpressPrice.setText("￥" + orders.getFreight());
+        txtOrderTotalPrice.setText("￥" + orders.getPayAmount());
+        txtActualPrice.setText("￥" + orders.getRealPayAmount());
+        txtOrderId.setText("订单编号：" + orders.getOrderId());
+        txtAlitradeNo.setText("支付宝交易号：" + orders.getAlipayTradeNo());
+        txtCreateTime.setText("创建时间：" + orders.getCreateTime());
+        txtPayTime.setText("付款时间：" + orders.getPayTime());
+        if (TextUtils.isEmpty(orders.getAlipayTradeNo())) {
             txtAlitradeNo.setVisibility(View.GONE);
             txtPayTime.setVisibility(View.GONE);
         }
-        final List<OrderItem> orderItems=orders.getOrderItems();
-        mAdapter=new OrderItemDetailAdapter(orders,orderItems,mContext);
+        final List<OrderItem> orderItems = orders.getOrderItems();
+        mAdapter = new OrderItemDetailAdapter(orders, orderItems, mContext);
         lvOrderItems.setAdapter(mAdapter);
         lvOrderItems.setOnItemClickListener(new LinearListView.OnItemClickListener() {
             @Override
             public void onItemClick(LinearListView parent, View view, int position, long id) {
-                Intent i=new Intent(mContext, GoodsDetailActivity.class);
-                Goods goods=new Goods();
+                Intent i = new Intent(mContext, GoodsDetailActivity.class);
+                Goods goods = new Goods();
                 goods.setGoodsId(orderItems.get(position).getGoodsId());
-                i.putExtra(Goods.KEY,goods);
+                i.putExtra(Goods.KEY, goods);
                 startActivity(i);
             }
         });
@@ -191,7 +195,7 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
 
-    private void setOperateBtns(Orders order){
+    private void setOperateBtns(Orders order) {
         txtPay.setVisibility(View.GONE);
         txtAlertSend.setVisibility(View.GONE);
         txtShowExpress.setVisibility(View.GONE);
@@ -200,58 +204,58 @@ public class OrderDetailActivity extends BaseActivity {
         txtCancel.setVisibility(View.GONE);
         txtDelete.setVisibility(View.GONE);
         txtAdditionComment.setVisibility(View.GONE);
-        int status=order.getStatus();
-        if(status==Constants.ORDER_STATUS_PENDING_PAY){//待付款
+        int status = order.getStatus();
+        if (status == Constants.ORDER_STATUS_PENDING_PAY) {//待付款
             txtPay.setVisibility(View.VISIBLE);
             txtCancel.setVisibility(View.VISIBLE);
             txtAdditionComment.setVisibility(View.GONE);
-        }else if(status==Constants.ORDER_STATUS_PRE_DELIVERED){//待发货
+        } else if (status == Constants.ORDER_STATUS_PRE_DELIVERED) {//待发货
             txtAlertSend.setVisibility(View.VISIBLE);
-        }else if(status==Constants.ORDER_STATUS_HAS_SENDED){//待收货
+        } else if (status == Constants.ORDER_STATUS_HAS_SENDED) {//待收货
             txtShowExpress.setVisibility(View.VISIBLE);
             txtReceive.setVisibility(View.VISIBLE);
-        }else if(status==Constants.ORDER_STATUS_PRE_EVALUATED){//待评价
+        } else if (status == Constants.ORDER_STATUS_PRE_EVALUATED) {//待评价
             txtShowExpress.setVisibility(View.VISIBLE);
             txtComment.setVisibility(View.VISIBLE);
             txtDelete.setVisibility(View.VISIBLE);
-        }else if(status==Constants.ORDER_STATUS_HAS_COMPLETED){//已完成
+        } else if (status == Constants.ORDER_STATUS_HAS_COMPLETED) {//已完成
             txtShowExpress.setVisibility(View.VISIBLE);
             txtDelete.setVisibility(View.VISIBLE);
-            if(null!=order.getCanAppendEvaluate() && order.getCanAppendEvaluate()==true){
+            if (null != order.getCanAppendEvaluate() && order.getCanAppendEvaluate() == true) {
                 txtAdditionComment.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 txtAdditionComment.setVisibility(View.GONE);
             }
-        }else if(status== Constants.ORDER_STATUS_HAS_CANCELED){//已取消
+        } else if (status == Constants.ORDER_STATUS_HAS_CANCELED) {//已取消
             txtDelete.setVisibility(View.VISIBLE);
-        }else if(status==Constants.ORDER_STATUS_CLOSED){//已关闭
+        } else if (status == Constants.ORDER_STATUS_CLOSED) {//已关闭
             txtDelete.setVisibility(View.VISIBLE);
         }
     }
 
 
-    public void showExpressDetail(View view){
-        Intent i=new Intent(mContext,ExpressDetailActivity.class);
-        i.putExtra(Orders.KEY,orderDetail.getOrders());
+    public void showExpressDetail(View view) {
+        Intent i = new Intent(mContext, ExpressDetailActivity.class);
+        i.putExtra(Orders.KEY, orderDetail.getOrders());
         startActivity(i);
     }
 
     /**
      * 提醒发货
      */
-    private void remindSend(Long orderId){
-        Call<ResponseBody> call=orderWebService.remindSend(mUser.getUserId(),orderId);
+    private void remindSend(Long orderId) {
+        Call<ResponseBody> call = orderWebService.remindSend(mUser.getUserId(), orderId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    String result=response.body().string();
-                    LogUtil.print("result",result);
-                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
-                    if(appResponse.getCode()== ResponseCode.SUCCESS){
-                        ToastUtil.showShort(mContext,"卖家已收到提醒！");
-                    }else{
-                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    String result = response.body().string();
+                    LogUtil.print("result", result);
+                    AppResponse appResponse = mGson.fromJson(result, AppResponse.class);
+                    if (appResponse.getCode() == ResponseCode.SUCCESS) {
+                        ToastUtil.showShort(mContext, "卖家已收到提醒！");
+                    } else {
+                        ToastUtil.showShort(mContext, appResponse.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -269,26 +273,26 @@ public class OrderDetailActivity extends BaseActivity {
     /**
      * 取消订单
      */
-    private void cancelOrder(Long orderId,String reason){
-        Map<String,Object> params=new HashMap<>();
-        params.put("cancelReason",reason);
-        params.put("orderId",orderId);
+    private void cancelOrder(Long orderId, String reason) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cancelReason", reason);
+        params.put("orderId", orderId);
         params.put("status", Constants.ORDER_STATUS_HAS_CANCELED);
-        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
-        Call<ResponseBody> call=orderWebService.cancelOrder(body);
+        RequestBody body = RequestBody.create(jsonMediaType, mGson.toJson(params));
+        Call<ResponseBody> call = orderWebService.cancelOrder(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    String result=response.body().string();
-                    LogUtil.print("result",result);
-                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
-                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                    String result = response.body().string();
+                    LogUtil.print("result", result);
+                    AppResponse appResponse = mGson.fromJson(result, AppResponse.class);
+                    if (appResponse.getCode() == ResponseCode.SUCCESS) {
                         EventBus.getDefault().post(new CancelOrderEvent());
-                        ToastUtil.showShort(mContext,"订单已取消！");
+                        ToastUtil.showShort(mContext, "订单已取消！");
                         getOrderDetail();
-                    }else{
-                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    } else {
+                        ToastUtil.showShort(mContext, appResponse.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -305,24 +309,24 @@ public class OrderDetailActivity extends BaseActivity {
     /**
      * 删除订单
      */
-    private void deleteOrder(Long orderId){
-        Map<String,Object> params=new HashMap<>();
-        params.put("orderIds",new Long[]{orderId});
-        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
-        Call<ResponseBody> call=orderWebService.deleteOrder(mUser.getUserId(),body);
+    private void deleteOrder(Long orderId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderIds", new Long[]{orderId});
+        RequestBody body = RequestBody.create(jsonMediaType, mGson.toJson(params));
+        Call<ResponseBody> call = orderWebService.deleteOrder(mUser.getUserId(), body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    String result=response.body().string();
-                    LogUtil.print("result",result);
-                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
-                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                    String result = response.body().string();
+                    LogUtil.print("result", result);
+                    AppResponse appResponse = mGson.fromJson(result, AppResponse.class);
+                    if (appResponse.getCode() == ResponseCode.SUCCESS) {
                         EventBus.getDefault().post(new DeleteOrderEvent());
-                        ToastUtil.showShort(mContext,"订单已删除！");
+                        ToastUtil.showShort(mContext, "订单已删除！");
                         finish();
-                    }else{
-                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    } else {
+                        ToastUtil.showShort(mContext, appResponse.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -339,24 +343,24 @@ public class OrderDetailActivity extends BaseActivity {
     /**
      * 订单收货
      */
-    private void receive(Long orderId){
-        Map<String,Object> params=new HashMap<>();
-        params.put("orderId",orderId);
-        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
-        Call<ResponseBody> call=orderWebService.receiveOrder(body);
+    private void receive(Long orderId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderId", orderId);
+        RequestBody body = RequestBody.create(jsonMediaType, mGson.toJson(params));
+        Call<ResponseBody> call = orderWebService.receiveOrder(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    String result=response.body().string();
-                    LogUtil.print("result",result);
-                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
-                    if(appResponse.getCode()== ResponseCode.SUCCESS){
+                    String result = response.body().string();
+                    LogUtil.print("result", result);
+                    AppResponse appResponse = mGson.fromJson(result, AppResponse.class);
+                    if (appResponse.getCode() == ResponseCode.SUCCESS) {
                         EventBus.getDefault().post(new ReceiveOrderEvent());
-                        ToastUtil.showShort(mContext,"已收货！");
+                        ToastUtil.showShort(mContext, "已收货！");
                         getOrderDetail();
-                    }else{
-                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    } else {
+                        ToastUtil.showShort(mContext, appResponse.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -370,25 +374,25 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
-    private void getPayBody(final Long orderId){
-        Map<String,Object> params=new HashMap<>();
-        params.put("orderIds",orderId);
-        params.put("payAmount",orderDetail.getOrders().getPayAmount());
-        params.put("userId",mUser.getUserId());
-        RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
-        Call<ResponseBody> call=orderWebService.pay(body);
+    private void getPayBody(final Long orderId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderIds", orderId);
+        params.put("payAmount", orderDetail.getOrders().getPayAmount());
+        params.put("userId", mUser.getUserId());
+        RequestBody body = RequestBody.create(jsonMediaType, mGson.toJson(params));
+        Call<ResponseBody> call = orderWebService.pay(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    String result=response.body().string();
-                    LogUtil.print("result",result);
-                    AppResponse appResponse=mGson.fromJson(result,AppResponse.class);
-                    if(appResponse.getCode()== ResponseCode.SUCCESS){
-                        String body=new JSONObject(result).getString("result");
-                        pay(body,orderId);
-                    }else{
-                        ToastUtil.showShort(mContext,appResponse.getMessage());
+                    String result = response.body().string();
+                    LogUtil.print("result", result);
+                    AppResponse appResponse = mGson.fromJson(result, AppResponse.class);
+                    if (appResponse.getCode() == ResponseCode.SUCCESS) {
+                        String body = new JSONObject(result).getString("result");
+                        pay(body, orderId);
+                    } else {
+                        ToastUtil.showShort(mContext, appResponse.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -403,13 +407,13 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
 
-    private void pay(final String payBody,final Long orderId){
+    private void pay(final String payBody, final Long orderId) {
         Runnable payRunnable = new Runnable() {
             @Override
             public void run() {
                 PayTask alipay = new PayTask((Activity) mContext);
                 Map<String, String> result = alipay.payV2(payBody, true);
-                result.put("orderId",orderId+"");
+                result.put("orderId", orderId + "");
                 Log.i("msp", result.toString());
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
@@ -427,7 +431,7 @@ public class OrderDetailActivity extends BaseActivity {
             switch (msg.what) {
                 case SDK_PAY_FLAG: {
                     //PayResult payResult = new PayResult((Map<String, String>) msg.obj);
-                    Map<String, String> result= (Map<String, String>) msg.obj;
+                    Map<String, String> result = (Map<String, String>) msg.obj;
                     getOrderDetail();
                     break;
                 }
@@ -436,26 +440,26 @@ public class OrderDetailActivity extends BaseActivity {
     };
 
 
-
     /**
      * 选择取消理由
      */
-    int selectIndex=0;
-    private void chooseCancelReason(final Long orderId){
-        final String[] reason=new String[]{"我不想买了","信息填写错误，重新拍","卖家缺货","拍错了","其他原因"};
+    int selectIndex = 0;
+
+    private void chooseCancelReason(final Long orderId) {
+        final String[] reason = new String[]{"我不想买了", "信息填写错误，重新拍", "卖家缺货", "拍错了", "其他原因"};
         new AlertDialog.Builder(mContext)
                 .setTitle("请选择取消理由")
                 .setSingleChoiceItems(reason, 0,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int i) {
-                                selectIndex=i;
+                                selectIndex = i;
                             }
                         }
                 )
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        cancelOrder(orderId,reason[selectIndex]);
+                        cancelOrder(orderId, reason[selectIndex]);
                     }
                 })
                 .setNegativeButton("取消", null)
@@ -466,7 +470,7 @@ public class OrderDetailActivity extends BaseActivity {
     /**
      * 确认删除
      */
-    private void comfirmDelete(final Long orderId){
+    private void comfirmDelete(final Long orderId) {
         new AlertDialog.Builder(mContext)
                 .setTitle("删除提醒")
                 .setMessage("您确定删除该订单吗？")
@@ -484,7 +488,7 @@ public class OrderDetailActivity extends BaseActivity {
     /**
      * 确认收货
      */
-    private void comfirmReceive(final Long orderId){
+    private void comfirmReceive(final Long orderId) {
         new AlertDialog.Builder(mContext)
                 .setTitle("收货提醒")
                 .setMessage("您确定收货吗？")
@@ -498,20 +502,20 @@ public class OrderDetailActivity extends BaseActivity {
                 .show();
     }
 
-    private void toComment(){
-        Intent i=new Intent(mContext, CommentActivity.class);
-        i.putExtra(Orders.KEY,orderDetail.getOrders());
+    private void toComment() {
+        Intent i = new Intent(mContext, CommentActivity.class);
+        i.putExtra(Orders.KEY, orderDetail.getOrders());
         mContext.startActivity(i);
     }
 
-    private void toAppendComment(){
-        Intent i=new Intent(mContext, AppendCommentActivity.class);
-        i.putExtra(Orders.KEY,orderDetail.getOrders());
+    private void toAppendComment() {
+        Intent i = new Intent(mContext, AppendCommentActivity.class);
+        i.putExtra(Orders.KEY, orderDetail.getOrders());
         mContext.startActivity(i);
     }
 
-    public void operateOrder(View v){
-        switch (v.getId()){
+    public void operateOrder(View v) {
+        switch (v.getId()) {
             case R.id.txt_pay:
                 getPayBody(orderId);
                 break;
@@ -536,10 +540,23 @@ public class OrderDetailActivity extends BaseActivity {
             case R.id.txt_delete:
                 comfirmDelete(orderId);
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 
+    public void contactSeller(View v) {
+        if (null == orderDetail) return;
+        String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + orderDetail.getOrders().getQq();
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+    }
+
+    public void telSeller(View v) {
+        if (null == orderDetail) return;
+        String tel = "tel:" + orderDetail.getOrders().getShopPhone();
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
+        startActivity(intent);
+    }
 
     public void onBackClick(View v){
         finish();

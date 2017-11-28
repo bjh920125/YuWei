@@ -2,6 +2,7 @@ package com.bap.yuwei.activity.order;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -140,6 +141,13 @@ public class RefundDetailActivity extends BaseActivity {
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
+    }
+
+
+    public void contactSeller(View v) {
+        if (null == refund) return;
+        String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + refund.getQq();
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
     public void onBackClick(View v){

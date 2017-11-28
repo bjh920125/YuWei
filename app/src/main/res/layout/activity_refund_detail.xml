@@ -263,7 +263,8 @@
             android:paddingLeft="10dp"
             android:paddingTop="8dp"
             android:text="联系卖家"
-            android:textColor="@color/lightblack" />
+            android:textColor="@color/lightblack"
+            android:onClick="contactSeller"/>
 
         <include layout="@layout/view_vertical_line" />
 

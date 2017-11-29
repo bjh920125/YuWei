@@ -46,6 +46,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 我的收藏列表
+ */
 public class MyCollectListActivity extends BaseActivity {
 
     private LRecyclerView rvCollect;
@@ -148,6 +151,9 @@ public class MyCollectListActivity extends BaseActivity {
         rvCollect.refresh();
     }
 
+    /**
+     * 根据类型获取列表
+     */
     private void getListByType(){
         if(showType==0){
             mLRecyclerViewAdapter = new LRecyclerViewAdapter(goodsCollectAdapter);

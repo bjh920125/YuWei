@@ -40,6 +40,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 退款列表
+ */
 public class RefundListActivity extends BaseActivity {
 
     protected LRecyclerView rvRefund;
@@ -92,6 +95,9 @@ public class RefundListActivity extends BaseActivity {
         rvRefund.refresh();
     }
 
+    /**
+     * 取消退款之后接收的event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshList(CancelRefundEvent event){
         rvRefund.refresh();

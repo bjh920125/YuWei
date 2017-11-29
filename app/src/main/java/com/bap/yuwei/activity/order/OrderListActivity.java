@@ -52,6 +52,9 @@ import static com.bap.yuwei.entity.Constants.ORDER_STATUS_PENDING_PAY;
 import static com.bap.yuwei.entity.Constants.ORDER_STATUS_PRE_DELIVERED;
 import static com.bap.yuwei.entity.Constants.ORDER_STATUS_PRE_EVALUATED;
 
+/**
+ * 订单列表
+ */
 public class OrderListActivity extends BaseActivity {
 
     private RadioGroup rgStatus;
@@ -93,19 +96,19 @@ public class OrderListActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
                 switch (i){
-                    case R.id.rb_all:
+                    case R.id.rb_all://全部订单
                         orderStatus=null;
                         break;
-                    case R.id.rb_pay:
+                    case R.id.rb_pay://待付款订单
                         orderStatus=ORDER_STATUS_PENDING_PAY;
                         break;
-                    case R.id.rb_send:
+                    case R.id.rb_send://待发货订单
                         orderStatus=ORDER_STATUS_PRE_DELIVERED;
                         break;
-                    case R.id.rb_receive:
+                    case R.id.rb_receive://代收货订单
                         orderStatus=ORDER_STATUS_HAS_SENDED;
                         break;
-                    case R.id.rb_comment:
+                    case R.id.rb_comment://待评价订单
                         orderStatus=ORDER_STATUS_PRE_EVALUATED;
                         break;
                     default:break;
@@ -135,32 +138,49 @@ public class OrderListActivity extends BaseActivity {
         rb.setChecked(true);
     }
 
+    /**
+     * 删除订单后接收的event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void deleteOrderEvent(DeleteOrderEvent event){
         rvOrder.refresh();
     }
 
+    /**
+     * 取消订单后接收的event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cancelOrderEvent(CancelOrderEvent event){
         rvOrder.refresh();
     }
 
+    /**
+     * 确认收货之后接收的event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveOrderEvent(ReceiveOrderEvent event){
         rvOrder.refresh();
     }
 
+    /**
+     * 付款之后接收的event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void payOrderEvent(PayOrderEvent event){
         rvOrder.refresh();
     }
 
+    /**
+     * 评价之后接收的event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void commentOrderEvent(CommentOrderEvent event){
         rvOrder.refresh();
     }
 
-
+    /**
+     * 获取订单列表
+     */
     private void getOrderList(){
         Map<String,Object> params=new HashMap<>();
         //params.put("dateBegin",categoryNodes);
@@ -219,7 +239,6 @@ public class OrderListActivity extends BaseActivity {
     protected void initView() {
         rgStatus= (RadioGroup) findViewById(R.id.rg_staus);
         rvOrder= (LRecyclerView) findViewById(R.id.rv_order);
-
         rvOrder.setHasFixedSize(true);
         rvOrder.setLayoutManager(new LinearLayoutManager(mContext));
         rvOrder.setHeaderViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);

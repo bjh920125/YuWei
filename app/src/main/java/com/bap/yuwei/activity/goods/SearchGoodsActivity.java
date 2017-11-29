@@ -153,39 +153,44 @@ public class SearchGoodsActivity extends BaseActivity {
         gvGoods.refresh();
     }
 
-
+    /**
+     * 显示分类
+     */
     public void showCategory(View v){
         Intent i=new Intent(mContext,SearchGoodsCategoryActivity.class);
         i.putStringArrayListExtra(SearchGoodsCategoryActivity.CATEGORY_KEY,categoryNames);
         startActivity(i);
     }
 
+    /**
+     * 选择排序方式
+     */
     public void chooseSort(View view){
         txtMult.setTextColor(color);
         txtSell.setTextColor(color);
         txtTime.setTextColor(color);
         txtPrice.setTextColor(color);
         switch (view.getId()) {
-            case R.id.txt_mult:
+            case R.id.txt_mult://综合排序
                 querySort="";
                 txtMult.setTextColor(selectColor);
                 break;
-            case R.id.txt_sell:
+            case R.id.txt_sell://销量排序
                 querySort="sales:desc";
                 txtSell.setTextColor(selectColor);
                 break;
-            case R.id.txt_time:
+            case R.id.txt_time://人气排序
                 querySort="popularity:desc";
                 txtTime.setTextColor(selectColor);
                 break;
             case R.id.txt_price:
-                if(isPriceAsc){
+                if(isPriceAsc){//价格递减
                     isPriceAsc=false;
                     querySort="price:desc";
                     Drawable drawable= getResources().getDrawable(R.drawable.triangle_up);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     txtPrice.setCompoundDrawables(null,null,drawable,null);
-                }else{
+                }else{//价格递增
                     isPriceAsc=true;
                     querySort="price:asc";
                     Drawable drawable= getResources().getDrawable(R.drawable.triangle_down);
@@ -200,6 +205,9 @@ public class SearchGoodsActivity extends BaseActivity {
         gvGoods.refresh();
     }
 
+    /**
+     * 获取商品列表
+     */
     protected void getGoodsList(){
         Map<String,Object> params=new HashMap<>();
         params.put("brandId","");

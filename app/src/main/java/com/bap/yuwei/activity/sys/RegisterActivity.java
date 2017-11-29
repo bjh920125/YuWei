@@ -33,6 +33,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 用户注册
+ */
 public class RegisterActivity extends BaseActivity {
 
     private TextView txtPeronalUser,txtComUser;
@@ -58,6 +61,9 @@ public class RegisterActivity extends BaseActivity {
         selectColor=getResources().getColor(R.color.colorPrimary);
     }
 
+    /**
+     * 注册
+     */
     public void regist(){
         showLoadingDialog();
         String password= MD5Utils.encode(StringUtils.getEditTextValue(etPwd)).toLowerCase();
@@ -97,18 +103,24 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 选择用户类型
+     */
     public void chooseUserType(View v){
         switch (v.getId()){
-            case R.id.txt_person_user:
+            case R.id.txt_person_user://个人用户
                 showPersonalView();
                 break;
-            case R.id.txt_com_user:
+            case R.id.txt_com_user://企业用户
                 showComView();
                 break;
             default:break;
         }
     }
 
+    /**
+     * 短信倒计时
+     */
     protected void startSecond(){
         timer=new Timer();
         timer.schedule(new TimerTask(){
@@ -218,7 +230,9 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * 显示个人注册的UI
+     */
     private void showPersonalView(){
         txtPeronalUser.setTextColor(selectColor);
         txtComUser.setTextColor(color);
@@ -228,6 +242,9 @@ public class RegisterActivity extends BaseActivity {
         txtCom.setVisibility(View.GONE);
     }
 
+    /**
+     * 显示企业用户注册的UI
+     */
     private void showComView(){
         txtPeronalUser.setTextColor(color);
         txtComUser.setTextColor(selectColor);

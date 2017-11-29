@@ -27,6 +27,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 设置菜单
+ */
 public class SettingActivity extends BaseActivity {
 
     private TextView txtLogout;
@@ -75,34 +78,39 @@ public class SettingActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 菜单点击
+     */
     public void onMenuClick(View v){
         switch (v.getId()){
-            case R.id.txt_user_info:
+            case R.id.txt_user_info://个人资料
                 if(isLogined())
-                startActivity(new Intent(mContext,UserInfoActivity.class));
+                    startActivity(new Intent(mContext,UserInfoActivity.class));
                 break;
-            case R.id.txt_security:
+            case R.id.txt_security://账户安全
                 if(isLogined())
                 startActivity(new Intent(mContext,AccountMenusActivity.class));
                 break;
-            case R.id.txt_msg:
+            case R.id.txt_msg://消息通知提醒
                 startActivity(new Intent(mContext,MsgSetActivity.class));
                 break;
-            case R.id.txt_clear:
+            case R.id.txt_clear://清除缓存
                 clearCache();
                 break;
-            case R.id.txt_service:
+            case R.id.txt_service://服务中心
                 break;
-            case R.id.txt_feedback:
+            case R.id.txt_feedback://意见反馈
                 startActivity(new Intent(mContext,AdviceActivity.class));
                 break;
-            case R.id.txt_about:
+            case R.id.txt_about://关于鱼尾
                 break;
             default:break;
         }
     }
 
-
+    /**
+     * 清除缓存
+     */
     public void clearCache(){
         MediaUtil.deleteFilesByDirectory(mContext.getCacheDir(), mContext);//删除缓存
         showProgressDialog("正在清除...",true);

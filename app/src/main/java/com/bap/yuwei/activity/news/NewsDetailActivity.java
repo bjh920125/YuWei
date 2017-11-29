@@ -23,11 +23,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 新闻详情
+ */
 public class NewsDetailActivity extends BaseActivity {
     private WebView mWebView;
     private News mNews;
 
     private NewsWebService newsWebService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +40,9 @@ public class NewsDetailActivity extends BaseActivity {
         getNews();
     }
 
+    /**
+     * 获取新闻详情
+     */
     private void getNews(){
         Call<ResponseBody> call=newsWebService.getNewsDetail(mNews.getNewsId());
         call.enqueue(new Callback<ResponseBody>() {

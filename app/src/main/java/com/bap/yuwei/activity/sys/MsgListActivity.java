@@ -35,6 +35,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 消息列表
+ */
 public class MsgListActivity extends BaseActivity {
 
     private LRecyclerView rvMsgs;
@@ -82,6 +85,9 @@ public class MsgListActivity extends BaseActivity {
         rvMsgs.refresh();
     }
 
+    /**
+     * 根据类型获取列表
+     */
     private void setMethodByType(){
         if(messageType==Constants.ORDER_MSG){
             getOrderMsgs();
@@ -90,7 +96,9 @@ public class MsgListActivity extends BaseActivity {
         }
     }
 
-
+    /**
+     * 获取消息
+     */
     private void getMsgs(){
         Map<String,Object> params=new HashMap<>();
         params.put("messageType", messageType);
@@ -134,6 +142,9 @@ public class MsgListActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 获取订单消息
+     */
     private void getOrderMsgs(){
         msg= (Msg) getIntent().getSerializableExtra(Msg.KEY);
         Call<ResponseBody> call=sysWebService.getOrderMsgs(mUser.getUserId(),msg.getShopId(), Constants.BUYER);

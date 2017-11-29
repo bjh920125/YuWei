@@ -35,6 +35,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 收货地址列表
+ */
 public class ReceiveAddressListActivity extends BaseActivity {
 
     private SysWebService sysWebService;
@@ -200,7 +203,9 @@ public class ReceiveAddressListActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * 新增收货地址
+     */
     public void addAddress(View v){
         startActivity(new Intent(mContext,AddReceiveAddressActivity.class));
     }

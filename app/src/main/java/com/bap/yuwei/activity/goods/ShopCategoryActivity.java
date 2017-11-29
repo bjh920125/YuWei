@@ -51,6 +51,9 @@ public class ShopCategoryActivity extends BaseActivity {
         getShopCategory();
     }
 
+    /**
+     * 显示全部商品
+     */
     public void showAll(View v){
         Intent i=new Intent(mContext, ShopGoodsListActivity.class);
         i.putExtra(Shop.KEY,mShop);
@@ -59,6 +62,9 @@ public class ShopCategoryActivity extends BaseActivity {
         startActivity(i);
     }
 
+    /**
+     * 获取店铺里的分类
+     */
     private void getShopCategory(){
         Call<ResponseBody> call=goodsWebService.getShopCategory(mShop.getShopId());
         call.enqueue(new Callback<ResponseBody>() {

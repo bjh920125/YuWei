@@ -44,6 +44,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 个人信息
+ */
 public class UserInfoActivity extends BaseActivity  implements ActionSheet.ActionSheetListener {
 
     private ImageView imgHead;
@@ -68,8 +71,10 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
         updateUserInfo();
     }
 
-
-    private void updateFile(File file){
+    /**
+     * 上传附件
+     */
+    private void uploadFile(File file){
         mProgressDialog.show();
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
@@ -170,6 +175,9 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
         });
     }
 
+    /**
+     * 刷新UI
+     */
     public void refreshUI() {
         if(null != mUser){
             etName.setText(mUser.getUsername());
@@ -189,18 +197,24 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
         }
     }
 
+    /**
+     * 选择照片
+     */
     public void chooseImage(View v){
         AndroidImagePicker.getInstance().pickSingle(this, true, new AndroidImagePicker.OnImagePickCompleteListener() {
             @Override
             public void onImagePickComplete(List<ImageItem> items) {
                 if (items != null && items.size() > 0) {
                     File file=new File(items.get(0).path);
-                    updateFile(file);
+                    uploadFile(file);
                 }
             }
         });
     }
 
+    /**
+     * 选择性别
+     */
     public void chooseGender(View v){
         mActionSheetBuilder.show();
     }
@@ -225,6 +239,9 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
 
     }
 
+    /**
+     * 更新用户信息后接收的event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateUserInfo(UserInfoEvent userInfoEvent){
         String userJson= SharedPreferencesUtil.getString(mContext, Constants.USER_KEY);
@@ -234,6 +251,9 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
         }
     }
 
+    /**
+     * 新增收货地址
+     */
     public void addAddress(View v){
         startActivity(new Intent(mContext,ReceiveAddressListActivity.class));
     }

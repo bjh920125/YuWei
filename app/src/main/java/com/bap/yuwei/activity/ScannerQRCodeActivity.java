@@ -10,6 +10,9 @@ import com.bap.yuwei.entity.Constants;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+/**
+ * 二维码扫描
+ */
 public class ScannerQRCodeActivity extends BaseActivity {
 
     @Override

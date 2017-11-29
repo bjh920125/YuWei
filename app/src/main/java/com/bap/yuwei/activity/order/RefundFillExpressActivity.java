@@ -31,6 +31,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 退款处理流程中的买家发货
+ */
 public class RefundFillExpressActivity extends BaseActivity {
 
     private TextView txtComName;
@@ -52,6 +55,9 @@ public class RefundFillExpressActivity extends BaseActivity {
         initComs();
     }
 
+    /**
+     * 买家填写物流信息
+     */
     private void fillExpressInfo(){
         Map<String,Object> params=new HashMap<>();
         params.put("logisticsCompany",mSelectExpress.getCom());

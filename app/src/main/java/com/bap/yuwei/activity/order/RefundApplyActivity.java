@@ -39,6 +39,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 申请退款
+ */
 public class RefundApplyActivity extends BaseChoosePhotoActivity {
 
     private ImageView imgGoods;
@@ -66,8 +69,9 @@ public class RefundApplyActivity extends BaseChoosePhotoActivity {
         etPrice.setText(orderItem.getPreferentialPrice()+"");
     }
 
-
-
+    /**
+     * 申请退款
+     */
     private void applyRefund(){
         Map<String,Object> params=new HashMap<>();
         params.put("orderItemId",orderItem.getOrderItemId());
@@ -103,7 +107,10 @@ public class RefundApplyActivity extends BaseChoosePhotoActivity {
         });
     }
 
-    private void updateFile(File file){
+    /**
+     * 上传附件
+     */
+    private void uploadFile(File file){
         mProgressDialog.show();
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
@@ -169,11 +176,14 @@ public class RefundApplyActivity extends BaseChoosePhotoActivity {
     }
 
 
+    /**
+     * 申请退款
+     */
     public void applyRefund(View v){
         if(filePaths.size()>1){
             uploadCount=0;
             for(String ps:getUsefulImagePathes()){
-                updateFile(new File(ps));
+                uploadFile(new File(ps));
             }
         }else {
             applyRefund();

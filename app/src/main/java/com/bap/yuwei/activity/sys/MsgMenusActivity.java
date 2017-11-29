@@ -35,8 +35,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 消息菜单
+ */
 public class MsgMenusActivity extends BaseActivity {
-
 
     private TextView txtSysMsg,txtExpressMsg,txtSysTime,txtExpressTime;
     private ImageView imgRedDotSys,imgRedDotExpress;
@@ -84,13 +86,16 @@ public class MsgMenusActivity extends BaseActivity {
         getMsgs();
     }
 
+    /**
+     * 转跳消息列表界面
+     */
     public void showMsgsList(View v){
         switch (v.getId()){
-            case R.id.rl_sys:
+            case R.id.rl_sys://系统消息
                 messageType=0;
                 setUnreadCount(msgs.get(0));
                 break;
-            case R.id.rl_express:
+            case R.id.rl_express://快递消息
                 messageType=1;
                 setUnreadCount(msgs.get(1));
                 break;
@@ -102,6 +107,9 @@ public class MsgMenusActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * 设置未读数量
+     */
     private void setUnreadCount(Msg msg){
         if(null!=msg){
             msg.setUnReadCount(0);
@@ -109,6 +117,9 @@ public class MsgMenusActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 获取消息列表
+     */
     private void getMsgs(){
         showLoadingDialog();
         Call<ResponseBody> call=sysWebService.getMsgs(mUser.getUserId());
@@ -142,9 +153,12 @@ public class MsgMenusActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化UI
+     */
     private void initUIWithValues(){
         try{
-            Msg sysMsg=msgs.get(0);
+            Msg sysMsg=msgs.get(0);//系统消息
             if(null!=sysMsg){
                 txtSysMsg.setText(sysMsg.getContent());
                 txtSysTime.setText(sysMsg.getCreateTime().substring(0,16));
@@ -153,7 +167,7 @@ public class MsgMenusActivity extends BaseActivity {
                 }
             }
 
-            Msg expressMsg=msgs.get(1);
+            Msg expressMsg=msgs.get(1);//物流消息
             if(null!=expressMsg){
                 txtExpressMsg.setText(expressMsg.getContent());
                 txtExpressTime.setText(sysMsg.getCreateTime().substring(0,16));
@@ -162,7 +176,7 @@ public class MsgMenusActivity extends BaseActivity {
                 }
             }
 
-            if(orderMsgs.size()==0){
+            if(orderMsgs.size()==0){//订单消息
                 for(int i=2;i<msgs.size();i++){
                     orderMsgs.add(msgs.get(i));
                 }

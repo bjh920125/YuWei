@@ -293,7 +293,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-
+    /**
+     * 设置按钮为不可购买状态
+     */
     private void setCannotBuy(){
         int color=getResources().getColor(R.color.darkgrey);
         txtSellOut.setVisibility(View.VISIBLE);
@@ -303,6 +305,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtBuy.setTextColor(color);
     }
 
+    /**
+     * 获取店铺详情
+     */
     private void getShopDetail(){
         Call<ResponseBody> call=goodsWebService.getShopDetail(mGoods.getShopId());
         call.enqueue(new Callback<ResponseBody>() {
@@ -511,6 +516,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    /**
+     * 设置收藏图片显示
+     */
     private void setCollectImage(boolean hasCollected){
         if(hasCollected){
             Drawable drawable= getResources().getDrawable(R.drawable.favourite_fill);
@@ -585,32 +593,34 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.txt_add_cart:
+            case R.id.txt_add_cart://加入购物车
                 if(isLogined())
                     addCarts();
                 break;
-            case R.id.txt_buy:
+            case R.id.txt_buy://立即购买
                 if(isLogined())
                     buyNow();
                 break;
-            case R.id.txt_open_model_view:
+            case R.id.txt_open_model_view://选择型号
                 if(isLogined())
                     chooseModel(null);
                 break;
-            case R.id.img_close:
+            case R.id.img_close://关闭选择型号的view
                 popModels.dismiss();
                 break;
-            case R.id.img_add:
+            case R.id.img_add://增加数量
                 updateSelectNum(true);
                 break;
-            case R.id.img_less:
+            case R.id.img_less://减少数量
                 updateSelectNum(false);
                 break;
             default:break;
         }
     }
 
-
+    /**
+     * 立即购买
+     */
     private void buyNow(){
         GoodsCart cart=new GoodsCart();
         cart.setGoodsId(mGoods.getGoodsId());
@@ -620,6 +630,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         startActivity(i);
     }
 
+    /**
+     * 展示店铺详情
+     */
     public void showShop(View v){
         if(null==mShop) return;
         Intent intent=new Intent(mContext,ShopHomeActivity.class);
@@ -627,6 +640,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         startActivity(intent);
     }
 
+    /**
+     * 更改选择的数量
+     */
     private void updateSelectNum(boolean isAdd){
         int num=Integer.parseInt(StringUtils.getTextViewValue(txtNum));
         if(isAdd){
@@ -650,21 +666,21 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtSpecification.setTextColor(color);
         txtPackage.setTextColor(color);
         switch (v.getId()){
-            case R.id.txt_introduce:
+            case R.id.txt_introduce://商品介绍
                 txtIntroduce.setTextColor(selectColor);
                 mWebView.setVisibility(View.VISIBLE);
                 imgSpecification.setVisibility(View.GONE);
                 rlPackage.setVisibility(View.GONE);
                 addview.setVisibility(View.GONE);
                 break;
-            case R.id.txt_spefi:
+            case R.id.txt_spefi://规格参数
                 txtSpecification.setTextColor(selectColor);
                 mWebView.setVisibility(View.GONE);
                 imgSpecification.setVisibility(View.VISIBLE);
                 rlPackage.setVisibility(View.GONE);
                 addview.setVisibility(View.VISIBLE);
                 break;
-            case R.id.txt_package:
+            case R.id.txt_package://包装售后
                 txtPackage.setTextColor(selectColor);
                 mWebView.setVisibility(View.GONE);
                 imgSpecification.setVisibility(View.GONE);
@@ -684,17 +700,17 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtDetail.setTextColor(color);
         txtComment.setTextColor(color);
         switch (v.getId()){
-            case R.id.txt_product:
+            case R.id.txt_product://商品
                 mScrollView.smoothScrollTo(0,0);
                 txtProduct.setTextColor(selectColor);
                 showDetail();
                 break;
-            case R.id.txt_detail:
+            case R.id.txt_detail://详情
                 mScrollView.smoothScrollTo(0,topDetail);
                 txtDetail.setTextColor(selectColor);
                 showDetail();
                 break;
-            case R.id.txt_comment:
+            case R.id.txt_comment://评论
                 txtComment.setTextColor(selectColor);
                 mScrollView.setVisibility(View.GONE);
                 llCommentDetail.setVisibility(View.VISIBLE);
@@ -704,6 +720,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * 根据类型显示评论
+     */
     public void getCommentByType(View v){
         txtAllComment.setTextColor(color);
         txtAllCommentTitle.setTextColor(color);
@@ -712,17 +731,17 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtHasPicCommentTitle.setTextColor(color);
         txtHasPicComment.setTextColor(color);
         switch (v.getId()){
-            case R.id.ll_all_comment:
+            case R.id.ll_all_comment://所有评论
                 queryCommentType=ALL_COMMENT;
                 txtAllComment.setTextColor(selectColor);
                 txtAllCommentTitle.setTextColor(selectColor);
                 break;
-            case R.id.ll_addtional_comment:
+            case R.id.ll_addtional_comment://追加评论
                 queryCommentType=ADDITION_COMMENT;
                 txtAdditionCommentTitle.setTextColor(selectColor);
                 txtAdditionComment.setTextColor(selectColor);
                 break;
-            case R.id.ll_pic_comment:
+            case R.id.ll_pic_comment://有图的评论
                 queryCommentType=HAS_PIC_COMMENT;
                 txtHasPicCommentTitle.setTextColor(selectColor);
                 txtHasPicComment.setTextColor(selectColor);
@@ -732,6 +751,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         rvComment.refresh();
     }
 
+    /**
+     * 显示评论
+     */
     public void showAllComment(View v){
         mScrollView.setVisibility(View.GONE);
         llCommentDetail.setVisibility(View.VISIBLE);
@@ -742,12 +764,18 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtComment.setTextColor(selectColor);
     }
 
+    /**
+     * 联系卖家
+     */
     public void contactSeller(View v){
         if(null==mShop) return;
         String url="mqqwpa://im/chat?chat_type=wpa&uin="+mShop.getQq();
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
+    /**
+     * 显示详情
+     */
     private void showDetail(){
         mScrollView.setVisibility(View.VISIBLE);
         llCommentDetail.setVisibility(View.GONE);
@@ -764,7 +792,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         topDetail = llDetail.getTop()+55;  //滑动需要的距离
     }
 
-
+    /**
+     * 初始化选择型号view
+     */
     private void initChooseModelView(){
         ImageView imgGoods=null;
         TextView txtPrice=null;

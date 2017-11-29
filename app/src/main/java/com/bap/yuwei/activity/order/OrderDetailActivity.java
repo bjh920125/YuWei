@@ -1,16 +1,13 @@
 package com.bap.yuwei.activity.order;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,7 +55,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+/**
+ * 订单详情
+ */
 public class OrderDetailActivity extends BaseActivity {
 
     private TextView txtOrderStauts, txtReceiverName, txtReceiverAddress, txtReceiverTel, txtShopName;
@@ -93,6 +92,9 @@ public class OrderDetailActivity extends BaseActivity {
         getOrderDetail();
     }
 
+    /**
+     * 获取订单详情
+     */
     private void getOrderDetail() {
         showLoadingDialog();
         Call<ResponseBody> call = orderWebService.getOrderDetail(orderId);
@@ -125,6 +127,9 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 获取快递详情
+     */
     private void getExpress() {
         showLoadingDialog();
         Call<ResponseBody> call = orderWebService.getExpress(orderId);
@@ -156,6 +161,9 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化UI
+     */
     private void initUIWithValues() {
         if (null == orderDetail) return;
         final Orders orders = orderDetail.getOrders();
@@ -194,7 +202,9 @@ public class OrderDetailActivity extends BaseActivity {
         setOperateBtns(orders);
     }
 
-
+    /**
+     * 显示可操作得按钮
+     */
     private void setOperateBtns(Orders order) {
         txtPay.setVisibility(View.GONE);
         txtAlertSend.setVisibility(View.GONE);
@@ -233,7 +243,9 @@ public class OrderDetailActivity extends BaseActivity {
         }
     }
 
-
+    /**
+     * 转跳快递详情页面
+     */
     public void showExpressDetail(View view) {
         Intent i = new Intent(mContext, ExpressDetailActivity.class);
         i.putExtra(Orders.KEY, orderDetail.getOrders());
@@ -374,6 +386,9 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 获取付款的body
+     */
     private void getPayBody(final Long orderId) {
         Map<String, Object> params = new HashMap<>();
         params.put("orderIds", orderId);
@@ -406,7 +421,9 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * 支付宝付款
+     */
     private void pay(final String payBody, final Long orderId) {
         Runnable payRunnable = new Runnable() {
             @Override
@@ -502,12 +519,18 @@ public class OrderDetailActivity extends BaseActivity {
                 .show();
     }
 
+    /**
+     * 转跳评价页面
+     */
     private void toComment() {
         Intent i = new Intent(mContext, CommentActivity.class);
         i.putExtra(Orders.KEY, orderDetail.getOrders());
         mContext.startActivity(i);
     }
 
+    /**
+     * 转跳追加评价页面
+     */
     private void toAppendComment() {
         Intent i = new Intent(mContext, AppendCommentActivity.class);
         i.putExtra(Orders.KEY, orderDetail.getOrders());
@@ -516,28 +539,28 @@ public class OrderDetailActivity extends BaseActivity {
 
     public void operateOrder(View v) {
         switch (v.getId()) {
-            case R.id.txt_pay:
+            case R.id.txt_pay://付款
                 getPayBody(orderId);
                 break;
-            case R.id.txt_alert_send:
+            case R.id.txt_alert_send://提醒发货
                 remindSend(orderId);
                 break;
-            case R.id.txt_show_express:
+            case R.id.txt_show_express://显示快递详情
                 showExpressDetail(null);
                 break;
-            case R.id.txt_receive:
+            case R.id.txt_receive://确认收货
                 comfirmReceive(orderId);
                 break;
-            case R.id.txt_comment:
+            case R.id.txt_comment://评价
                 toComment();
                 break;
-            case R.id.txt_addition_comment:
+            case R.id.txt_addition_comment://追加评价
                 toAppendComment();
                 break;
-            case R.id.txt_cancel:
+            case R.id.txt_cancel://取消订单
                 chooseCancelReason(orderId);
                 break;
-            case R.id.txt_delete:
+            case R.id.txt_delete://删除订单
                 comfirmDelete(orderId);
                 break;
             default:
@@ -545,12 +568,18 @@ public class OrderDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * QQ联系卖家
+     */
     public void contactSeller(View v) {
         if (null == orderDetail) return;
         String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + orderDetail.getOrders().getQq();
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
+    /**
+     * 电话联系卖家
+     */
     public void telSeller(View v) {
         if (null == orderDetail) return;
         String tel = "tel:" + orderDetail.getOrders().getShopPhone();

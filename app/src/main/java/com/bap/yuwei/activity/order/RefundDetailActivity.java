@@ -30,6 +30,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 退款详情
+ */
 public class RefundDetailActivity extends BaseActivity {
 
     private TextView txtStatus,txtTotalPrice,txtGoodsTitle,txtModel,txtPrice,txtNum;
@@ -53,6 +56,9 @@ public class RefundDetailActivity extends BaseActivity {
         getRefundDetail();
     }
 
+    /**
+     * 获取退款详情
+     */
     private void getRefundDetail(){
         showLoadingDialog();
         Call<ResponseBody> call;
@@ -89,6 +95,9 @@ public class RefundDetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化UI
+     */
     private void initUIWithValues(){
         txtTotalPrice.setText("￥"+refund.getRefundMoney());
         txtGoodsTitle.setText(refund.getTitle()+"");
@@ -108,12 +117,18 @@ public class RefundDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 转跳协商历史界面
+     */
     public void showHistory(View v){
         Intent i=new Intent(mContext,RefundConsultHistoryActivity.class);
         i.putExtra(Refund.KEY,refund);
         startActivity(i);
     }
 
+    /**
+     * 申请评价介入处理
+     */
     public void applyPlatformDeal(View v){
         showLoadingDialog();
         Call<ResponseBody> call=orderWebService.applyPlatformDeal(refund.getRefundId());
@@ -143,7 +158,9 @@ public class RefundDetailActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * QQ联系卖家
+     */
     public void contactSeller(View v) {
         if (null == refund) return;
         String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + refund.getQq();

@@ -16,6 +16,9 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 分类
+ */
 public class SearchGoodsCategoryActivity extends BaseActivity {
 
     private LinearListView lvCategory;
@@ -53,6 +56,9 @@ public class SearchGoodsCategoryActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 显示全部
+     */
     public void showAll(View v){
         EventBus.getDefault().post(new CategoryEvent(""));
         finish();

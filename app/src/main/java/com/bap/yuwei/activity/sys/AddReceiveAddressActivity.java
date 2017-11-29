@@ -36,6 +36,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 新增收货地址
+ */
 public class AddReceiveAddressActivity extends BaseActivity {
 
     protected EditText etName,etTel,etAddress;
@@ -61,6 +64,9 @@ public class AddReceiveAddressActivity extends BaseActivity {
         initUiWithValue();
     }
 
+    /**
+     * 新增收货地址
+     */
     public void addAddress(View v){
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
@@ -100,7 +106,9 @@ public class AddReceiveAddressActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * 选择地址
+     */
     public void chooseArea(View v) {// 弹出选择器
         SoftInputUtil.hideKeyboard(mContext);
         OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {

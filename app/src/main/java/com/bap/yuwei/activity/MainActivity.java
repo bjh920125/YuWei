@@ -107,7 +107,6 @@ public class MainActivity extends BaseActivity {
         currentTabIndex=index;
     }
 
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -129,8 +128,9 @@ public class MainActivity extends BaseActivity {
         getCartNum();
     }
 
-
-
+    /**
+     * 获取购物车内商品数量
+     */
     private void getCartNum(){
         if(null==mUser) return;
         Call<ResponseBody> call=webService.getCartsNum(mUser.getUserId());
@@ -160,6 +160,9 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 显示购物车数量
+     */
     private void updateCartNum(int num){
         if(num==0){
             txtCartNum.setVisibility(View.GONE);

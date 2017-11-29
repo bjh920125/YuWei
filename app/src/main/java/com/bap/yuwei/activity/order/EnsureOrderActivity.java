@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.alipay.sdk.app.PayTask;
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
+import com.bap.yuwei.activity.sys.AddReceiveAddressActivity;
 import com.bap.yuwei.activity.sys.ReceiveAddressListActivity;
 import com.bap.yuwei.adapter.OrderAdapter;
 import com.bap.yuwei.entity.Constants;
@@ -59,6 +60,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 确认订单
+ */
 public class EnsureOrderActivity extends BaseActivity {
 
     private TextView txtReceiver,txtTel,txtReceiverAdress;
@@ -102,7 +106,9 @@ public class EnsureOrderActivity extends BaseActivity {
         getReceiveAddress();
     }
 
-
+    /**
+     * 付款
+     */
     private void pay(final String payBody){
         Runnable payRunnable = new Runnable() {
             @Override
@@ -120,6 +126,9 @@ public class EnsureOrderActivity extends BaseActivity {
         payThread.start();
     }
 
+    /**
+     * 获取付款的body
+     */
     private void getPayBody(){
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
@@ -156,6 +165,9 @@ public class EnsureOrderActivity extends BaseActivity {
     }
 
 
+    /**
+     * 生成付款的表单
+     */
     private PayOrderForm getCommitOrderEntity(){
         PayOrderForm payOrderForm=new PayOrderForm();
         payOrderForm.setBuyerName(mSelectedAddress.getConsignee());
@@ -221,7 +233,9 @@ public class EnsureOrderActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * 初始化UI
+     */
     private void resetUIWithValues(){
         mAdapter=new OrderAdapter(mOrderEnsure,mContext);
         listView.setAdapter(mAdapter);
@@ -249,6 +263,9 @@ public class EnsureOrderActivity extends BaseActivity {
         txtInvoiceHeader.setText(sb.toString());
     }
 
+    /**
+     * 获取订单信息
+     */
     private void getOrderInfo(){
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
@@ -285,6 +302,9 @@ public class EnsureOrderActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 根据购物车获取订单信息
+     */
     private void getOrderInfoByCart(){
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
@@ -359,36 +379,61 @@ public class EnsureOrderActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 新增收货地址
+     */
+    public void addAddress(View v){
+        Intent i=new Intent(mContext, AddReceiveAddressActivity.class);
+        startActivity(i);
+    }
 
+    /**
+     * 选择收货地址
+     */
     public void chooseAddress(View view){
         Intent i=new Intent(mContext, ReceiveAddressListActivity.class);
         startActivity(i);
     }
 
+    /**
+     * 设置发票
+     */
     public void setInvoice(View view){
         Intent i=new Intent(mContext, InvoiceSetActivity.class);
         i.putExtra(OrderEnsure.KEY,mOrderEnsure);
         startActivity(i);
     }
 
+    /**
+     * 选择收货地址之后的Event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void chooseAddressEvent(ReceiverAddressEvent event){
         setReceiverAddressUI(event.shippingAddress);
         mSelectedAddress=event.shippingAddress;
     }
 
+    /**
+     * 选择发票之后的Event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void chooseInvoiceEvent(ChooseInvoiceEvent event){
         mOrderEnsure.setInvoice(event.userInvoice);
         resetUIWithValues();
     }
 
+    /**
+     * 设置收货地址的UI
+     */
     private void setReceiverAddressUI(ShippingAddress address){
         txtReceiverAdress.setText(address.getProvince()+address.getCity()+address.getRegion()+address.getStreet());
         rlReceiverInfo.setVisibility(View.VISIBLE);
         txtAddAddress.setVisibility(View.GONE);
     }
 
+    /**
+     * 初始化付款的View
+     */
     private void initPayView(){
         View popToPayview = LayoutInflater.from(mContext).inflate(R.layout.view_ensure_pay, null);
         TextView txtName= (TextView) popToPayview.findViewById(R.id.txt_order_name);

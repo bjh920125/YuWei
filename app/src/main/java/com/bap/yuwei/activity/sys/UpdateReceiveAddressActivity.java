@@ -19,6 +19,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 更新收货地址
+ */
 public class UpdateReceiveAddressActivity extends AddReceiveAddressActivity {
 
     @Override
@@ -26,6 +29,9 @@ public class UpdateReceiveAddressActivity extends AddReceiveAddressActivity {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * 更新收货地址
+     */
     @Override
     public void addAddress(View v){
         showLoadingDialog();
@@ -67,7 +73,9 @@ public class UpdateReceiveAddressActivity extends AddReceiveAddressActivity {
         });
     }
 
-
+    /**
+     * 初始化UI
+     */
     @Override
     protected void initUiWithValue() {
         province=address.getProvince();

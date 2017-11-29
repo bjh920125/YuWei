@@ -54,6 +54,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 店铺详情
+ */
 public class ShopHomeActivity extends BaseActivity {
 
     protected ImageView imgShop,imgHead;
@@ -145,6 +148,9 @@ public class ShopHomeActivity extends BaseActivity {
     }
 
 
+    /**
+     * 店铺收藏、取消收藏
+     */
     public void shopCollect(View v){
         if(hasCollected){
             cancelShopCollect();
@@ -153,6 +159,9 @@ public class ShopHomeActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 店铺首页、全部商品、新品 切换
+     */
     public void onTabClicked(View v){
         viewHome.setVisibility(View.INVISIBLE);
         viewAll.setVisibility(View.INVISIBLE);
@@ -168,7 +177,7 @@ public class ShopHomeActivity extends BaseActivity {
         btnHome.setCompoundDrawables(null,drawable,null,null);
         goodsTitle=null;
         switch (v.getId()){
-            case R.id.btn_home:
+            case R.id.btn_home://店铺首页
                 viewHome.setVisibility(View.VISIBLE);
                 Drawable drawablefill= getResources().getDrawable(R.drawable.dianpu_fill);
                 drawablefill.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -176,14 +185,14 @@ public class ShopHomeActivity extends BaseActivity {
                 btnHome.setTextColor(selectColor);
                 queryTime=null;
                 break;
-            case R.id.rl_all:
+            case R.id.rl_all://全部商品
                 viewAll.setVisibility(View.VISIBLE);
                 txtAllNum.setTextColor(selectColor);
                 txtAllTitle.setTextColor(selectColor);
                 llFilter.setVisibility(View.VISIBLE);
                 queryTime=null;
                 break;
-            case R.id.rl_new:
+            case R.id.rl_new://新品
                 viewNew.setVisibility(View.VISIBLE);
                 txtNewNum.setTextColor(selectColor);
                 txtNewTitle.setTextColor(selectColor);
@@ -194,33 +203,35 @@ public class ShopHomeActivity extends BaseActivity {
         gvGoods.refresh();
     }
 
-
+    /**
+     * 选择排序方式
+     */
     public void chooseSort(View view){
         txtMult.setTextColor(color);
         txtSell.setTextColor(color);
         txtTime.setTextColor(color);
         txtPrice.setTextColor(color);
         switch (view.getId()) {
-            case R.id.txt_mult:
+            case R.id.txt_mult://综合排序
                 orderType=1;
                 txtMult.setTextColor(selectColor);
                 break;
-            case R.id.txt_sell:
+            case R.id.txt_sell://销量排序
                 orderType=2;
                 txtSell.setTextColor(selectColor);
                 break;
-            case R.id.txt_time:
+            case R.id.txt_time://时间排序
                 orderType=3;
                 txtTime.setTextColor(selectColor);
                 break;
             case R.id.txt_price:
-                if(isPriceAsc){
+                if(isPriceAsc){//价格递减
                     isPriceAsc=false;
                     orderType=4;
                     Drawable drawable= getResources().getDrawable(R.drawable.triangle_up);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     txtPrice.setCompoundDrawables(null,null,drawable,null);
-                }else{
+                }else{//价格递增
                     isPriceAsc=true;
                     orderType=5;
                     Drawable drawable= getResources().getDrawable(R.drawable.triangle_down);
@@ -235,6 +246,9 @@ public class ShopHomeActivity extends BaseActivity {
         gvGoods.refresh();
     }
 
+    /**
+     * 获取商品列表
+     */
     protected void getGoodsList(){
         Map<String,Object> params=new HashMap<>();
         params.put("categoryNodes",categoryNodes);
@@ -392,14 +406,18 @@ public class ShopHomeActivity extends BaseActivity {
         super.onBackPressed();
     }
 
+    /**
+     * 转跳商品类目界面
+     */
     public void showCategory(View v){
         Intent i=new Intent(mContext,ShopCategoryActivity.class);
         i.putExtra(Shop.KEY,mShop);
         startActivity(i);
     }
 
-
-
+    /**
+     * 初始化UI
+     */
     protected void initUIWithValue(){
         gvGoods.refresh();
         txtShopName.setText(mShop.getShopName());
@@ -410,7 +428,6 @@ public class ShopHomeActivity extends BaseActivity {
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mShop.getShopIcon(),imgShop, DisplayImageOptionsUtil.getOptions());
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mShop.getHeadImage(),imgHead, DisplayImageOptionsUtil.getOptions());
     }
-
 
     @Override
     protected int getLayoutId() {

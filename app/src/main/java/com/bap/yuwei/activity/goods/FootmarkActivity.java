@@ -39,6 +39,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 我的足迹
+ */
 public class FootmarkActivity extends BaseActivity {
 
     private LRecyclerView rvFootmark;
@@ -94,6 +97,9 @@ public class FootmarkActivity extends BaseActivity {
         rvFootmark.refresh();
     }
 
+    /**
+     * 获取需要删除的ID
+     */
     private List<Long> getNeedDeleteIds(){
         List<Long> ids=new ArrayList<>();
         for(Footmark footmark:footmarks){
@@ -104,6 +110,9 @@ public class FootmarkActivity extends BaseActivity {
         return ids;
     }
 
+    /**
+     * 删除足迹
+     */
     public void delete(View v){
         showLoadingDialog();
         Map<String, Object> params = new HashMap<>();
@@ -136,6 +145,9 @@ public class FootmarkActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 获取足迹列表
+     */
     private void getFootmark() {
         Map<String, Object> params = new HashMap<>();
         params.put("pageNumber", pageIndex);

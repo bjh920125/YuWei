@@ -93,6 +93,9 @@ public class CommentActivity extends BaseActivity {
 
     }
 
+    /**
+     * 初始化参数
+     */
     private void initForm(){
         evaluationForm=new EvaluationForm();
         evaluationForm.setEvaluateFrom(0);//买家评价
@@ -116,7 +119,10 @@ public class CommentActivity extends BaseActivity {
         evaluationForm.setItems(itemForms);
     }
 
-    private void updateFile(final File file, final EvaluateItemForm item,final int i){
+    /**
+     * 上传附件
+     */
+    private void uploadFile(final File file, final EvaluateItemForm item,final int i){
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         Call<ResponseBody> call = sysWebService.uploadFile(body);
@@ -153,6 +159,9 @@ public class CommentActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 评价
+     */
     private void comment(){
         showLoadingDialog();
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(evaluationForm));
@@ -185,18 +194,28 @@ public class CommentActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 评价
+     */
     public void comment(View v){
         showLoadingDialog();
+        totalImageCount=0;
+        uploadCount=0;
+        //计算总的附件数量
         for(EvaluateItemForm item:itemForms){
             if(null != item.getFilePathes()){
                 totalImageCount+=item.getFilePathes().size()-1;
             }
         }
 
-        for(EvaluateItemForm item:itemForms){
-            if(null != item.getFilePathes()){
-                for(int i=0;i<item.getFilePathes().size()-1;i++){
-                    updateFile(new File(item.getFilePathes().get(i)),item,i);
+        if(totalImageCount==0){//没有附件的，直接评价
+            comment();
+        } else {
+            for(EvaluateItemForm item:itemForms){//有附件的先上传图片再评价
+                if(null != item.getFilePathes()){
+                    for(int i=0;i<item.getFilePathes().size()-1;i++){
+                        uploadFile(new File(item.getFilePathes().get(i)),item,i);
+                    }
                 }
             }
         }

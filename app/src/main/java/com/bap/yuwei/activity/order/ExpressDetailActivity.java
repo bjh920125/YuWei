@@ -1,8 +1,6 @@
 package com.bap.yuwei.activity.order;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -75,6 +73,9 @@ public class ExpressDetailActivity extends BaseActivity {
         getExpress();
     }
 
+    /**
+     * 获取快递信息
+     */
     private void getExpress(){
         showLoadingDialog();
         Call<ResponseBody> call=orderWebService.getExpress(order.getOrderId());
@@ -100,6 +101,9 @@ public class ExpressDetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化UI
+     */
     private void initUIWithValues(){
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+order.getOrderItems().get(0).getGoodsImage(),imgGoods);
         txtExpressStauts.setText(mExpress.getStatusText());

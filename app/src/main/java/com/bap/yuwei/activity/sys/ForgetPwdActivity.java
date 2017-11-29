@@ -32,6 +32,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 忘记密码
+ */
 public class ForgetPwdActivity extends BaseActivity {
     private EditText etPhone,etValidateCode,etPwd;
 
@@ -47,6 +50,9 @@ public class ForgetPwdActivity extends BaseActivity {
         webService = MyApplication.getInstance().getWebService(SysWebService.class);
     }
 
+    /**
+     * 更新密码
+     */
     private void updatePwd(){
         showLoadingDialog();
         String password= MD5Utils.encode(StringUtils.getEditTextValue(etPwd)).toLowerCase();

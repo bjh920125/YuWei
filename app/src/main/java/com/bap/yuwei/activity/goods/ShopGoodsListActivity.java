@@ -16,6 +16,9 @@ import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+/**
+ * 店铺里的商品列表
+ */
 public class ShopGoodsListActivity extends ShopHomeActivity {
 
     public static final String CATEGORY_KEY="category.key";

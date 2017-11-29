@@ -30,6 +30,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 修改密码
+ */
 public class ResetPwdByOldPwdActivity extends BaseActivity {
 
     private ClearableEditText etOldPwd,etPwd,etConfirmPwd;
@@ -42,6 +45,9 @@ public class ResetPwdByOldPwdActivity extends BaseActivity {
         webService = MyApplication.getInstance().getWebService(SysWebService.class);
     }
 
+    /**
+     * 密码修改
+     */
     public void changePwd(View v){
         if(validateForm()){
             checkPwd();
@@ -90,6 +96,9 @@ public class ResetPwdByOldPwdActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 检验原密码
+     */
     private void checkPwd(){
         String password= MD5Utils.encode(StringUtils.getEditTextValue(etOldPwd)).toLowerCase();
         Map<String,Object> params=new HashMap<>();
@@ -126,6 +135,9 @@ public class ResetPwdByOldPwdActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 表单验证
+     */
     public boolean validateForm(){
         String oldPwd=StringUtils.getEditTextValue(etOldPwd);
         String pwd= StringUtils.getEditTextValue(etPwd);

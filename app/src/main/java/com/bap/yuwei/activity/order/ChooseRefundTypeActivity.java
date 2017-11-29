@@ -15,6 +15,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import static com.bap.yuwei.entity.Constants.REFUND_MONEY;
 import static com.bap.yuwei.entity.Constants.REFUND_MONEY_AND_GOODS;
 
+/**
+ * 选择退款类型
+ */
 public class ChooseRefundTypeActivity extends BaseActivity {
 
     private ImageView imgGoods;
@@ -32,13 +35,16 @@ public class ChooseRefundTypeActivity extends BaseActivity {
         txtModel.setText("类型"+orderItem.getModel());
     }
 
+    /**
+     * 选择类型
+     */
     public void chooseType(View v){
         Integer type=null;
         switch (v.getId()){
-            case R.id.rl_only_money:
+            case R.id.rl_only_money://仅退款
                 type=REFUND_MONEY;
                 break;
-            case R.id.rl_money_goods:
+            case R.id.rl_money_goods://退货退款
                 type=REFUND_MONEY_AND_GOODS;
                 break;
             default:break;

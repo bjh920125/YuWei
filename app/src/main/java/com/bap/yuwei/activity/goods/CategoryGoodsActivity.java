@@ -48,9 +48,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 根据类目展示商品列表
+ */
 public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefreshLayout.OnRefreshListener,PLALoadMoreListView.OnLoadMoreListener,View.OnClickListener {
-
-
     private SwipeRefreshLayout swipeRefresh;
     private PLALoadMoreListView mGvGoods;
     private TextView txtCategory1,txtCategory2,txtCategory3,txtCategory4;
@@ -160,6 +161,9 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         });
     }
 
+    /**
+     * 获取商品列表
+     */
     private void getGoods(){
         Map<String,Object> params=new HashMap<>();
         params.put("cid",cid);
@@ -208,6 +212,9 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         super.onResume();
     }
 
+    /**
+     * 选择排序方式
+     */
     public void chooseSort(View view){
         txtMult.setTextColor(color);
         txtSell.setTextColor(color);
@@ -346,7 +353,9 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         });
     }
 
-
+    /**
+     * 初始化类目选择view
+     */
     private void initPopCategoryView() {
         if (null == popCategory) {
             popCategoryView = LayoutInflater.from(mContext).inflate(R.layout.view_category_filter, null);
@@ -428,6 +437,9 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         });
     }
 
+    /**
+     * 显示已选的类目
+     */
     private void setHeadText(int index,Category category){
         if(index==0){
             txtCategory1.setText(category.getCategoryName());
@@ -462,7 +474,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.txt_category1:
+            case R.id.txt_category1://点击一级类目
                 mParent.clear();
                 mParent.addAll(mCategories1);
                 parentAdapter.notifyDataSetChanged();
@@ -470,7 +482,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
                 mChildren.addAll(mCategories2);
                 childrenAdapter.notifyDataSetChanged();
                 break;
-            case R.id.txt_category2:
+            case R.id.txt_category2://点击二级类目
                 if(mCategories3.size()>0){
                     mParent.clear();
                     mParent.addAll(mCategories2);
@@ -482,7 +494,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
                     onClick(txtCategory1);
                 }
                 break;
-            case R.id.txt_category3:
+            case R.id.txt_category3://点击三级类目
                 if(mCategories4.size()>0){
                     mParent.clear();
                     mParent.addAll(mCategories3);
@@ -494,7 +506,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
                     onClick(txtCategory2);
                 }
                 break;
-            case R.id.txt_category4:
+            case R.id.txt_category4://点击四级类目
                 mParent.clear();
                 mParent.addAll(mCategories3);
                 parentAdapter.notifyDataSetChanged();

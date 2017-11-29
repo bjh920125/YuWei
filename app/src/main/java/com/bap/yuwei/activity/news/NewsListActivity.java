@@ -74,6 +74,9 @@ public class NewsListActivity extends BaseActivity implements SwipeRefreshLayout
         getNews();
     }
 
+    /**
+     * 获取新闻列表
+     * */
     private void getNews(){
         Map<String,Object> params=new HashMap<>();
         params.put("pageNumber",pageIndex);

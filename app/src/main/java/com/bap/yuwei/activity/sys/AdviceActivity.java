@@ -24,6 +24,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 意见反馈
+ */
 public class AdviceActivity extends BaseActivity {
 
     private EditText etTitle,etContent,etTel;
@@ -36,7 +39,9 @@ public class AdviceActivity extends BaseActivity {
         sysWebService= MyApplication.getInstance().getWebService(SysWebService.class);
     }
 
-
+    /**
+     * 评价
+     */
     public void commit(View v){
         Map<String,Object> params=new HashMap<>();
         params.put("userName", null!=mUser ? mUser.getUsername() : "");

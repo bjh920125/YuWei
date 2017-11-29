@@ -48,6 +48,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 发票设置
+ */
 public class InvoiceSetActivity extends BaseActivity {
 
     private RadioGroup rgType;
@@ -143,18 +146,23 @@ public class InvoiceSetActivity extends BaseActivity {
         initJsonData();
     }
 
-
+    /**
+     * 保存发票
+     */
     public void saveInvoice(View v){
         addOrUpdateInvoice();
     }
 
+    /**
+     * 获取用户的发票模板
+     */
     private UserInvoice getUserInvoiceEntity(){
         UserInvoice userInvoice=new UserInvoice();
         userInvoice.setUserInvoiceId(userInvoiceId);
         userInvoice.setType(type);
         userInvoice.setHeaderType(headerType);
         userInvoice.setContent(selectContent);
-        if(type==Constants.INVOICE_COMMON){
+        if(type==Constants.INVOICE_COMMON){//普通发票
             if(headerType==Constants.INVOICE_HEADER_UNIT){
                 userInvoice.setHeader(StringUtils.getEditTextValue(etUnitName));
                 userInvoice.setCompanyName(StringUtils.getEditTextValue(etUnitName));
@@ -162,7 +170,7 @@ public class InvoiceSetActivity extends BaseActivity {
             }else {
                 userInvoice.setHeader("个人");
             }
-        }else if (type==Constants.INVOICE_ELEC){
+        }else if (type==Constants.INVOICE_ELEC){//电子发票
             userInvoice.setCellphone(StringUtils.getEditTextValue(etElecTel));
             userInvoice.setEmail(StringUtils.getEditTextValue(etElecEmail));
             if(headerType==Constants.INVOICE_HEADER_UNIT){
@@ -172,7 +180,7 @@ public class InvoiceSetActivity extends BaseActivity {
             }else {
                 userInvoice.setHeader("个人");
             }
-        }else if (type==Constants.INVOICE_VAT){
+        }else if (type==Constants.INVOICE_VAT){//增值发票
             userInvoice.setInvoiceMode(0);//0：订单完成后开票;
             userInvoice.setHeader(StringUtils.getEditTextValue(etVatUnitName));
             userInvoice.setCompanyName(StringUtils.getEditTextValue(etVatUnitName));
@@ -261,6 +269,9 @@ public class InvoiceSetActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 获取增值发票
+     */
     private void getVat(){
         if(null==mUser) return;
         Call<ResponseBody> call=webService.getVat(mUser.getUserId());
@@ -290,6 +301,9 @@ public class InvoiceSetActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化增值发票的UI
+     */
     private void initUIWithVat(Vat vat){
         if(null==vat) return;
         etVatUnitName.setText(vat.getCompanyName());
@@ -300,6 +314,9 @@ public class InvoiceSetActivity extends BaseActivity {
         etBankName.setText(vat.getBankName());
     }
 
+    /**
+     * 初始化UI
+     */
     private void initUIWithValues(){
         if(null==mUserInvoice) return;
         userInvoiceId=mUserInvoice.getUserInvoiceId();
@@ -350,20 +367,23 @@ public class InvoiceSetActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 根据发票类型显示UI
+     */
     private void showUIByType(){
-        if(type==Constants.INVOICE_COMMON){
+        if(type==Constants.INVOICE_COMMON){//普通发票
             llMakeInvoiceType.setVisibility(View.GONE);
             llHeader.setVisibility(View.VISIBLE);
             llElecReceiverInfo.setVisibility(View.GONE);
             llVatInfo.setVisibility(View.GONE);
             rbNoInvoice.setVisibility(View.VISIBLE);
-        }else if (type==Constants.INVOICE_ELEC){
+        }else if (type==Constants.INVOICE_ELEC){//电子发票
             llMakeInvoiceType.setVisibility(View.GONE);
             llHeader.setVisibility(View.VISIBLE);
             llElecReceiverInfo.setVisibility(View.VISIBLE);
             llVatInfo.setVisibility(View.GONE);
             rbNoInvoice.setVisibility(View.GONE);
-        }else if (type==Constants.INVOICE_VAT){
+        }else if (type==Constants.INVOICE_VAT){//增值发票
             llMakeInvoiceType.setVisibility(View.VISIBLE);
             llHeader.setVisibility(View.GONE);
             llElecReceiverInfo.setVisibility(View.GONE);
@@ -372,6 +392,9 @@ public class InvoiceSetActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 根据发票抬头类型显示UI
+     */
     private void showUIByHeaderType(){
         if(headerType==Constants.INVOICE_HEADER_PERSONAL){
             llUnit.setVisibility(View.GONE);
@@ -380,6 +403,9 @@ public class InvoiceSetActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 显示发票明细
+     */
     private void setContents(){
         LayoutInflater inflater=LayoutInflater.from(mContext);
         RadioButton rb;
@@ -391,6 +417,9 @@ public class InvoiceSetActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 设置类型
+     */
     private void setType(){
         String[] types=orderEnsure.getInvoiceTypes();
         for(int i=0;i<types.length;i++){
@@ -410,6 +439,9 @@ public class InvoiceSetActivity extends BaseActivity {
         finish();
     }
 
+    /**
+     * 选择区域
+     */
     public void chooseArea(View v) {// 弹出选择器
         SoftInputUtil.hideKeyboard(mContext);
         OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {

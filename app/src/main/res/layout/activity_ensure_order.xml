@@ -27,7 +27,7 @@
                 android:layout_height="50dp"
                 android:background="@color/white"
                 android:gravity="center"
-                android:onClick="chooseAddress"
+                android:onClick="addAddress"
                 android:text="点击添加收货地址" />
 
             <RelativeLayout

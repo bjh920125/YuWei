@@ -5,9 +5,8 @@ import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
 
 /**
- * Created by Administrator on 2017/11/2.
+ * 消息设置
  */
-
 public class MsgSetActivity extends BaseActivity {
 
     @Override

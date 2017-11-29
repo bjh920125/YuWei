@@ -34,6 +34,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 综合搜索
+ */
 public class OverallSearchActivity extends BaseActivity {
 
     private EditText etWords;
@@ -62,7 +65,7 @@ public class OverallSearchActivity extends BaseActivity {
 
     public void search(View v){
         String words= StringUtils.getEditTextValue(etWords);
-        toSeachPage(words);
+        toSearchPage(words);
     }
 
     /**
@@ -212,7 +215,7 @@ public class OverallSearchActivity extends BaseActivity {
         lvHotwords.setOnItemClickListener(new LinearListView.OnItemClickListener() {
             @Override
             public void onItemClick(LinearListView parent, View view, int position, long id) {
-                toSeachPage(mHotwords.get(position));
+                toSearchPage(mHotwords.get(position));
             }
         });
     }
@@ -228,12 +231,12 @@ public class OverallSearchActivity extends BaseActivity {
         lvHistory.setOnItemClickListener(new LinearListView.OnItemClickListener() {
             @Override
             public void onItemClick(LinearListView parent, View view, int position, long id) {
-                toSeachPage(mSearchHistories.get(position));
+                toSearchPage(mSearchHistories.get(position));
             }
         });
     }
 
-    private void toSeachPage(String words){
+    private void toSearchPage(String words){
         Intent i=new Intent(mContext,SearchGoodsActivity.class);
         i.putExtra(SearchGoodsActivity.KEYWORDS_KEY,words);
         startActivity(i);

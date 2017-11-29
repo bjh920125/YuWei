@@ -55,6 +55,9 @@ public class LoginActivity extends BaseActivity {
         initUIWithValue();
     }
 
+    /**
+     * 登录
+     */
     public void login(View v){
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
@@ -106,7 +109,9 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * 生成并保存接口头部的token
+     */
     private void getXToken(String token,String userId){
         String str=token+":"+userId+":"+Constants.DEVICE_TYPE;
         String xToken = Base64.encodeToString(str.getBytes(), Base64.NO_WRAP);
@@ -119,6 +124,9 @@ public class LoginActivity extends BaseActivity {
         etUserName.setText(mUser.getLoginName());
     }
 
+    /**
+     * 获取ip
+     */
     private void getIp(){
         Call<ResponseBody> call=webService.getIp("myip");
         call.enqueue(new Callback<ResponseBody>() {
@@ -139,15 +147,19 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 注册
+     */
     public void regist(View v){
         startActivity(new Intent(mContext,RegisterActivity.class));
     }
 
+    /**
+     * 忘记密码
+     */
     public void forgetPwd(View v){
         startActivity(new Intent(mContext,ForgetPwdActivity.class));
     }
-
-
 
     @Override
     protected int getLayoutId() {

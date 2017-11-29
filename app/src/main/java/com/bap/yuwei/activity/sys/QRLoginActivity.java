@@ -17,6 +17,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 二维码扫描登录
+ */
 public class QRLoginActivity extends BaseActivity {
 
     private String token;
@@ -29,6 +32,9 @@ public class QRLoginActivity extends BaseActivity {
         token=getIntent().getStringExtra(Constants.TOKEN_KEY);
     }
 
+    /**
+     * 扫描登录
+     */
     public void qrLogin(View v){
         showLoadingDialog();
         Call<ResponseBody> call=sysWebService.login(mUser.getUserId(),token);
@@ -56,10 +62,6 @@ public class QRLoginActivity extends BaseActivity {
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
-    }
-
-    public void onBackClick(View v){
-        finish();
     }
 
     @Override

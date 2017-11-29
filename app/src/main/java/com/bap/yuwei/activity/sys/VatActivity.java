@@ -27,6 +27,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 增票资质
+ */
 public class VatActivity extends BaseActivity {
 
     private ClearableEditText etUnitName,etPayNo,etAddress,etPhone,etBank,etBankAccount;
@@ -42,6 +45,9 @@ public class VatActivity extends BaseActivity {
         getVat();
     }
 
+    /**
+     * 新增或更新增票资质
+     */
     public void updateVat(View v){
         Map<String,Object> params=new HashMap<>();
         params.put("address", StringUtils.getEditTextValue(etAddress));
@@ -79,6 +85,9 @@ public class VatActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 获取增票资质
+     */
     private void getVat(){
         if(null==mUser) return;
         Call<ResponseBody> call=webService.getVat(mUser.getUserId());
@@ -108,6 +117,9 @@ public class VatActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化UI
+     */
     private void initUIWithValues(){
         if(null==mVat) return;
         etUnitName.setText(mVat.getCompanyName());

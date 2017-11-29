@@ -31,6 +31,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 追加评价
+ */
 public class AppendCommentActivity extends BaseActivity {
 
     private LinearListView lvOrderItem;
@@ -53,7 +56,9 @@ public class AppendCommentActivity extends BaseActivity {
         lvOrderItem.setAdapter(adapter);
     }
 
-
+    /**
+     * 追加评价
+     */
     public void appendComment(View v){
         showLoadingDialog();
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(form));
@@ -86,6 +91,9 @@ public class AppendCommentActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化参数
+     */
     private void initForm(){
         form=new CommentAppendForm();
         form.setOrderId(orders.getOrderId());

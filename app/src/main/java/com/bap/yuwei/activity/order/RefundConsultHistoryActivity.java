@@ -14,6 +14,9 @@ import com.bap.yuwei.entity.order.RefundConsultHistory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 退款协商历史
+ */
 public class RefundConsultHistoryActivity extends BaseActivity {
 
     private ListView lvHistory;

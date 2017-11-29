@@ -167,7 +167,7 @@ public abstract class BaseFragment extends Fragment {
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateUserInfo(QueryUnreadCountEvent event){
+    public void getMsgCount(QueryUnreadCountEvent event){
         getUnreadMsgCount();
     }
 

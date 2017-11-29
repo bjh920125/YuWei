@@ -60,9 +60,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Administrator on 2017/10/27.
+ * 首页
  */
-
 public class HomeFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private Button btnScan;
@@ -108,8 +107,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         getUnreadMsgCount();
     }
 
-
-
+    /**
+     * 获取轮播图
+     */
     private void getBanner(){
         Call<ResponseBody> call=newsWebService.getBanner();
         call.enqueue(new Callback<ResponseBody>() {
@@ -157,7 +157,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         convenientBanner.setScrollDuration(800);
     }
 
-
+    /**
+     * 获取类目
+     */
     private void getCategories(){
         Call<ResponseBody> call=goodsWebService.getTopCategories();
         call.enqueue(new Callback<ResponseBody>() {
@@ -188,6 +190,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
 
+    /**
+     * 初始化类目gridview
+     */
     private void initCategoryGV(){
         mCategoryAdapter = new CommonAdapter<Category>(mContext, mCategories, R.layout.item_home_menu) {
             @Override
@@ -210,6 +215,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
+    /**
+     * 初始化热门推荐商品列表
+     */
     private void initHotRecommendGV(){
         mGoodsAdapter = new CommonAdapter<Goods>(mContext, mGoods, R.layout.item_goods) {
             @Override
@@ -234,7 +242,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
 
-
+    /**
+     * 获取热门推荐商品
+     */
     private void getHotRecommend(){
         Map<String,Object> params=new HashMap<>();
         params.put("pageNumber",1);
@@ -270,6 +280,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
 
+    /**
+     * 获取新闻列表
+     */
     private void getNews(){
         Map<String,Object> params=new HashMap<>();
         params.put("pageNumber",1);
@@ -303,7 +316,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
 
-
+    /**
+     * 显示未读消息数量
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setUnReadMsgCount(UnreadEvent event){
         int unreadNum=event.unreadNum;
@@ -364,18 +379,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.txt_news:
+            case R.id.txt_news://显示新闻列表
                 startActivity(new Intent(mContext, NewsListActivity.class));
                 break;
-            case R.id.btn_scan:
+            case R.id.btn_scan://二维码扫描
                 if(isLogined())
-                startActivity(new Intent(mContext, ScannerQRCodeActivity.class));
+                    startActivity(new Intent(mContext, ScannerQRCodeActivity.class));
                 break;
-            case R.id.btn_msg:
+            case R.id.btn_msg://消息
                 if(isLogined())
                     startActivity(new Intent(mContext, MsgMenusActivity.class));
                 break;
-            case R.id.txt_search:
+            case R.id.txt_search://综合搜索
                 startActivity(new Intent(mContext, OverallSearchActivity.class));
                 break;
             default:break;

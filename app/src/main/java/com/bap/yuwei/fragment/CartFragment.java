@@ -49,9 +49,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Administrator on 2017/10/27.
+ * 购物车
  */
-
 public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     private TextView txtPrice,txtPay,txtEdit;
@@ -135,7 +134,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         txtPrice.setText("￥"+total);
     }
 
-
+    /**
+     * 获取选择的购物车id
+     */
     private List<Long> getSelectCartIds(){
         List<Long> cartIds=new ArrayList<>();
         for(MyGoodsCart goodsCart:myGoodsCarts) {
@@ -148,6 +149,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         return cartIds;
     }
 
+    /**
+     * 更新购物车
+     */
     private void updateCarts(final GoodsCart cart, Long cartId, final int goodsCount){
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
@@ -183,6 +187,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         });
     }
 
+    /**
+     * 删除购物车商品
+     */
     private void deleteCarts(){
         showLoadingDialog();
         Map<String,Object> params=new HashMap<>();
@@ -215,6 +222,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         });
     }
 
+
+    /**
+     * 获取购物车
+     */
     private void getCarts(){
         if(null==mUser) return;
         showLoadingDialog();
@@ -281,16 +292,19 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.txt_pay_or_del:
+            case R.id.txt_pay_or_del://提交订单、删除
                 payOrDelete();
                 break;
-            case R.id.txt_edit:
+            case R.id.txt_edit://编辑
                 changeModel();
                 break;
             default:break;
         }
     }
 
+    /**
+     * 提交订单/删除
+     */
     private void payOrDelete(){
         ArrayList<String> cartIds=new ArrayList<>();
         for(MyGoodsCart goodsCart:myGoodsCarts) {
@@ -314,6 +328,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * 切换编辑和提交订单的模式
+     */
     private void changeModel(){
         if(model==PAY){
             model=EDIT;
@@ -323,6 +340,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
             model=PAY;
             txtPay.setText("结算");
             txtEdit.setText("编辑");
+            //从编辑切换到提交订单模式时要去除掉下架的商品
             for(MyGoodsCart goodsCart:myGoodsCarts) {
                 for (GoodsCart cartItem : goodsCart.getCartItems()) {
                     if(!cartItem.getIsValid()) {

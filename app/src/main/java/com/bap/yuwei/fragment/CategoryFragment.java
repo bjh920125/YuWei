@@ -51,7 +51,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Administrator on 2017/10/27.
+ * 分类
  */
 public class CategoryFragment extends BaseFragment  implements OnRefreshListener,OnLoadMoreListener,View.OnClickListener {
 

@@ -51,9 +51,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Administrator on 2017/10/27.
+ * 我的
  */
-
 public class MineFragment extends BaseFragment implements View.OnClickListener{
 
     private RelativeLayout rlPersonInfo;
@@ -89,42 +88,42 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.ll_show_all:
+            case R.id.ll_show_all://全部订单
                 toOrderListPage(0);
                 break;
-            case R.id.btn_pay:
+            case R.id.btn_pay://待付款
                 toOrderListPage(1);
                 break;
-            case R.id.btn_send:
+            case R.id.btn_send://待发货
                 toOrderListPage(2);
                 break;
-            case R.id.btn_receive:
+            case R.id.btn_receive://待收货
                 toOrderListPage(3);
                 break;
-            case R.id.btn_comment:
+            case R.id.btn_comment://待评价
                 toOrderListPage(4);
                 break;
-            case R.id.btn_refund:
+            case R.id.btn_refund://退款
                 if(isLogined())
                 startActivity(new Intent(mContext, RefundListActivity.class));
                 break;
-            case R.id.rl_person_info:
+            case R.id.rl_person_info://个人资料
                 loginOrUpdateInfo();
                 break;
-            case R.id.img_set:
+            case R.id.img_set://设置
                 startActivity(new Intent(mContext, SettingActivity.class));
                 break;
-            case R.id.img_msg:
+            case R.id.img_msg://消息
                 if(isLogined())
                     startActivity(new Intent(mContext, MsgMenusActivity.class));
                 break;
-            case R.id.rl_goods_collect:
+            case R.id.rl_goods_collect://商品收藏
                 showMyCollects(0);
                 break;
-            case R.id.rl_shop_collect:
+            case R.id.rl_shop_collect://店铺收藏
                 showMyCollects(1);
                 break;
-            case R.id.rl_footmark:
+            case R.id.rl_footmark://足迹
                 if(isLogined())
                     startActivity(new Intent(mContext, FootmarkActivity.class));
                 break;
@@ -132,6 +131,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * 转跳品收藏页面
+     */
     private void showMyCollects(int showTypeIndex){
         if(isLogined()){
             Intent i=new Intent(mContext,MyCollectListActivity.class);
@@ -140,6 +142,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * 转跳订单列表页面
+     */
     private void toOrderListPage(int index){
         if(isLogined()){
             Intent i=new Intent(mContext, OrderListActivity.class);
@@ -148,6 +153,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * 转跳登录或者个人资料页面
+     */
     private void loginOrUpdateInfo(){
         if(null!=mUser){
             startActivity(new Intent(mContext, UserInfoActivity.class));
@@ -156,7 +164,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         }
     }
 
-
+    /**
+     * 获取个状态下订单数量
+     */
     private void getOrderStatistics(){
         if(null==mUser) return;
         Call<ResponseBody> call=orderWebService.getOrderStatistics(mUser.getUserId());
@@ -190,6 +200,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         });
     }
 
+    /**
+     * 显示订单数量
+     */
     private void showOrderNum(Map<Integer,String> map){
         String payNum=map.get(Constants.ORDER_STATUS_PENDING_PAY);
         if(!TextUtils.isEmpty(payNum)){
@@ -257,6 +270,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         });
     }
 
+    /**
+     * 更新UI
+     */
     public void refreshUI() {
         if(null != mUser){
             txtName.setText(mUser.getUsername());
@@ -286,6 +302,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         refreshUI();
     }
 
+    /**
+     * 显示未读消息数量
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setUnReadMsgCount(UnreadEvent event){
         int unreadNum=event.unreadNum;

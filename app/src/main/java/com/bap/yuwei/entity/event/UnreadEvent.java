@@ -1,7 +1,7 @@
 package com.bap.yuwei.entity.event;
 
 /**
- * Created by Administrator on 2017/11/6.
+ * 未读消息数量event
  */
 public class UnreadEvent {
 

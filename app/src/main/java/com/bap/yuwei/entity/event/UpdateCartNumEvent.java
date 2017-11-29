@@ -1,7 +1,7 @@
 package com.bap.yuwei.entity.event;
 
 /**
- * Created by Administrator on 2017/11/9.
+ * 更新购物车数量event
  */
 
 public class UpdateCartNumEvent {

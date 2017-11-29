@@ -4,9 +4,8 @@ package com.bap.yuwei.entity.event;
 import com.bap.yuwei.entity.sys.User;
 
 /**
- * Created by jianhua on 17/5/31.
+ * 用户信息event
  */
-
 public class UserInfoEvent {
 
     public User user;

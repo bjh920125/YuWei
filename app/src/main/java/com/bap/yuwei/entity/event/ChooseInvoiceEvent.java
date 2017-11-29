@@ -3,9 +3,8 @@ package com.bap.yuwei.entity.event;
 import com.bap.yuwei.entity.order.UserInvoice;
 
 /**
- * Created by Administrator on 2017/11/13.
+ * 选择发票event
  */
-
 public class ChooseInvoiceEvent {
 
     public UserInvoice userInvoice;

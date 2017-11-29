@@ -1,9 +1,8 @@
 package com.bap.yuwei.entity.event;
 
 /**
- * Created by jianhua on 17/5/26.
+ * 删除照片event
  */
-
 public class DeleteImageEvent {
 
     private String filePath;

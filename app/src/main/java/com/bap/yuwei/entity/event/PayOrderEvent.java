@@ -1,8 +1,7 @@
 package com.bap.yuwei.entity.event;
 
 /**
- * Created by Administrator on 2017/11/20.
+ * 订单付款event
  */
-
 public class PayOrderEvent {
 }

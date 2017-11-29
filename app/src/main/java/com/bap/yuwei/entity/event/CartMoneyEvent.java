@@ -3,9 +3,8 @@ package com.bap.yuwei.entity.event;
 import java.math.BigDecimal;
 
 /**
- * Created by Administrator on 2017/11/9.
+ * 计算购物车价格event
  */
-
 public class CartMoneyEvent {
 
     public BigDecimal money;

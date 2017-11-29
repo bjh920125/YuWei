@@ -1,8 +1,7 @@
 package com.bap.yuwei.entity.event;
 
 /**
- * Created by Administrator on 2017/11/15.
+ * 取消订单event
  */
-
 public class CancelOrderEvent {
 }

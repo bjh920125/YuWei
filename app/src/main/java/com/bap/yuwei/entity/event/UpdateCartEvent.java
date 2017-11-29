@@ -3,7 +3,7 @@ package com.bap.yuwei.entity.event;
 import com.bap.yuwei.entity.order.GoodsCart;
 
 /**
- * Created by Administrator on 2017/11/9.
+ * 更新购物车event
  */
 
 public class UpdateCartEvent {

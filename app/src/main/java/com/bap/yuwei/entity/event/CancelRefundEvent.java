@@ -1,8 +1,7 @@
 package com.bap.yuwei.entity.event;
 
 /**
- * Created by Administrator on 2017/11/17.
+ * 取消退款event
  */
-
 public class CancelRefundEvent {
 }

@@ -354,6 +354,9 @@ public class MyCollectListActivity extends BaseActivity {
         });
     }
 
+    /**
+     *获取店铺详情
+     */
     private void getShopDetail(Long shopId){
         showLoadingDialog();
         Call<ResponseBody> call=goodsWebService.getShopDetail(shopId);

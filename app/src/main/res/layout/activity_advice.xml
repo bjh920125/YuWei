@@ -5,57 +5,113 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
     tools:context="com.bap.yuwei.activity.sys.AdviceActivity">
 
-    <include layout="@layout/view_toolbar"/>
+    <include layout="@layout/view_toolbar" />
 
-    <EditText
+    <TextView
         android:id="@+id/et_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:minLines="2"
-        android:background="@drawable/radius_gray_border"
-        android:hint="请输入标题"
+        android:layout_margin="10dp"
         android:gravity="top"
-        android:padding="7dp"
+        android:text="请选择您要反馈的问题类型"
+        android:textColor="@color/lightblack"
         android:textSize="14dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_advice"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_advice_btn_bg"
+                android:text="功能建议"
+                android:textColor="@color/white"
+                android:onClick="chooseTitle"
+                android:textSize="13dp"/>
+
+            <Button
+                android:id="@+id/btn_buy_question"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="9dp"
+                android:background="@drawable/selector_advice_btn_bg"
+                android:text="购买遇到问题"
+                android:textColor="@color/white"
+                android:onClick="chooseTitle"
+                android:textSize="13dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_use_question"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_advice_btn_bg"
+                android:text="性能问题"
+                android:textColor="@color/white"
+                android:onClick="chooseTitle"
+                android:textSize="13dp"/>
+
+            <Button
+                android:id="@+id/btn_other"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="9dp"
+                android:background="@drawable/selector_advice_btn_bg"
+                android:text="其他"
+                android:textColor="@color/white"
+                android:onClick="chooseTitle"
+                android:textSize="13dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:minLines="8"
+        android:layout_margin="10dp"
         android:background="@drawable/radius_gray_border"
-        android:hint="如果您遇到问题或者有什么建议，请留下您的宝贵意见和联系方式，我们会及时与您联系，排查解决相关问题。"
         android:gravity="top"
+        android:hint="请描述一下您的问题"
+        android:minLines="5"
         android:padding="7dp"
         android:textSize="14dp" />
 
-    <EditText
-        android:id="@+id/et_tel"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:minLines="1"
-        android:background="@drawable/radius_gray_border"
-        android:hint="请输入联系电话或qq号码"
-        android:inputType="phone"
-        android:gravity="top"
-        android:padding="7dp"
-        android:textSize="14dp" />
+        android:gravity="right">
 
-
-    <TextView
-        android:layout_width="270dp"
-        android:layout_height="45dp"
-        android:text="提交"
-        android:gravity="center"
-        android:layout_marginTop="150dp"
-        android:background="@drawable/radius_purple_bg"
-        android:textColor="@color/white"
-        android:onClick="commit"/>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/radius_purple_bg"
+            android:gravity="center"
+            android:onClick="commit"
+            android:text="提交"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
 </LinearLayout>

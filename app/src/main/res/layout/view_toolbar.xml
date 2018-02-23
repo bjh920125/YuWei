@@ -45,7 +45,6 @@
             android:onClick="onRightBtnClick"
             android:paddingRight="10dp"
             android:singleLine="true"
-            android:text=""
             android:textColor="@color/press_white_grey" />
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

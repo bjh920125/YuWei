@@ -86,9 +86,11 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="服务中心"
-        android:textColor="@color/lightblack" />
+        android:textColor="@color/lightblack"
+        android:visibility="gone"/>
 
-    <include layout="@layout/view_margin_line" />
+    <include layout="@layout/view_margin_line"
+        android:visibility="gone"/>
 
 
     <TextView
@@ -120,9 +122,11 @@
         android:paddingRight="15dp"
         android:text="关于鱼尾"
         android:textColor="@color/lightblack"
-        android:onClick="onMenuClick"/>
+        android:onClick="onMenuClick"
+        android:visibility="gone"/>
 
-    <include layout="@layout/view_margin_line" />
+    <include layout="@layout/view_margin_line"
+        android:visibility="gone" />
 
 
     <TextView

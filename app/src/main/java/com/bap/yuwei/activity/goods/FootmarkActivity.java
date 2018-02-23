@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.bap.yuwei.R;
 import com.bap.yuwei.activity.base.BaseActivity;
@@ -45,7 +45,7 @@ import retrofit2.Response;
 public class FootmarkActivity extends BaseActivity {
 
     private LRecyclerView rvFootmark;
-    private RelativeLayout rlDelete;
+    private LinearLayout llDelete;
 
     private List<Footmark> footmarks;
     private FootmarkAdapter adapter;
@@ -58,8 +58,9 @@ public class FootmarkActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTxtRightMenu.setText("编辑");
         goodsWebService = MyApplication.getInstance().getWebService(GoodsWebService.class);
+        mTxtRightMenu.setText("编辑");
+        mTxtRightMenu.setTextColor(getResources().getColor(R.color.white));
         footmarks = new ArrayList<>();
         adapter = new FootmarkAdapter(mContext);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
@@ -113,7 +114,11 @@ public class FootmarkActivity extends BaseActivity {
     /**
      * 删除足迹
      */
-    public void delete(View v){
+    public void delete(){
+        if(getNeedDeleteIds().size()<=0){
+            ToastUtil.showShort(mContext,"请先选择要删除的项！");
+            return;
+        }
         showLoadingDialog();
         Map<String, Object> params = new HashMap<>();
         params.put("historyIds", getNeedDeleteIds());
@@ -189,18 +194,26 @@ public class FootmarkActivity extends BaseActivity {
         });
     }
 
+    public void onDeleteBtnClick(View v){
+        switch (v.getId()){
+            case R.id.txt_delete:
+                delete();
+                break;
+            case R.id.txt_cancel:
+                adapter.isEditMode = false;
+                mTxtRightMenu.setVisibility(View.VISIBLE);
+                llDelete.setVisibility(View.GONE);
+                break;
+            default:break;
+        }
+    }
+
+
     @Override
     public void onRightBtnClick(View v) {
-        String txt = mTxtRightMenu.getText().toString();
-        if (txt.equals("编辑")) {
-            mTxtRightMenu.setText("完成");
-            adapter.isEditMode = true;
-            rlDelete.setVisibility(View.VISIBLE);
-        } else {
-            mTxtRightMenu.setText("编辑");
-            adapter.isEditMode = false;
-            rlDelete.setVisibility(View.GONE);
-        }
+        adapter.isEditMode = true;
+        mTxtRightMenu.setVisibility(View.GONE);
+        llDelete.setVisibility(View.VISIBLE);
         adapter.notifyDataSetChanged();
     }
 
@@ -211,7 +224,7 @@ public class FootmarkActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        rlDelete = (RelativeLayout) findViewById(R.id.rl_bottom);
+        llDelete= (LinearLayout) findViewById(R.id.ll_delete);
         rvFootmark = (LRecyclerView) findViewById(R.id.rv_footmark);
         rvFootmark.setHasFixedSize(true);
         rvFootmark.setLayoutManager(new LinearLayoutManager(mContext));

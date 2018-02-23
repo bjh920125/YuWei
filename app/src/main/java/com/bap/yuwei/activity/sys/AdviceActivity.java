@@ -2,6 +2,7 @@ package com.bap.yuwei.activity.sys;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.bap.yuwei.R;
@@ -29,7 +30,10 @@ import retrofit2.Response;
  */
 public class AdviceActivity extends BaseActivity {
 
-    private EditText etTitle,etContent,etTel;
+    private Button btnAdvice,btnBuyQuestion,btnQuestion,btnOther;
+    private Button[] btns;
+    private EditText etContent;
+    private String title;
 
     private SysWebService sysWebService;
 
@@ -39,14 +43,39 @@ public class AdviceActivity extends BaseActivity {
         sysWebService= MyApplication.getInstance().getWebService(SysWebService.class);
     }
 
+
+    public void chooseTitle(View v){
+        int index=-1;
+        switch (v.getId()){
+            case R.id.btn_advice:
+                index=0;
+                break;
+            case R.id.btn_buy_question:
+                index=1;
+                break;
+            case R.id.btn_use_question:
+                index=2;
+                break;
+            case R.id.btn_other:
+                index=3;
+                break;
+            default:break;
+        }
+        for(Button btn:btns){
+            btn.setSelected(false);
+        }
+        btns[index].setSelected(true);
+        title=btns[index].getText().toString();
+    }
+
     /**
      * 评价
      */
     public void commit(View v){
         Map<String,Object> params=new HashMap<>();
         params.put("userName", null!=mUser ? mUser.getUsername() : "");
-        params.put("telphone",StringUtils.getEditTextValue(etTel));
-        params.put("title",StringUtils.getEditTextValue(etTitle));
+        params.put("telphone",null!=mUser ? mUser.getPhone() : "");
+        params.put("title",title);
         params.put("content",StringUtils.getEditTextValue(etContent));
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
         Call<ResponseBody> call=sysWebService.addAdvice(body);
@@ -84,8 +113,13 @@ public class AdviceActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        etTitle= (EditText) findViewById(R.id.et_title);
         etContent= (EditText) findViewById(R.id.et_content);
-        etTel= (EditText) findViewById(R.id.et_tel);
+        btnAdvice= (Button) findViewById(R.id.btn_advice);
+        btnBuyQuestion= (Button) findViewById(R.id.btn_buy_question);
+        btnQuestion= (Button) findViewById(R.id.btn_use_question);
+        btnOther= (Button) findViewById(R.id.btn_other);
+        btns=new Button[]{btnAdvice,btnBuyQuestion,btnQuestion,btnOther};
+        btnAdvice.setSelected(true);
+        title=btnAdvice.getText().toString();
     }
 }

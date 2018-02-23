@@ -30,9 +30,9 @@
         android:id="@+id/txt_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dp"
-        android:textColor="@color/red"
-        android:textSize="13dp"
+        android:paddingLeft="2dp"
+        android:textColor="@color/price_red"
+        android:textSize="15dp"
         android:background="@color/white"/>
 
     <LinearLayout
@@ -44,7 +44,9 @@
             android:id="@+id/txt_comment_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="5dp"
             android:textColor="@color/darkgrey"
             android:textSize="11dp"/>
 
@@ -52,8 +54,9 @@
             android:id="@+id/txt_comment_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:layout_marginLeft="10dp"
+            android:paddingLeft="13dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="5dp"
             android:textColor="@color/darkgrey"
             android:textSize="11dp"/>
     </LinearLayout>

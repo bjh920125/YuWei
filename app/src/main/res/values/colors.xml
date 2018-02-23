@@ -8,6 +8,7 @@
     <color name="wheel_timebtn_pre">#CCCCCC</color>
 
     <color name="lightpruple">#C0A6D8</color>
+    <color name="lightpruple2"> #D8B6F7</color>
     <color name="lightgray2">#EBEEF1</color>
     <color name="black">#000000</color><!--黑色 -->
     <color name="lightblack">#5b5b5b</color><!--浅黑色 -->
@@ -36,7 +37,7 @@
     <color name="silver">#c0c0c0</color><!--银色 -->
 
 
-
+    <color name="price_red"> #EB0400</color><!--红色 -->
     <color name="red">#8b0000</color><!--红色 -->
     <color name="darkred">#8b0000</color><!--暗红色 -->
     <color name="crimson">#dc143c</color><!--暗深红色 -->

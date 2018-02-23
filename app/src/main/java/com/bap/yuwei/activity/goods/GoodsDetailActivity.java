@@ -854,7 +854,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             });
         }
 
-        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mGoods.getGoodsImages().get(0).getGoodsImagePath(),imgGoods, DisplayImageOptionsUtil.getOptions());
+        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mGoods.getGoodsImages().get(0).getGoodsImagePath(),imgGoods, DisplayImageOptionsUtil.getOptionsRounded());
         txtPrice.setText("￥"+mGoods.getPreferentialPrice());
         txtStock.setText("库存"+mGoods.getStockNum()+"件");
         txtAddCart.setOnClickListener(this);

@@ -28,7 +28,7 @@
         android:layout_below="@+id/txt_goods_title"
         android:padding="5dp"
         android:text=""
-        android:textColor="@color/red"/>
+        android:textColor="@color/price_red"/>
 
     <ImageView
         android:id="@+id/img_add_cart"

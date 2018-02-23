@@ -77,6 +77,11 @@
         android:layout_below="@+id/txt_goods_name"
         android:layout_marginTop="5dp"
         android:text="1"
-        android:textColor="@color/red"
-        android:textSize="11dp" />
+        android:textColor="@color/price_red" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/img_check"
+        android:background="@color/lightgray"/>
 </RelativeLayout>

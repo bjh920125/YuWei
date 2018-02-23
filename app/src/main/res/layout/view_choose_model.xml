@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="450dp"
         android:layout_below="@+id/view"
-        android:background="@color/white"
         android:layout_marginTop="10dp"
+        android:background="@color/white"
         android:paddingTop="10dp">
 
         <ImageView
@@ -31,11 +31,11 @@
             android:layout_alignTop="@+id/img_place"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_toEndOf="@+id/img_place"
             android:layout_toRightOf="@+id/img_place"
             android:text="111"
-            android:textColor="@color/red"
+            android:textColor="@color/price_red"
             android:textSize="16dp" />
 
         <TextView
@@ -46,17 +46,15 @@
             android:layout_alignLeft="@+id/txt_price"
             android:layout_marginBottom="9dp"
             android:text="1111"
-            android:textColor="@color/darkgrey"
-            android:textSize="11dp" />
+            android:textColor="@color/lightblack"
+            android:textSize="12dp" />
 
         <ImageView
             android:id="@+id/img_close"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="-10dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/tk_close" />
 
@@ -83,6 +81,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_model_title"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
             zhy:max_select="1" />
 
         <TextView
@@ -92,7 +92,7 @@
             android:layout_alignLeft="@+id/txt_model_title"
             android:layout_alignStart="@+id/txt_model_title"
             android:layout_below="@+id/flowlayout"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="数量" />
 
@@ -102,6 +102,7 @@
             android:layout_height="25dp"
             android:layout_alignRight="@+id/img_close"
             android:layout_alignTop="@+id/txt_num_title"
+            android:layout_marginRight="10dp"
             app:srcCompat="@drawable/syncart_more_btn" />
 
         <TextView

@@ -1,10 +1,12 @@
 package com.bap.yuwei.activity.goods;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -48,6 +50,13 @@ import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
+import com.umeng.socialize.utils.SocializeUtils;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -70,6 +79,7 @@ import retrofit2.Response;
 public class GoodsDetailActivity extends BaseActivity implements View.OnClickListener{
 
     private ConvenientBanner convenientBanner;
+    private TextView txtImageIndex;
     private ImageView imgShop,imgSpecification;
     private TextView txtGoodsTitle,txtPrice,txtOldPrice,txtExpressPrice,txtSellNum,txtModelName,txtSelectNum,txtShopName,txtShopDesc;
     private TextView txtShopCollectUserTotal,txtRecentGoodsTotal,txtGoodsTotal;
@@ -118,6 +128,8 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
 
     private GoodsWebService goodsWebService;
 
+    private ProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +164,9 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 getEvaluations();
             }
         });
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("正在处理..");
     }
 
     /**
@@ -535,7 +550,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         txtGoodsTitle.setText(mGoods.getTitle());
         txtPrice.setText("￥"+mGoods.getPreferentialPrice());
         txtOldPrice.setText("原价￥"+mGoods.getPrice()+"");
-        txtExpressPrice.setText("快递："+mGoods.getFreight()+"元");
+        txtExpressPrice.setText("快递： "+mGoods.getFreight()+"元");
         txtModelName.setText(mGoods.getGoodsModelName());
         txtSellNum.setText("已卖出"+mGoods.getSellNum()+"件");
         ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mGoods.getSpecification(),imgSpecification, DisplayImageOptionsUtil.getOptions());
@@ -586,8 +601,26 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             public GoodsImageAdapter createHolder() {
                 return new GoodsImageAdapter();
             }
-        }, mGoods.getGoodsImages()).setPageIndicator(new int[]{R.drawable.dot_blur, R.drawable.dot_focus})
-                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT);
+        }, mGoods.getGoodsImages());
+
+        convenientBanner.startTurning(999999999);
+
+        convenientBanner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                txtImageIndex.setText((position+1)+"/"+mGoods.getGoodsImages().size());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -789,7 +822,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        topDetail = llDetail.getTop()+55;  //滑动需要的距离
+        topDetail = llDetail.getTop();  //滑动需要的距离
     }
 
     /**
@@ -881,6 +914,74 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
+    }
+
+    public void share(View v){
+        UMWeb web = new UMWeb(Constants.GOODS_SHARE_URL+mGoods.getGoodsId());
+        web.setTitle(mGoods.getTitle());//标题
+        web.setThumb(new UMImage(this,Constants.PICTURE_URL+mGoods.getGoodsImages().get(0).getGoodsImagePath()));  //缩略图
+        web.setDescription(mGoods.getTitle());//描述
+
+        new ShareAction(this)
+                .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE,SHARE_MEDIA.WEIXIN_FAVORITE)
+                .setCallback(shareListener)
+                .withMedia(web).open();
+    }
+
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+            SocializeUtils.safeShowDialog(dialog);
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            SocializeUtils.safeCloseDialog(dialog);
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            SocializeUtils.safeCloseDialog(dialog);
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            SocializeUtils.safeCloseDialog(dialog);
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UMShareAPI.get(this).release();
+    }
+
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_goods_detail;
@@ -890,6 +991,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initView() {
         convenientBanner=(ConvenientBanner) findViewById(R.id.banner);
+        txtImageIndex=(TextView) findViewById(R.id.txt_image_index);
         txtGoodsTitle= (TextView) findViewById(R.id.txt_goods_title);
         txtPrice= (TextView) findViewById(R.id.txt_price);
         txtOldPrice= (TextView) findViewById(R.id.txt_old_price);

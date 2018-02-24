@@ -44,6 +44,8 @@
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/search"
                 android:paddingLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:drawablePadding="5dp"
                 android:layout_weight="8"
                 android:background="@drawable/radius_lightpurple_bg"

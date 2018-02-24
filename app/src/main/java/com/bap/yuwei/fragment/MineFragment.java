@@ -276,12 +276,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     public void refreshUI() {
         if(null != mUser){
             txtName.setText(mUser.getUsername());
-            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead, DisplayImageOptionsUtil.getOptions());
+            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead, DisplayImageOptionsUtil.getOptionsRounded(360));
             getCollectNum();
             getOrderStatistics();
         }else{
             txtName.setText("点击登录");
-            ImageLoader.getInstance().displayImage("drawable://"+R.drawable.iconfont_touxiang,imgHead, DisplayImageOptionsUtil.getOptions());
+            ImageLoader.getInstance().displayImage("drawable://"+R.drawable.iconfont_touxiang,imgHead, DisplayImageOptionsUtil.getOptionsRounded(360));
             txtGoodsCollectNum.setText("0");
             txtShopCollectNum.setText("0");
             txtFootmarkNum.setText("0");

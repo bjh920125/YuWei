@@ -58,8 +58,10 @@
         android:layout_alignLeft="@+id/txt_goods_name"
         android:layout_alignStart="@+id/txt_goods_name"
         android:layout_below="@+id/txt_goods_name"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:text="1"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/darkgrey"
         android:textSize="11dp" />
 
@@ -72,9 +74,10 @@
         android:layout_alignStart="@+id/txt_model"
         android:layout_below="@+id/txt_model"
         android:gravity="bottom"
+        android:layout_marginBottom="2dp"
         android:text="1"
-        android:textColor="@color/price_red"
-        android:textSize="14dp" />
+        android:textColor="#B72E31"
+        android:textSize="15dp" />
 
 
     <ImageView
@@ -88,7 +91,7 @@
 
     <TextView
         android:id="@+id/txt_num"
-        android:layout_width="30dp"
+        android:layout_width="26dp"
         android:layout_height="22dp"
         android:layout_alignBottom="@+id/txt_price"
         android:layout_toLeftOf="@+id/img_add"

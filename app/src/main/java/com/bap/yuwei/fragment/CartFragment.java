@@ -130,8 +130,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
             }
         }
         total=money;
-        txtPay.setText("结算（"+num+"）");
+        txtPay.setText("结算("+num+")");
         txtPrice.setText("￥"+total);
+
+        if(num<=0){
+            txtPay.setBackgroundColor(getResources().getColor(R.color.darkgrey));
+        }else {
+            txtPay.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
     }
 
     /**
@@ -272,6 +278,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     private void resetUI(){
         txtPrice.setText("￥0");
         cbAll.setChecked(false);
+        if(model==PAY){
+            txtPay.setText("结算(0)");
+            txtPay.setBackgroundColor(getResources().getColor(R.color.darkgrey));
+        }else {
+            txtPay.setText("删除");
+            txtPay.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
         getCarts();
     }
 
@@ -336,6 +349,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
             model=EDIT;
             txtPay.setText("删除");
             txtEdit.setText("完成");
+            txtPay.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         }else {
             model=PAY;
             txtPay.setText("结算");

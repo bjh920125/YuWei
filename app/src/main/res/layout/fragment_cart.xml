@@ -84,7 +84,7 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@color/colorPrimary"
+            android:background="@color/darkgrey"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -101,7 +101,7 @@
             android:paddingRight="5dp"
             android:paddingTop="7dp"
             android:text="￥0.00"
-            android:textColor="@color/red" />
+            android:textColor="#B72E31" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -122,5 +122,5 @@
             android:textSize="10dp" />
     </RelativeLayout>
 
-    <include layout="@layout/view_empty_cart"/>
+    <include layout="@layout/view_empty_cart" />
 </RelativeLayout>

@@ -16,6 +16,9 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -74,6 +77,10 @@ public class MyApplication extends Application {
 		super.onCreate();
 		initOkHttp();
 		initImageLoader(getApplicationContext());//初始化imageloader
+		PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+		PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+		Config.DEBUG = true;
+		UMShareAPI.get(this);
 	}
 
 	private void initOkHttp() {

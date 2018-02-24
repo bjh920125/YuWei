@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.bap.yuwei.R;
@@ -45,7 +44,7 @@ public class MainActivity extends BaseActivity {
     private CartFragment cartFragment;
     private MineFragment mineFragment;
 
-    private Button[] mTabs;
+    private TextView[] mTabs;
     private Fragment[] fragments;
     private TextView txtCartNum;
 
@@ -114,11 +113,11 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mTabs=new Button[4];
-        mTabs[0]=(Button) findViewById(R.id.btn_home);
-        mTabs[1]=(Button) findViewById(R.id.btn_category);
-        mTabs[2]=(Button) findViewById(R.id.btn_cart);
-        mTabs[3]=(Button) findViewById(R.id.btn_mine);
+        mTabs=new TextView[4];
+        mTabs[0]=(TextView) findViewById(R.id.btn_home);
+        mTabs[1]=(TextView) findViewById(R.id.btn_category);
+        mTabs[2]=(TextView) findViewById(R.id.btn_cart);
+        mTabs[3]=(TextView) findViewById(R.id.btn_mine);
         mTabs[0].setSelected(true);
         txtCartNum= (TextView) findViewById(R.id.txt_cart_num);
     }

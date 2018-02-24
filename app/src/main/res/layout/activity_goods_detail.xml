@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/txt_product"
-                android:layout_width="50dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:onClick="toPosition"
@@ -40,7 +40,7 @@
 
             <TextView
                 android:id="@+id/txt_detail"
-                android:layout_width="50dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:onClick="toPosition"
@@ -48,12 +48,23 @@
 
             <TextView
                 android:id="@+id/txt_comment"
-                android:layout_width="50dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:onClick="toPosition"
                 android:text="评价" />
         </LinearLayout>
+
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="10dp"
+            android:onClick="share"
+            android:scaleType="center"
+            android:src="@drawable/share" />
     </RelativeLayout>
 
     <View
@@ -61,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@+id/rl_title"
-        android:background="#ADADAD"/>
+        android:background="#ADADAD" />
 
     <com.bap.yuwei.view.StickyScrollView
         android:id="@+id/scrollview"
@@ -77,10 +88,30 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.bigkoo.convenientbanner.ConvenientBanner
-                android:id="@+id/banner"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="350dp" />
+                android:layout_height="350dp">
+
+                <com.bigkoo.convenientbanner.ConvenientBanner
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp" />
+
+                <TextView
+                    android:id="@+id/txt_image_index"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/circle_grey"
+                    android:gravity="center"
+                    android:text="1/1"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/txt_goods_title"
@@ -94,7 +125,9 @@
                 android:id="@+id/txt_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="3dp"
+                android:paddingTop="3dp"
                 android:textColor="@color/price_red"
                 android:textSize="16dp" />
 
@@ -104,14 +137,15 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textColor="@color/darkgrey"
-                android:textSize="12dp" />
+                android:textSize="12dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:paddingBottom="5dp">
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp">
 
                 <TextView
                     android:id="@+id/txt_express_price"
@@ -268,8 +302,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:onClick="showShop">
+                android:onClick="showShop"
+                android:padding="5dp">
 
                 <ImageView
                     android:id="@+id/img_shop"
@@ -306,9 +340,9 @@
                 android:id="@+id/ll_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="showShop"
                 android:orientation="horizontal"
-                android:padding="5dp"
-                android:onClick="showShop">
+                android:padding="5dp">
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -405,9 +439,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/radius_grey_border"
                     android:gravity="center"
+                    android:onClick="contactSeller"
                     android:text="联系供应商"
-                    android:textSize="12dp"
-                    android:onClick="contactSeller"/>
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/txt_enter_shop"
@@ -573,27 +607,30 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:onClick="getCommentByType">
+            android:onClick="getCommentByType"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/txt_all_comment_title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="全部评价"
                 android:gravity="center"
-                android:textSize="12dp"
-                android:textColor="@color/colorPrimary"/>
+                android:text="全部评价"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12dp" />
+
             <TextView
                 android:id="@+id/txt_all_comment"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="0"
                 android:gravity="center"
-                android:textSize="12dp"
-                android:textColor="@color/colorPrimary"/>
-            <include layout="@layout/view_line"/>
+                android:text="0"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12dp" />
+
+            <include layout="@layout/view_line" />
         </LinearLayout>
 
         <LinearLayout
@@ -601,27 +638,30 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:onClick="getCommentByType">
+            android:onClick="getCommentByType"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/txt_addition_comment_title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="追评"
                 android:gravity="center"
-                android:textSize="12dp"
-                android:textColor="@color/lightblack"/>
+                android:text="追评"
+                android:textColor="@color/lightblack"
+                android:textSize="12dp" />
+
             <TextView
                 android:id="@+id/txt_addition_comment"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="0"
                 android:gravity="center"
-                android:textSize="12dp"
-                android:textColor="@color/lightblack"/>
-            <include layout="@layout/view_line"/>
+                android:text="0"
+                android:textColor="@color/lightblack"
+                android:textSize="12dp" />
+
+            <include layout="@layout/view_line" />
         </LinearLayout>
 
         <LinearLayout
@@ -629,27 +669,30 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:onClick="getCommentByType">
+            android:onClick="getCommentByType"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/txt_has_pic_comment_title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="有图"
                 android:gravity="center"
-                android:textSize="12dp"
-                android:textColor="@color/lightblack"/>
+                android:text="有图"
+                android:textColor="@color/lightblack"
+                android:textSize="12dp" />
+
             <TextView
                 android:id="@+id/txt_has_pic_comment"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="0"
                 android:gravity="center"
-                android:textSize="12dp"
-                android:textColor="@color/lightblack"/>
-            <include layout="@layout/view_line"/>
+                android:text="0"
+                android:textColor="@color/lightblack"
+                android:textSize="12dp" />
+
+            <include layout="@layout/view_line" />
         </LinearLayout>
     </LinearLayout>
 
@@ -660,19 +703,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_comment_detail"
         android:layout_marginBottom="41dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/txt_sell_out"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:text="该商品已经下架啦~"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:background="@color/grey"
-        android:textSize="13dp"
         android:layout_above="@+id/view_divider_line2"
-        android:visibility="gone"/>
+        android:background="@color/grey"
+        android:gravity="center"
+        android:text="该商品已经下架啦~"
+        android:textColor="@color/white"
+        android:textSize="13dp"
+        android:visibility="gone" />
 
     <View
         android:id="@+id/view_divider_line2"
@@ -696,11 +739,11 @@
             android:layout_weight="1"
             android:background="@null"
             android:drawableTop="@drawable/kefu"
+            android:onClick="contactSeller"
             android:paddingTop="5dp"
             android:text="客服"
             android:textColor="@color/lightblack"
-            android:textSize="12sp"
-            android:onClick="contactSeller"/>
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/btn_shop"

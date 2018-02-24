@@ -61,29 +61,30 @@
         android:layout_width="30dp"
         android:layout_height="22dp"
         android:layout_alignBottom="@+id/txt_price"
-        android:layout_toLeftOf="@+id/img_add"
         android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@+id/img_add"
         android:background="@null"
         android:gravity="center"
         android:text="x1"
         android:textColor="@color/lightblack"
-        android:textSize="12dp"/>
+        android:textSize="12dp" />
 
     <LinearLayout
         android:id="@+id/ll_order_item_operate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_num"
-        android:paddingTop="8dp"
-        android:gravity="right">
+        android:gravity="right"
+        android:paddingTop="8dp">
 
         <TextView
             android:id="@+id/txt_refund"
             android:layout_width="60dp"
             android:layout_height="25dp"
+            android:background="@drawable/radius_lightblack_border"
             android:gravity="center"
             android:text="退款"
-            android:background="@drawable/radius_grey_border"/>
+            android:textColor="@color/lightblack" />
 
 
         <TextView
@@ -91,28 +92,32 @@
             android:layout_width="60dp"
             android:layout_height="25dp"
             android:layout_marginLeft="10dp"
+            android:background="@drawable/radius_lightblack_border"
             android:gravity="center"
             android:text="申请售后"
-            android:background="@drawable/radius_grey_border"/>
+            android:textColor="@color/lightblack" />
 
         <TextView
             android:id="@+id/txt_refunding"
             android:layout_width="60dp"
             android:layout_height="25dp"
             android:layout_marginLeft="10dp"
+            android:background="@drawable/radius_lightblack_border"
             android:gravity="center"
             android:text="退款中"
-            android:background="@drawable/radius_grey_border"
-            android:visibility="gone"/>
+            android:textColor="@color/lightblack"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txt_refund_success"
             android:layout_width="60dp"
             android:layout_height="25dp"
             android:layout_marginLeft="10dp"
+            android:background="@drawable/radius_lightblack_border"
             android:gravity="center"
             android:text="退款成功"
-            android:visibility="gone"/>
+            android:textColor="@color/lightblack"
+            android:visibility="gone" />
     </LinearLayout>
 
 </RelativeLayout>

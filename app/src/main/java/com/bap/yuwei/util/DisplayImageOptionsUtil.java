@@ -77,4 +77,21 @@ public class DisplayImageOptionsUtil {
 				.displayer(new RoundedBitmapDisplayer(round))
 				.build();
 	}
+
+	/**
+	 * 圆角图片
+	 * @return
+	 */
+	public static DisplayImageOptions getOptionsRounded(int round,int defaultImage){
+		return new DisplayImageOptions.Builder()
+				.showImageOnLoading(defaultImage)
+				.showImageForEmptyUri(defaultImage)
+				.showImageOnFail(defaultImage)
+				.cacheOnDisk(true)
+				.cacheInMemory(true)
+				.imageScaleType(ImageScaleType.EXACTLY)
+				.bitmapConfig(Bitmap.Config.RGB_565)
+				.displayer(new RoundedBitmapDisplayer(round))
+				.build();
+	}
 }

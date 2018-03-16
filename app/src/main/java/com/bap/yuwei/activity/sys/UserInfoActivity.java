@@ -89,7 +89,7 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         mProgressDialog.dismiss();
                         avatar=new JSONObject(result).getString("result");
-                        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+avatar,imgHead, DisplayImageOptionsUtil.getOptionsRounded(360));
+                        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+avatar,imgHead, DisplayImageOptionsUtil.getOptionsRounded(180,R.drawable.iconfont_touxiang));
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -181,7 +181,7 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
     public void refreshUI() {
         if(null != mUser){
             etName.setText(mUser.getUsername());
-            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead,DisplayImageOptionsUtil.getOptionsRounded(360));
+            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead,DisplayImageOptionsUtil.getOptionsRounded(180,R.drawable.iconfont_touxiang));
             avatar=mUser.getAvatar();
             int gender=mUser.getGender();
             if(gender==0){

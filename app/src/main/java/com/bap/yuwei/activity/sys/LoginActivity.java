@@ -152,6 +152,7 @@ public class LoginActivity extends BaseActivity {
      */
     public void regist(View v){
         startActivity(new Intent(mContext,RegisterActivity.class));
+        finish();
     }
 
     /**
@@ -159,6 +160,7 @@ public class LoginActivity extends BaseActivity {
      */
     public void forgetPwd(View v){
         startActivity(new Intent(mContext,ForgetPwdActivity.class));
+        finish();
     }
 
     @Override

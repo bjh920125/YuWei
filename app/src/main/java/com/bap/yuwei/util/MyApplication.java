@@ -77,7 +77,7 @@ public class MyApplication extends Application {
 		super.onCreate();
 		initOkHttp();
 		initImageLoader(getApplicationContext());//初始化imageloader
-		PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+		PlatformConfig.setWeixin("wxa8e5bf9dae487c00", "5968957db232874cbc9d4b25fc5511fc");
 		PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
 		Config.DEBUG = true;
 		UMShareAPI.get(this);

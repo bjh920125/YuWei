@@ -224,5 +224,7 @@ public class ReceiveAddressListActivity extends BaseActivity {
     @Override
     protected void initView() {
         mListView= (ListView) findViewById(R.id.lv_address);
+        View emptyView= findViewById(R.id.view_list_empty);
+        mListView.setEmptyView(emptyView);
     }
 }

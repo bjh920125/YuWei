@@ -23,4 +23,6 @@
             android:scrollbars="none"
             android:background="@color/lightgray2"/>
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/view_list_empty" />
 </LinearLayout>

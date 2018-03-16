@@ -304,5 +304,7 @@ public class SearchGoodsActivity extends BaseActivity {
         gvGoods.setHeaderViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
         gvGoods.setFooterViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
         gvGoods.setFooterViewHint("拼命加载中","已经全部为你呈现了","网络不给力啊，点击再试一次吧");
+        View emptyView= findViewById(R.id.view_list_empty);
+        gvGoods.setEmptyView(emptyView);
     }
 }

@@ -39,6 +39,7 @@ public class NewsListActivity extends BaseActivity implements SwipeRefreshLayout
 
     private SwipeRefreshLayout swipeRefresh;
     private PLALoadMoreListView mListview;
+    private View emptyView;
 
     private List<News> mNews;
     private CommonAdapter<News> mAdapter;
@@ -102,6 +103,7 @@ public class NewsListActivity extends BaseActivity implements SwipeRefreshLayout
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                setEmptyView();
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -109,6 +111,16 @@ public class NewsListActivity extends BaseActivity implements SwipeRefreshLayout
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
+    }
+
+    private void setEmptyView(){
+        if(null==mNews || mNews.size()<=0){
+            swipeRefresh.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }else {
+            swipeRefresh.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -137,5 +149,6 @@ public class NewsListActivity extends BaseActivity implements SwipeRefreshLayout
         swipeRefresh= (SwipeRefreshLayout) findViewById(R.id.swipe);
         mListview.setOnLoadMoreListener(this);
         swipeRefresh.setOnRefreshListener(this);
+        emptyView= findViewById(R.id.view_list_empty);
     }
 }

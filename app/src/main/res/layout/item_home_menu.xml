@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/img_icon"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
         android:src="@drawable/default_img" />
 
     <TextView

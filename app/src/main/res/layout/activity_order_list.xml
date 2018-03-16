@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.bap.yuwei.activity.order.OrderListActivity">
 
-    <include layout="@layout/view_toolbar"/>
+    <include layout="@layout/view_toolbar" />
 
     <RadioGroup
         android:id="@+id/rg_staus"
@@ -17,50 +17,56 @@
 
         <RadioButton
             android:id="@+id/rb_all"
+            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="全部"
-            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"/>
+            android:text="全部" />
+
         <RadioButton
             android:id="@+id/rb_pay"
+            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="待付款"
-            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"/>
+            android:text="待付款" />
+
         <RadioButton
             android:id="@+id/rb_send"
+            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="待发货"
-            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"/>
+            android:text="待发货" />
+
         <RadioButton
             android:id="@+id/rb_receive"
+            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="待收货"
-            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"/>
+            android:text="待收货" />
+
         <RadioButton
             android:id="@+id/rb_comment"
+            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="待评价"
-            style="@style/CustomUnderlineCheckboxTheme.CheckboxTheme"/>
+            android:text="待评价" />
     </RadioGroup>
 
-    <include layout="@layout/view_line"/>
+    <include layout="@layout/view_line" />
 
     <com.github.jdsjlzx.recyclerview.LRecyclerView
-    android:id="@+id/rv_order"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+        android:id="@+id/rv_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/view_list_empty" />
 </LinearLayout>

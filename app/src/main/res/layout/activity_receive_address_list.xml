@@ -31,4 +31,6 @@
         android:onClick="addAddress"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"/>
+
+    <include layout="@layout/view_list_empty" />
 </RelativeLayout>

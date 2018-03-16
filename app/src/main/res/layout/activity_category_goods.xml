@@ -179,5 +179,5 @@
             app:plaColumnNumber="2"
             app:plaContentBackground="@color/lightgray" />
     </android.support.v4.widget.SwipeRefreshLayout>
-
+    <include layout="@layout/view_list_empty" />
 </LinearLayout>

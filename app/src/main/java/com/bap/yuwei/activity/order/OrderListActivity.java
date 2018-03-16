@@ -244,5 +244,7 @@ public class OrderListActivity extends BaseActivity {
         rvOrder.setHeaderViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
         rvOrder.setFooterViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
         rvOrder.setFooterViewHint("拼命加载中","已经全部为你呈现了","网络不给力啊，点击再试一次吧");
+        View emptyView= findViewById(R.id.view_list_empty);
+        rvOrder.setEmptyView(emptyView);
     }
 }

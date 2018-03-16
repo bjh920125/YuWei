@@ -100,5 +100,5 @@
         android:layout_above="@+id/rl_bottom"
         android:layout_below="@+id/toolbar" />
 
-
+    <include layout="@layout/view_list_empty" />
 </RelativeLayout>

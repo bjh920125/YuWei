@@ -121,7 +121,8 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:numColumns="5"
-                android:scrollbars="none"/>
+                android:scrollbars="none"
+                android:verticalSpacing="5dp"/>
 
             <View
                 android:layout_width="match_parent"

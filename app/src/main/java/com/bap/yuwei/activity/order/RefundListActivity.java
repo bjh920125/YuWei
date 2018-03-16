@@ -161,5 +161,7 @@ public class RefundListActivity extends BaseActivity {
         rvRefund.setHeaderViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
         rvRefund.setFooterViewColor(R.color.colorAccent, R.color.dark ,android.R.color.white);
         rvRefund.setFooterViewHint("拼命加载中","已经全部为你呈现了","网络不给力啊，点击再试一次吧");
+        View emptyView= findViewById(R.id.view_list_empty);
+        rvRefund.setEmptyView(emptyView);
     }
 }

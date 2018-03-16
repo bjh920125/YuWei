@@ -57,6 +57,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
     private TextView txtCategory1,txtCategory2,txtCategory3,txtCategory4;
     private TextView txtMult,txtSell,txtHot,txtPrice;
     private EditText etSearch;
+    private View emptyView;
 
     private Category mCategory;
     private List<Goods> mGoods;
@@ -196,6 +197,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                setEmptyView();
             }
 
             @Override
@@ -206,6 +208,15 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         });
     }
 
+    private void setEmptyView(){
+        if(null==mGoods || mGoods.size()<=0){
+            swipeRefresh.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }else {
+            swipeRefresh.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onResume() {
@@ -546,6 +557,7 @@ public class CategoryGoodsActivity extends BaseActivity  implements SwipeRefresh
         txtHot= (TextView) findViewById(R.id.txt_hot);
         txtPrice= (TextView) findViewById(R.id.txt_price);
         etSearch= (EditText) findViewById(R.id.et_search);
+        emptyView=  findViewById(R.id.view_list_empty);
         mGvGoods.setOnLoadMoreListener(this);
         swipeRefresh.setOnRefreshListener(this);
         txtCategory1.setOnClickListener(this);

@@ -59,6 +59,7 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
     private PLALoadMoreListView mGvGoods;
     private TextView btnMsg,txtMsgCount,txtSearch;
     private TextView txtCategory1,txtCategory2,txtCategory3,txtCategory4;
+    private View emptyView;
 
     private PopupWindow popCategory;
     private View popCategoryView;
@@ -281,6 +282,7 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                setEmptyView();
             }
 
             @Override
@@ -289,6 +291,16 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
                 ToastUtil.showShort(mContext, ThrowableUtil.getErrorMsg(t));
             }
         });
+    }
+
+    private void setEmptyView(){
+        if(null==mGoods || mGoods.size()<=0){
+            swipeRefresh.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }else {
+            swipeRefresh.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     private void initPopCategoryView() {
@@ -487,6 +499,7 @@ public class CategoryFragment extends BaseFragment  implements OnRefreshListener
         btnMsg=(TextView) fragmentView.findViewById(R.id.btn_msg);
         txtMsgCount=(TextView) fragmentView.findViewById(R.id.txt_msg_count);
         txtSearch=(TextView) fragmentView.findViewById(R.id.txt_search);
+        emptyView= fragmentView.findViewById(R.id.view_list_empty);
         mGvGoods.setOnLoadMoreListener(this);
         swipeRefresh.setOnRefreshListener(this);
         txtCategory1.setOnClickListener(this);

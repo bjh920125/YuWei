@@ -83,7 +83,7 @@ public class OverallSearchActivity extends BaseActivity {
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         JSONObject jo=new JSONObject(result);
                         String words=jo.getString("result");
-                        if(!TextUtils.isEmpty(words)){
+                        if(!TextUtils.isEmpty(words) && !"null".equals(words)){
                             etWords.setText(words);
                         }
                     }else{

@@ -216,7 +216,7 @@ public class SearchGoodsActivity extends BaseActivity {
         params.put("sort",querySort);
         params.put("page",pageIndex);
         params.put("size",12);
-        params.put("ui", null!=mUser ? getXToken() : "");
+        params.put("ui", null!=mUser ? SharedPreferencesUtil.getString(mContext,Constants.XTOKEN_KEY) : "");
         Call<ResponseBody> call=goodsWebService.goodssearch(params);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -256,7 +256,7 @@ public class SearchGoodsActivity extends BaseActivity {
 
     @NonNull
     private String getXToken(){
-        String str=SharedPreferencesUtil.getString(mContext,Constants.TOKEN_KEY)+":"+mUser.getUserId()+":1";
+        String str=SharedPreferencesUtil.getString(mContext,Constants.TOKEN_KEY);//+":"+mUser.getUserId()+":"+Constants.DEVICE_TYPE
         return Base64.encodeToString(str.getBytes(), Base64.NO_WRAP).trim();
     }
 

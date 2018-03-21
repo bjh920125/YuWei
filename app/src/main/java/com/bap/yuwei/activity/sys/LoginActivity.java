@@ -67,11 +67,11 @@ public class LoginActivity extends BaseActivity {
         String randomStr=new Random().nextLong()+"";
         params.put("username", username);
         params.put("password", password);
-        params.put("type",2);
+        params.put("type",Constants.DEVICE_TYPE);
         params.put("timestamp",timestamp);
         params.put("randomStr",randomStr);
         params.put("ip",ip);
-        params.put("sign", MD5Utils.encode("ip="+ip+"&password="+password+"&randomStr="+randomStr+"&timestamp="+timestamp+"&type=2"+"&username="+username).toUpperCase());
+        params.put("sign", MD5Utils.encode("ip="+ip+"&password="+password+"&randomStr="+randomStr+"&timestamp="+timestamp+"&type=1"+"&username="+username).toUpperCase());
         RequestBody body=RequestBody.create(jsonMediaType,mGson.toJson(params));
         Call<ResponseBody> call=webService.login(body);
         call.enqueue(new Callback<ResponseBody>() {

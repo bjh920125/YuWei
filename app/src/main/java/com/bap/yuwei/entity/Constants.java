@@ -21,7 +21,7 @@ public class Constants {
     public static final String XTOKEN_KEY="xtoken.key";
 
     /**设备类型*/
-    public static final int DEVICE_TYPE=2;
+    public static final int DEVICE_TYPE=1;
     /**买家*/
     public static final int BUYER=0;
 

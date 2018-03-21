@@ -178,24 +178,33 @@ public class EnsureOrderActivity extends BaseActivity {
         payOrderForm.setPayType(0);
         if(orderResource==Constants.ORDER_RESUORCE_BUY){
             payOrderForm.setFrom(Constants.ORDER_RESUORCE_BUY);
-            List<GoodsItemForm> goodsItemForms=new ArrayList<>();
-            GoodsItemForm goodsItemForm=new GoodsItemForm();
-            OrderShop orderShop=mOrderEnsure.getShopItems().get(0);
-            GoodsCart goodsCart=orderShop.getCartItems().get(0);
-            goodsItemForm.setGoodsId(goodsCart.getGoodsId());
-            goodsItemForm.setGoodsCount(goodsCart.getGoodsCount());
-            goodsItemForms.add(goodsItemForm);
-            List<OrderItemForm> orderItemForms=new ArrayList<>();
-            OrderItemForm orderItemForm=new OrderItemForm();
-            orderItemForm.setShopId(goodsCart.getShopId());
-            orderItemForm.setDeliveryType(0);
-            orderItemForm.setGoodsItems(goodsItemForms);
-            orderItemForm.setBuyerMessage(orderShop.getBuyerMsg());
-            orderItemForms.add(orderItemForm);
-            payOrderForm.setShopItems(orderItemForms);
         }else {
             payOrderForm.setFrom(Constants.ORDER_RESUORCE_CART);
+            List<Long> cartIds=new ArrayList<>();
+            for(OrderShop os:mOrderEnsure.getShopItems()){
+                List<GoodsCart> carts=os.getCartItems();
+                for(GoodsCart cart:carts){
+                    cartIds.add(cart.getGoodsCartId());
+                }
+            }
+            Long[] ids=new Long[cartIds.size()];
+            payOrderForm.setCartIds(cartIds.toArray(ids));
         }
+        List<GoodsItemForm> goodsItemForms = new ArrayList<>();
+        GoodsItemForm goodsItemForm = new GoodsItemForm();
+        OrderShop orderShop = mOrderEnsure.getShopItems().get(0);
+        GoodsCart goodsCart = orderShop.getCartItems().get(0);
+        goodsItemForm.setGoodsId(goodsCart.getGoodsId());
+        goodsItemForm.setGoodsCount(goodsCart.getGoodsCount());
+        goodsItemForms.add(goodsItemForm);
+        List<OrderItemForm> orderItemForms = new ArrayList<>();
+        OrderItemForm orderItemForm = new OrderItemForm();
+        orderItemForm.setShopId(goodsCart.getShopId());
+        orderItemForm.setDeliveryType(0);
+        orderItemForm.setGoodsItems(goodsItemForms);
+        orderItemForm.setBuyerMessage(orderShop.getBuyerMsg());
+        orderItemForms.add(orderItemForm);
+        payOrderForm.setShopItems(orderItemForms);
         return payOrderForm;
     }
 
@@ -357,8 +366,8 @@ public class EnsureOrderActivity extends BaseActivity {
                         if(null!=tempList && tempList.size()>0){
                             ShippingAddress address=tempList.get(0);
                             mSelectedAddress=address;
-                            txtReceiver.setText(address.getConsignee());
-                            txtTel.setText(address.getCellphone());
+                            ///txtReceiver.setText(address.getConsignee());
+                            //txtTel.setText(address.getCellphone());
                             setReceiverAddressUI(address);
                         }else {
                             rlReceiverInfo.setVisibility(View.GONE);
@@ -383,8 +392,10 @@ public class EnsureOrderActivity extends BaseActivity {
      * 新增收货地址
      */
     public void addAddress(View v){
-        Intent i=new Intent(mContext, AddReceiveAddressActivity.class);
-        startActivity(i);
+        Intent i=new Intent(mContext, ReceiveAddressListActivity.class);
+        Intent i2=new Intent(mContext, AddReceiveAddressActivity.class);
+        Intent[] is=new Intent[]{i,i2};
+        startActivities(is);
     }
 
     /**
@@ -427,6 +438,8 @@ public class EnsureOrderActivity extends BaseActivity {
      */
     private void setReceiverAddressUI(ShippingAddress address){
         txtReceiverAdress.setText(address.getProvince()+address.getCity()+address.getRegion()+address.getStreet());
+        txtReceiver.setText(address.getConsignee());
+        txtTel.setText(address.getCellphone());
         rlReceiverInfo.setVisibility(View.VISIBLE);
         txtAddAddress.setVisibility(View.GONE);
     }

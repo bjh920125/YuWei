@@ -10,7 +10,8 @@
         android:layout_height="400dp"
         android:layout_weight="1"
         android:background="@color/white"
-        android:divider="@drawable/ic_listview_sperator"/>
+        android:divider="@drawable/ic_listview_sperator"
+        android:scrollbars="none"/>
 
     <View
         android:layout_width="0.5dp"
@@ -24,5 +25,6 @@
         android:layout_height="400dp"
         android:layout_weight="1.5"
         android:background="@color/white"
-        android:divider="@drawable/ic_listview_sperator"/>
+        android:divider="@drawable/ic_listview_sperator"
+        android:scrollbars="none"/>
 </LinearLayout>

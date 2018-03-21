@@ -63,6 +63,12 @@ public class OverallSearchActivity extends BaseActivity {
         getSearchHistory();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSearchHistory();
+    }
+
     public void search(View v){
         String words= StringUtils.getEditTextValue(etWords);
         toSearchPage(words);
@@ -155,6 +161,7 @@ public class OverallSearchActivity extends BaseActivity {
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         JSONArray ja=new JSONObject(result).getJSONArray("result");
                         List<String> tempList=mGson.fromJson(ja.toString(),new TypeToken<List<String>>() {}.getType());
+                        mSearchHistories.clear();
                         mSearchHistories.addAll(tempList);
                         mHistoryAdapter.notifyDataSetChanged();
                     }else{

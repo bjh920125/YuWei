@@ -44,6 +44,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@color/white"
                 android:hint="账号/邮箱/手机号"
+                android:maxLines="1"
                 android:paddingLeft="5dp"
                 android:textColorHint="@color/darkgrey"
                 android:textSize="14dp" />
@@ -84,6 +85,7 @@
                 android:layout_weight="5"
                 android:background="@color/white"
                 android:hint="请输入密码"
+                android:maxLines="1"
                 android:inputType="textPassword"
                 android:layout_marginRight="20dp"
                 android:paddingLeft="5dp"

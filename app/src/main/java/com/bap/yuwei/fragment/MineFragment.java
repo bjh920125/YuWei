@@ -276,7 +276,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     public void refreshUI() {
         if(null != mUser){
             txtName.setText(mUser.getUsername());
-            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead, DisplayImageOptionsUtil.getOptionsRounded(180,R.drawable.iconfont_touxiang));
+            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar()+Constants.PICTURE_DEAL,imgHead, DisplayImageOptionsUtil.getOptionsRounded(180,R.drawable.iconfont_touxiang));
             getCollectNum();
             getOrderStatistics();
         }else{

@@ -13,6 +13,9 @@ public class Constants {
 
     public static final String PICTURE_URL="http://oxqok0jcq.bkt.clouddn.com/";
 
+    public static final String PICTURE_DEAL="?imageView2/1/w/70/h/70";
+
+
     /**当前用户*/
     public static final String USER_KEY="user.key";
     /**TOKEN*/

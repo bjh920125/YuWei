@@ -145,6 +145,7 @@
         <activity
             android:name=".activity.sys.LoginActivity"
             android:label="登录鱼尾"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.news.NewsListActivity"

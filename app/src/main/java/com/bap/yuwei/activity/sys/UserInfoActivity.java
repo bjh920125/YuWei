@@ -54,6 +54,7 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
     private TextView txtGender;
     private int gender;
     private String avatar;
+    private String password="";
 
     private ActionSheet.Builder mActionSheetBuilder;
 
@@ -63,6 +64,7 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sysWebService= MyApplication.getInstance().getWebService(SysWebService.class);
+        password=mUser.getPassword();
         getUserInfo();
     }
 
@@ -89,7 +91,7 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
                     if(appResponse.getCode()== ResponseCode.SUCCESS){
                         mProgressDialog.dismiss();
                         avatar=new JSONObject(result).getString("result");
-                        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+avatar,imgHead, DisplayImageOptionsUtil.getOptionsRounded(180,R.drawable.iconfont_touxiang));
+                        ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+avatar+Constants.PICTURE_DEAL,imgHead, DisplayImageOptionsUtil.getOptionsRounded(180,R.drawable.iconfont_touxiang));
                     }else{
                         ToastUtil.showShort(mContext,appResponse.getMessage());
                     }
@@ -127,6 +129,7 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
                         mUser.setAvatar(avatar);
                         mUser.setNickname(StringUtils.getEditTextValue(etName));
                         mUser.setGender(gender);
+                        mUser.setPassword(password);
                         SharedPreferencesUtil.putString(mContext,Constants.USER_KEY,mGson.toJson(mUser));
                         finish();
                     }else{
@@ -181,7 +184,7 @@ public class UserInfoActivity extends BaseActivity  implements ActionSheet.Actio
     public void refreshUI() {
         if(null != mUser){
             etName.setText(mUser.getUsername());
-            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar(),imgHead,DisplayImageOptionsUtil.getOptionsRounded(180,R.drawable.iconfont_touxiang));
+            ImageLoader.getInstance().displayImage(Constants.PICTURE_URL+mUser.getAvatar()+Constants.PICTURE_DEAL,imgHead,DisplayImageOptionsUtil.getOptionsRounded(180,R.drawable.iconfont_touxiang));
             avatar=mUser.getAvatar();
             int gender=mUser.getGender();
             if(gender==0){

@@ -35,7 +35,7 @@ public class RefundConsultHistoryActivity extends BaseActivity {
         mAdapter=new CommonAdapter<RefundConsultHistory>(mContext,histories,R.layout.item_refund_consult) {
             @Override
             public void convert(ViewHolder viewHolder, RefundConsultHistory item) {
-                viewHolder.setImageByUrl(R.id.img_head,Constants.PICTURE_URL+item.getHeadImage());
+                viewHolder.setImageByUrl(R.id.img_head,Constants.PICTURE_URL+item.getHeadImage()+Constants.PICTURE_DEAL);
                 viewHolder.setText(R.id.txt_user_name,item.getUsername());
                 viewHolder.setText(R.id.txt_time,item.getCreateTime());
                 viewHolder.setHtmlText(R.id.txt_content,item.getHistoryDesc());

@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
@@ -704,7 +705,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 mWebView.setVisibility(View.VISIBLE);
                 imgSpecification.setVisibility(View.GONE);
                 rlPackage.setVisibility(View.GONE);
-                addview.setVisibility(View.GONE);
+                //addview.setVisibility(View.GONE);
                 break;
             case R.id.txt_spefi://规格参数
                 txtSpecification.setTextColor(selectColor);
@@ -822,7 +823,15 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        topDetail = llDetail.getTop();  //滑动需要的距离
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                topDetail = llDetail.getTop();  //滑动需要的距离
+                if(mWebView.getHeight()<findViewById(R.id.view_divider_line2).getTop()){
+                    addview.setVisibility(View.VISIBLE);
+                }
+            }
+        },1000);
     }
 
     /**

@@ -214,6 +214,12 @@ public class MyApplication extends Application {
 		String contentEncoding = headers.get("Content-Encoding");
 		return contentEncoding != null && !contentEncoding.equalsIgnoreCase("identity");
 	}
+
+	@Override
+	public void onTerminate() {
+		super.onTerminate();
+		System.exit(0);
+	}
 }
 
 
